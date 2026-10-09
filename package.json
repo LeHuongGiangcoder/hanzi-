@@ -1,0 +1,16 @@
+{
+  "name": "hanzi-drill",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Daily HSK 1-4 hanzi drill - IME production gate, FSRS scheduling, homophone traps",
+  "scripts": {
+    "data:fetch": "node scripts/1-fetch-source.mjs",
+    "data:build": "node scripts/2-build-seed.mjs",
+    "data:qa": "node scripts/3-qa-report.mjs",
+    "data:all": "npm run data:fetch && npm run data:build && npm run data:qa"
+  },
+  "dependencies": {
+    "pinyin-pro": "^3.29.4"
+  }
+}

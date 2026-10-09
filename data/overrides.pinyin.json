@@ -1,0 +1,13 @@
+{
+  "$note": "Pinyin quyết định bằng tay, thắng mọi nguồn tự động. Lý do ghi ở 'why' để sau này audit được. Sửa file này rồi chạy: npm run data:build",
+
+  "了":   { "pinyin": "le",       "why": "HSK1 dùng làm trợ từ thể (吃了). pinyin-pro trả 'liǎo' là nghĩa 'xong/hoàn tất', không phải cách dùng HSK1." },
+  "谁":   { "pinyin": "shéi",     "why": "Giáo trình HSK đại lục dạy 'shéi'; 'shuí' là âm đọc trang trọng/văn viết." },
+  "只":   { "pinyin": "zhǐ",      "why": "HSK3 只 = 'chỉ, chỉ có'. pinyin-pro trả 'zhī' (lượng từ con vật) và nghĩa CC-CEDICT bị rác." },
+  "教":   { "pinyin": "jiāo",     "why": "HSK3 教 = 'dạy' (jiāo). 'jiào' là 'tôn giáo/giáo dục', nguồn A còn bắt vào nhánh họ Giáo." },
+  "干":   { "pinyin": "gàn",      "why": "HSK4 干 = 'làm, công tác'. 'gān' (khô) thuộc 干净 — vốn là từ HSK3 riêng." },
+  "喂":   { "pinyin": "wéi",      "why": "HSK1 喂 = 'a-lô' khi gọi điện → wéi. 'wèi' là 'cho ăn, nuôi'." },
+  "结果": { "pinyin": "jié guǒ",  "why": "HSK4 结果 = 'kết quả' (jiéguǒ). 'jiēguǒ' nghĩa là 'ra quả, đơm quả'." },
+  "一会儿": { "pinyin": "yí huìr", "why": "Chuẩn hoá vần hoá -r thành 'huìr'; nguồn A tách rời thành 'yī huì r'. 一 biến điệu thành yí trước thanh 4." },
+  "女人": { "pinyin": "nǚ rén",   "why": "'nǚrén' = người phụ nữ (nghĩa HSK2). Nhánh thanh nhẹ 'nǚ ren' là nghĩa 'vợ' trong khẩu ngữ." }
+}
