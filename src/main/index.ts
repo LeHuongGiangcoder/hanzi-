@@ -2,7 +2,7 @@ import { app, BrowserWindow, Tray, Menu, nativeImage, ipcMain, powerMonitor, dia
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { randomUUID } from 'node:crypto';
-import { readFileSync, existsSync, mkdirSync } from 'node:fs';
+import { readFileSync, existsSync } from 'node:fs';
 // @ts-ignore — lõi viết bằng .mjs để test được bằng node mà không cần Electron
 import { openDb, upsertWords, ensureCards, isoDate, homophonesOf, quarantineWord, stats, getSetting, setSetting, wordByHanzi, distractorPools } from '../core/db.mjs';
 // @ts-ignore
@@ -14,6 +14,8 @@ import { gradeAnswer } from '../core/grading.mjs';
 // @ts-ignore
 import { pickHint, buildComparison } from '../core/hints.mjs';
 // @ts-ignore
+import { progressStats, daysToGoal } from '../core/progress.mjs';
+// @ts-ignore
 import { SessionRunner } from '../core/session-runner.mjs';
 
 // Bundle main chạy ở chế độ ESM nên không có __dirname sẵn.
@@ -22,6 +24,11 @@ const HERE = dirname(fileURLToPath(import.meta.url));
 const DRILL_TIME_DEFAULT = '20:30';
 const MAX_SNOOZE = 3;
 const REMIND_EVERY_MIN = 30;
+
+// Chạy kiểm thử phải tách HOÀN TOÀN khỏi bản thật: đổi luôn userData chứ không
+// chỉ đổi đường dẫn DB. Khoá một-bản-duy-nhất bám theo userData, nên nếu chỉ đổi
+// DB thì lần chạy kiểm thử vẫn tranh khoá với app đang chạy của người dùng.
+if (process.env.HANZI_DATA_DIR) app.setPath('userData', process.env.HANZI_DATA_DIR);
 
 // CHỈ CHO PHÉP MỘT BẢN CHẠY. Hai bản cùng chạy nghĩa là hai cái timer, hai cái
 // tray, và cửa sổ bật lên gấp đôi — người dùng đóng một cái thì cái kia mở lại.
@@ -129,7 +136,17 @@ function createWindow() {
 
         // B — Enter đi liền sau khi IME chốt chữ (đúng chuỗi sự kiện của macOS,
         // đây là bug đã tái hiện được). Phải KHÔNG nộp bài.
-        let el = input(); if (!el) return { error: 'không thấy ô nhập' };
+        let el = input();
+        if (!el) {
+          // Phiên đã xong → màn hình "xong" hiện thẳng bảng tiến độ.
+          const panel = document.querySelector('.stats');
+          return {
+            mode: 'phiên đã hoàn thành',
+            statsOnDoneScreen: !!panel,
+            levelRows: document.querySelectorAll('.lvrow').length,
+            text: panel?.innerText.replace(/\\n+/g, ' · ').slice(0, 300) ?? null,
+          };
+        }
         compose(el, '在');
         await sleep(60);
         enter(el, false);
@@ -160,6 +177,19 @@ function createWindow() {
           await sleep(250);
           res.D_cmdEnterSubmitted = !!document.querySelector('.card');
         }
+        // --- màn hình tiến độ ---
+        const statsBtn = [...document.querySelectorAll('button')]
+          .find((b) => b.textContent?.trim() === 'Tiến độ');
+        res.E_hasStatsButton = !!statsBtn;
+        statsBtn?.click();
+        await sleep(600);
+        const panel = document.querySelector('.stats');
+        res.E_statsOpened = !!panel;
+        res.E_text = panel?.innerText.replace(/\\n+/g, ' · ').slice(0, 260) ?? null;
+        res.E_levelRows = document.querySelectorAll('.lvrow').length;
+        res.E_bars = [...document.querySelectorAll('.lvrow .track i.mature')]
+          .map((e) => e.style.width);
+
         return res;
       })()`);
       console.log('\n===RENDERER===\n' + JSON.stringify(out, null, 1) + '\n===END===');
@@ -508,6 +538,11 @@ function registerIpc() {
     ).get().n,
   }));
 
+  ipcMain.handle('stats:progress', () => {
+    const s = progressStats(db);
+    return { ...s, eta: daysToGoal(s) };
+  });
+
   ipcMain.handle('settings:get', () => ({
     drillTime: getSetting(db, 'drill_time', DRILL_TIME_DEFAULT),
     alwaysOnTop: getSetting(db, 'always_on_top', '1') !== '0',
@@ -537,9 +572,7 @@ app.whenReady().then(() => {
   // HANZI_DATA_DIR cho phép chạy kiểm thử trên DB riêng. Không có nó thì mọi
   // lần smoke/debug đều ghi vào dữ liệu học thật — và một lần đã làm smoke
   // test fail chỉ vì phiên hôm đó đã hoàn thành.
-  const dataDir = process.env.HANZI_DATA_DIR || app.getPath('userData');
-  if (process.env.HANZI_DATA_DIR) mkdirSync(dataDir, { recursive: true });
-  db = openDb(join(dataDir, 'hanzi-drill.db'));
+  db = openDb(join(app.getPath('userData'), 'hanzi-drill.db'));
   if (!getSetting(db, 'seed_loaded_at')) loadSeed();
   ensureCards(db);
   registerIpc();

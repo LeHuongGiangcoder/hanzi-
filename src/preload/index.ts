@@ -8,6 +8,7 @@ const api = {
   snooze: () => ipcRenderer.invoke('session:snooze'),
   surrender: (typed: string) => ipcRenderer.invoke('session:surrender', { typed }),
   stats: () => ipcRenderer.invoke('stats:get'),
+  progress: () => ipcRenderer.invoke('stats:progress'),
   composing: (on: boolean) => ipcRenderer.invoke('window:composing', on),
   openDrill: () => ipcRenderer.invoke('window:open-drill'),
   onProgress: (cb: (p: unknown) => void) =>

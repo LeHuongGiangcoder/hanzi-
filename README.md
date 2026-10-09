@@ -242,6 +242,42 @@ Hán-Việt cũng gài bẫy, và những ca đó được ghi thẳng vào cộ
 | 仔细 | tử tế | **cẩn thận, tỉ mỉ** |
 | 专业 | chuyên nghiệp | **chuyên ngành** |
 
+## Tiến độ được tính ở đâu
+
+**Không có cột nào trên Google Sheet.** Sheet là một chiều: nội dung từ vựng đi vào app,
+không có gì đi ngược ra. Lịch ôn đổi sau *từng câu trả lời*, đẩy ngược lên Sheet chỉ tạo ra
+hai nguồn đánh nhau.
+
+Tất cả nằm trong SQLite ở `~/Library/Application Support/Hanzi Drill/hanzi-drill.db`, và
+theo dõi ở **mức card chứ không phải mức từ** — mỗi từ có tới 3 card (production, reading,
+cloze), mỗi card một lịch FSRS riêng.
+
+### "Đã thuộc" nghĩa là gì
+
+Một từ tính là **đã thuộc** khi **cả ba cổng** đều đạt khoảng ôn **21 ngày** — ngưỡng quen
+thuộc trong SRS (Anki gọi là *mature*). Lấy theo card **yếu nhất**: gõ ra được chữ bao giờ
+cũng chậm hơn đọc hiểu nó, nên từ chỉ thật sự thuộc khi cổng chậm nhất cũng vững.
+
+Trong code còn vài khái niệm khác, dùng cho việc khác, đừng nhầm với nhau:
+
+| Điều kiện | Nghĩa | Dùng ở đâu |
+|---|---|---|
+| `state ≠ 0` | đã trả lời ít nhất 1 lần | hầu như không |
+| `state ≠ 0 và reps ≥ 2` | tạm gọi "đã thuộc" | **chỉ** để quyết định khi nào bật bẫy đồng âm |
+| `daily_queue.passed_at` | qua hết các cổng trong một phiên | bộ đếm 20/20 — là *làm xong hôm nay*, không phải *đã thuộc* |
+| `min(stability) ≥ 21 ngày` | **đã thuộc** theo nghĩa ở trên | màn hình tiến độ |
+
+### Màn hình tiến độ
+
+Bấm **Tiến độ** trên thanh trên, hoặc nó tự hiện khi học xong trong ngày:
+
+- thanh lớn: *đã thuộc / tổng số từ*, kèm phần *đang học*
+- 4 thanh nhỏ theo cấp HSK 1–4
+- **phụ thuộc pinyin** — tỷ lệ lượt gõ *đúng âm nhưng sai chữ*, con số cần kéo xuống
+- chuỗi ngày liên tiếp
+- ước tính số ngày tới mục tiêu, **chỉ hiện khi đã học ít nhất 3 ngày**: một buổi học gấp
+  đôi là đủ thổi phồng nhịp, thà hiện "chưa đủ dữ liệu" còn hơn đưa ra dự báo sai
+
 ## Báo lỗi dữ liệu
 
 Kho từ dựng từ CC-CEDICT nên sẽ có lỗi, và lỗi trong app này độc hơn bình thường: một chữ

@@ -3,6 +3,7 @@ import ImeInput from './components/ImeInput';
 import ReportDialog from './components/ReportDialog';
 import ReadingStage from './components/ReadingStage';
 import ClozeStage from './components/ClozeStage';
+import Progress from './components/Progress';
 
 const STAGE_LABEL: Record<string, string> = {
   production: 'Tạo ra chữ', reading: 'Đọc hiểu', cloze: 'Dùng trong câu',
@@ -17,7 +18,7 @@ export default function App() {
   const [result, setResult] = useState<any>(null);
   const [reporting, setReporting] = useState<string | null>(null);
   const [imeWarn, setImeWarn] = useState(false);
-  const [surrender, setSurrender] = useState('');
+  const [showStats, setShowStats] = useState(false);
 
   const load = useCallback(async () => {
     setResult(null); setImeWarn(false);
@@ -52,9 +53,8 @@ export default function App() {
   if (q.done) {
     return (
       <div className="stage done">
-        <h1>Xong 20 từ hôm nay ✓</h1>
-        <p style={{ color: 'var(--dim)' }}>Cửa sổ đóng được rồi. Hẹn mai.</p>
-        <button onClick={() => window.close()}>Đóng</button>
+        <h1 style={{ marginBottom: 24 }}>Xong {p.total} từ hôm nay ✓</h1>
+        <Progress />
       </div>
     );
   }
@@ -74,6 +74,7 @@ export default function App() {
           </>
         )}
         <div className="bar"><i style={{ width: `${pct}%` }} /></div>
+        <button className="ghost" onClick={() => setShowStats(true)}>Tiến độ</button>
         <button className="ghost" onClick={() => setReporting(result && !result.correct ? 'grading' : 'hanzi')}>
           ⚠ Báo lỗi <span style={{ opacity: .6 }}>⌘E</span>
         </button>
@@ -121,6 +122,14 @@ export default function App() {
           <Result result={result} onNext={load} onReport={() => setReporting('grading')} />
         )}
       </div>
+
+      {showStats && (
+        <div className="modal" onClick={() => setShowStats(false)}>
+          <div onClick={(e) => e.stopPropagation()} style={{ width: 600 }}>
+            <Progress onClose={() => setShowStats(false)} />
+          </div>
+        </div>
+      )}
 
       {reporting && (
         <ReportDialog

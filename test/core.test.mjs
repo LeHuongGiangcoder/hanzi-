@@ -590,3 +590,89 @@ test('ba cổng của một từ không bao giờ đứng liền nhau trong cả
   assert.equal(r.done, true);
   assert.equal(backToBack, 0, 'có lượt hỏi cùng một từ hai lần liên tiếp');
 });
+
+// ---------- thống kê tiến độ ----------
+import { progressStats, streakDays, pacePerDay, MATURE_DAYS } from '../src/core/progress.mjs';
+
+test('kho từ mới: tất cả đều là "chưa học"', () => {
+  const db = freshDb();
+  const s = progressStats(db);
+  assert.equal(s.all.mature, 0);
+  assert.equal(s.all.learning, 0);
+  assert.equal(s.all.fresh, s.all.total);
+  assert.ok(s.all.total > 3000);
+  assert.equal(s.byLevel[1].total + s.byLevel[2].total + s.byLevel[3].total + s.byLevel[4].total,
+               s.all.total);
+});
+
+test('từ chỉ tính ĐÃ THUỘC khi CẢ BA cổng đều đạt 21 ngày', () => {
+  const db = freshDb();
+  const w = db.prepare("SELECT id FROM words WHERE hanzi='买'").get();
+  // hai cổng vững, một cổng còn non → vẫn là "đang học"
+  db.prepare("UPDATE cards SET state=2, reps=5, stability=40 WHERE word_id=?").run(w.id);
+  db.prepare("UPDATE cards SET stability=3 WHERE word_id=? AND direction='production'").run(w.id);
+  assert.equal(progressStats(db).all.mature, 0);
+  assert.equal(progressStats(db).all.learning, 1);
+
+  db.prepare("UPDATE cards SET stability=40 WHERE word_id=?").run(w.id);
+  assert.equal(progressStats(db).all.mature, 1);
+});
+
+test('đếm đúng theo từng cấp HSK', () => {
+  const db = freshDb();
+  const w = db.prepare("SELECT id, hsk_level FROM words WHERE hanzi='买'").get();
+  db.prepare("UPDATE cards SET state=2, reps=5, stability=40 WHERE word_id=?").run(w.id);
+  const s = progressStats(db);
+  assert.equal(s.byLevel[w.hsk_level].mature, 1);
+  for (const lv of [1, 2, 3, 4]) if (lv !== w.hsk_level) assert.equal(s.byLevel[lv].mature, 0);
+});
+
+test('tỷ lệ phụ thuộc pinyin tính từ lỗi đúng-âm-sai-chữ', () => {
+  const db = freshDb();
+  assert.equal(progressStats(db).pinyinDependency, null, 'chưa có lượt nào thì không bịa ra số');
+  const card = db.prepare('SELECT id FROM cards LIMIT 1').get();
+  const ins = db.prepare('INSERT INTO reviews (card_id, grade, error_type) VALUES (?,?,?)');
+  for (let i = 0; i < 9; i++) ins.run(card.id, 3, 'none');
+  ins.run(card.id, 1, 'homophone_wrong_char');
+  assert.equal(progressStats(db).pinyinDependency, 0.1);
+});
+
+test('chuỗi ngày: hôm nay chưa xong thì vẫn tính từ hôm qua', () => {
+  const db = freshDb();
+  const d = (n) => {
+    const t = new Date(); t.setDate(t.getDate() - n);
+    return new Date(t.getTime() - t.getTimezoneOffset() * 60000).toISOString().slice(0, 10);
+  };
+  const ins = db.prepare("INSERT INTO sessions (date,target_count,finished_at) VALUES (?,20,datetime('now'))");
+  ins.run(d(1)); ins.run(d(2)); ins.run(d(3));
+  assert.equal(streakDays(db), 3);
+  ins.run(d(0));
+  assert.equal(streakDays(db), 4);
+});
+
+test('chuỗi ngày đứt khi bỏ một ngày', () => {
+  const db = freshDb();
+  const d = (n) => {
+    const t = new Date(); t.setDate(t.getDate() - n);
+    return new Date(t.getTime() - t.getTimezoneOffset() * 60000).toISOString().slice(0, 10);
+  };
+  const ins = db.prepare("INSERT INTO sessions (date,target_count,finished_at) VALUES (?,20,datetime('now'))");
+  ins.run(d(1)); ins.run(d(3));       // bỏ ngày d(2)
+  assert.equal(streakDays(db), 1);
+});
+
+test('chưa học ngày nào thì nhịp là null, không chia cho 0', () => {
+  const db = freshDb();
+  assert.equal(pacePerDay(db), null);
+});
+
+test('nhịp học chưa đủ 3 ngày thì KHÔNG đưa ra dự báo', () => {
+  const db = freshDb();
+  const card = db.prepare('SELECT id FROM cards LIMIT 1').get();
+  const ins = db.prepare("INSERT INTO reviews (card_id, grade, ts) VALUES (?,3,datetime('now',?))");
+  ins.run(card.id, '-0 day');
+  ins.run(card.id, '-1 day');
+  assert.equal(pacePerDay(db), null, '2 ngày là chưa đủ để nói về nhịp');
+  ins.run(card.id, '-2 day');
+  assert.ok(pacePerDay(db) > 0, '3 ngày thì mới tính');
+});
