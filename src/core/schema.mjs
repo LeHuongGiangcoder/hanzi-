@@ -14,6 +14,8 @@ CREATE TABLE IF NOT EXISTS words (
   pos_vi       TEXT NOT NULL DEFAULT '',
   hsk_level    INTEGER NOT NULL,
   standard     TEXT NOT NULL DEFAULT 'hsk3',
+  stages       TEXT NOT NULL DEFAULT '["production"]',
+  anchor       TEXT NOT NULL DEFAULT 'production',
   lesson       TEXT NOT NULL DEFAULT '',
   radical      TEXT NOT NULL DEFAULT '',
   example_zh   TEXT NOT NULL DEFAULT '',

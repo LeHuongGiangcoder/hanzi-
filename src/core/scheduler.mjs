@@ -43,33 +43,35 @@ export function applyReview(db, cardRow, { grade, latencyMs, answerRaw, errorTyp
  * Trộn: từ đến hạn > từ hay sai > từ mới. Sau đó CỐ Ý kéo thêm các từ cùng âm
  * của những từ đã chọn vào — đó là bẫy đồng âm: nếu chỉ nhớ âm thì sẽ trượt.
  */
-export function buildQueue(db, { date = isoDate(), mix = DEFAULT_MIX, direction = 'production' } = {}) {
+export function buildQueue(db, { date = isoDate(), mix = DEFAULT_MIX } = {}) {
   const pick = (sql, n, ...args) => (n > 0 ? db.prepare(sql).all(...args, n) : []);
   const READY = `w.active=1 AND w.quarantined=0 AND w.meaning_vi<>''`;
 
+  // Lên lịch theo CỔNG NEO (cổng đầu tiên của từ), không cố định 'production':
+  // trợ từ không có cổng production.
   const due = pick(
-    `SELECT w.*, c.id card_id FROM cards c JOIN words w ON w.id=c.word_id
-     WHERE c.direction=? AND c.due<=? AND c.state<>0 AND ${READY}
+    `SELECT w.*, c.id card_id FROM cards c JOIN words w ON w.id=c.word_id AND c.direction=w.anchor
+     WHERE c.due<=? AND c.state<>0 AND ${READY}
      ORDER BY c.due ASC, w.frequency IS NULL, w.frequency ASC LIMIT ?`,
-    mix.due, direction, date
+    mix.due, date
   );
 
   // "Leech" = từ hay mắc đúng lỗi phụ thuộc pinyin. Ưu tiên bất kể lịch.
   const leech = pick(
-    `SELECT w.*, c.id card_id, COUNT(r.id) bad
+    `SELECT w.*, MIN(c.id) card_id, COUNT(r.id) bad
      FROM cards c JOIN words w ON w.id=c.word_id
      JOIN reviews r ON r.card_id=c.id AND r.error_type='homophone_wrong_char'
-     WHERE c.direction=? AND ${READY}
-     GROUP BY c.id HAVING bad>0 ORDER BY bad DESC, c.due ASC LIMIT ?`,
-    mix.leech, direction
+     WHERE ${READY}
+     GROUP BY w.id HAVING bad>0 ORDER BY bad DESC LIMIT ?`,
+    mix.leech
   );
 
   const taken = new Set([...due, ...leech].map((r) => r.id));
   const fresh = pick(
-    `SELECT w.*, c.id card_id FROM cards c JOIN words w ON w.id=c.word_id
-     WHERE c.direction=? AND c.state=0 AND ${READY}
+    `SELECT w.*, c.id card_id FROM cards c JOIN words w ON w.id=c.word_id AND c.direction=w.anchor
+     WHERE c.state=0 AND ${READY}
      ORDER BY w.hsk_level ASC, w.lesson ASC, w.frequency IS NULL, w.frequency ASC LIMIT ?`,
-    mix.fresh + taken.size, direction
+    mix.fresh + taken.size
   );
 
   const out = [];
@@ -86,13 +88,13 @@ export function buildQueue(db, { date = isoDate(), mix = DEFAULT_MIX, direction 
 
   // Bẫy đồng âm: kéo anh em cùng âm vào, chiếm chỗ của từ mới.
   const siblings = db.prepare(
-    `SELECT w.*, c.id card_id FROM words w JOIN cards c ON c.word_id=w.id AND c.direction=?
+    `SELECT w.*, c.id card_id FROM words w JOIN cards c ON c.word_id=w.id AND c.direction=w.anchor
      WHERE w.homophone_key=? AND w.id<>? AND ${READY}`
   );
   for (const seed of [...out]) {
     if (out.length >= mix.target) break;
     if (!seed.homophone_key) continue;
-    for (const s of siblings.all(direction, seed.homophone_key, seed.id)) {
+    for (const s of siblings.all(seed.homophone_key, seed.id)) {
       if (!add(s, 'homophone_sibling')) break;
     }
   }
@@ -100,9 +102,9 @@ export function buildQueue(db, { date = isoDate(), mix = DEFAULT_MIX, direction 
   // Còn thiếu thì bù thêm từ mới cho đủ chỉ tiêu.
   if (out.length < mix.target) {
     for (const r of pick(
-      `SELECT w.*, c.id card_id FROM cards c JOIN words w ON w.id=c.word_id
-       WHERE c.direction=? AND ${READY} ORDER BY c.due ASC LIMIT ?`,
-      mix.target * 3, direction
+      `SELECT w.*, c.id card_id FROM cards c JOIN words w ON w.id=c.word_id AND c.direction=w.anchor
+       WHERE ${READY} ORDER BY c.due ASC LIMIT ?`,
+      mix.target * 3
     )) {
       if (!add(r, 'replacement')) continue;
       if (out.length >= mix.target) break;
@@ -112,18 +114,18 @@ export function buildQueue(db, { date = isoDate(), mix = DEFAULT_MIX, direction 
 }
 
 /** Mở (hoặc lấy lại) phiên học của hôm nay. */
-export function startSession(db, { date = isoDate(), mix = DEFAULT_MIX, direction = 'production' } = {}) {
+export function startSession(db, { date = isoDate(), mix = DEFAULT_MIX } = {}) {
   const existing = db.prepare('SELECT * FROM sessions WHERE date=?').get(date);
   if (existing) {
     const items = db.prepare(
       `SELECT w.*, c.id card_id, q.reason, q.passed_at FROM daily_queue q
-       JOIN words w ON w.id=q.word_id JOIN cards c ON c.word_id=w.id AND c.direction=?
+       JOIN words w ON w.id=q.word_id JOIN cards c ON c.word_id=w.id AND c.direction=w.anchor
        WHERE q.session_id=? ORDER BY q.position`
-    ).all(direction, existing.id);
+    ).all(existing.id);
     return { session: existing, items, resumed: true };
   }
 
-  const picked = buildQueue(db, { date, mix, direction });
+  const picked = buildQueue(db, { date, mix });
   const info = db.prepare('INSERT INTO sessions (date,target_count) VALUES (?,?)').run(date, picked.length);
   const sid = info.lastInsertRowid;
   const ins = db.prepare('INSERT INTO daily_queue (session_id,word_id,position,reason) VALUES (?,?,?,?)');
@@ -146,15 +148,15 @@ export function markPassed(db, sessionId, wordId) {
  * Thay một từ bị cách ly giữa phiên bằng từ khác, để chỉ tiêu 20 không đổi.
  * Báo lỗi dữ liệu không được làm bạn mất chỉ tiêu của ngày hôm đó.
  */
-export function replaceInQueue(db, sessionId, wordId, direction = 'production') {
+export function replaceInQueue(db, sessionId, wordId) {
   const row = db.prepare('SELECT position FROM daily_queue WHERE session_id=? AND word_id=?').get(sessionId, wordId);
   if (!row) return null;
   const repl = db.prepare(
-    `SELECT w.*, c.id card_id FROM cards c JOIN words w ON w.id=c.word_id
-     WHERE c.direction=? AND w.active=1 AND w.quarantined=0 AND w.meaning_vi<>''
+    `SELECT w.*, c.id card_id FROM cards c JOIN words w ON w.id=c.word_id AND c.direction=w.anchor
+     WHERE w.active=1 AND w.quarantined=0 AND w.meaning_vi<>''
        AND w.id NOT IN (SELECT word_id FROM daily_queue WHERE session_id=?)
      ORDER BY c.due ASC LIMIT 1`
-  ).get(direction, sessionId);
+  ).get(sessionId);
   db.prepare('DELETE FROM daily_queue WHERE session_id=? AND word_id=?').run(sessionId, wordId);
   if (!repl) {
     db.prepare('UPDATE sessions SET target_count=target_count-1 WHERE id=?').run(sessionId);

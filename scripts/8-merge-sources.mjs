@@ -27,9 +27,24 @@ import * as OpenCC from 'opencc-js';
 import { pinyin } from 'pinyin-pro';
 import { toneless } from './lib/py.mjs';
 
-// from:'t' là chuyển đổi THUẦN MẶT CHỮ. from:'tw' còn đổi cả từ vựng kiểu Đài
-// Loan và chuyển quá tay: nó biến 显著 (vốn đúng giản thể) thành 显着.
+// Hai bộ chuyển đổi, không bộ nào đúng hết:
+//   from:'t'  — thuần mặt chữ, an toàn, nhưng GIỮ NGUYÊN 著 nên trợ từ 着 bị sót
+//               ("他正在看著我" đáng lẽ phải là "他正在看着我")
+//   from:'tw' — mạnh hơn, đổi được 著→着, nhưng CHUYỂN QUÁ TAY: biến 显著 (vốn
+//               đúng giản thể) thành 显着
+//
+// Nên: chạy bộ an toàn trước; chỉ dùng bộ mạnh khi nó CHỨNG MINH ĐƯỢC là sửa
+// đúng — tức là sau khi đổi, câu mới thật sự chứa từ khoá còn trước đó thì không.
 const t2s = OpenCC.Converter({ from: 't', to: 'cn' });
+const tw2s = OpenCC.Converter({ from: 'tw', to: 'cn' });
+let repaired = 0;
+function toSimplified(raw, hanzi) {
+  const safe = t2s(raw);
+  if (!raw || safe.includes(hanzi)) return safe;
+  const strong = tw2s(raw);
+  if (strong.includes(hanzi)) { repaired++; return strong; }
+  return safe;
+}
 
 /**
  * Chuẩn hoá pinyin về một dạng duy nhất.
@@ -83,7 +98,7 @@ for (const [tab, m] of Object.entries(TABS)) {
     const prev = sheet.get(hanzi);
     if (prev && prev.hsk_level <= level) continue;
     const exRaw = (r[m.ex] ?? '').trim();
-    const ex = t2s(exRaw);
+    const ex = toSimplified(exRaw, hanzi);
     if (ex !== exRaw) tradFixed++;
     sheet.set(hanzi, {
       hanzi,
@@ -245,7 +260,10 @@ for (const w of out) byLvl[`HSK${w.hsk_level}`] = (byLvl[`HSK${w.hsk_level}`] ??
 const missing = (k) => out.filter((w) => !w[k]).length;
 
 console.log(`Sheet: ${sheetRows} dòng → ${sheet.size} từ sau khi bỏ trùng`);
-console.log(`Câu ví dụ quy phồn thể → giản thể: ${tradFixed}`);
+console.log(`Câu ví dụ quy phồn thể → giản thể: ${tradFixed} (${repaired} câu phải dùng bộ mạnh hơn)`);
+const noContain = out.filter((w) => w.example_zh && !w.example_zh.includes(w.hanzi));
+console.log(`Câu ví dụ KHÔNG chứa từ khoá: ${noContain.length}` +
+  (noContain.length ? '  ' + noContain.slice(0, 6).map((w) => `${w.hanzi}:${w.example_zh}`).join('  ') : ''));
 console.log(`Từ chỉ có ở kho HSK 2.0, giữ lại : ${extras}`);
 console.log(`\nTỔNG: ${out.length} từ`, byLvl);
 console.log(`Thiếu: ` + JSON.stringify({

@@ -1,6 +1,12 @@
 import { useCallback, useEffect, useState } from 'react';
 import ImeInput from './components/ImeInput';
 import ReportDialog from './components/ReportDialog';
+import ReadingStage from './components/ReadingStage';
+import ClozeStage from './components/ClozeStage';
+
+const STAGE_LABEL: Record<string, string> = {
+  production: 'Tạo ra chữ', reading: 'Đọc hiểu', cloze: 'Dùng trong câu',
+};
 
 declare global { interface Window { hanzi: any } }
 
@@ -36,6 +42,7 @@ export default function App() {
     if (r.imeOff) { setImeWarn(true); return; }
     setResult(r);
   };
+  const pick = async (choice: number) => setResult(await window.hanzi.answer(q!.word.id, '', choice));
 
   if (!q) return <div className="stage">Đang tải…</div>;
 
@@ -56,6 +63,16 @@ export default function App() {
     <>
       <div className="topbar">
         <span className="count">{p.passed}/{p.total}</span>
+        {q.word && (
+          <>
+            <span className="stagename">{STAGE_LABEL[q.word.stage] ?? q.word.stage}</span>
+            <span className="stagebar">
+              {Array.from({ length: q.word.stageCount }, (_, i) => (
+                <i key={i} className={i <= q.word.stageIndex ? 'on' : ''} />
+              ))}
+            </span>
+          </>
+        )}
         <div className="bar"><i style={{ width: `${pct}%` }} /></div>
         <button className="ghost" onClick={() => setReporting(result && !result.correct ? 'grading' : 'hanzi')}>
           ⚠ Báo lỗi <span style={{ opacity: .6 }}>⌘E</span>
@@ -68,6 +85,24 @@ export default function App() {
 
       <div className="stage">
         {!result ? (
+          q.word.stage === 'reading' ? (
+            <ReadingStage hanzi={q.word.hanzi} choices={q.word.choices} onPick={pick} />
+          ) : q.word.stage === 'cloze' && q.word.cloze ? (
+            <>
+              <ClozeStage
+                cloze={q.word.cloze}
+                meaning={q.word.meaning_vi}
+                expectedLength={q.word.hanzi_len}
+                onSubmit={submit}
+                bad={imeWarn}
+              />
+              <div className="hintline">
+                {imeWarn
+                  ? 'Bạn đang gõ chữ Latin — bật bộ gõ tiếng Trung rồi thử lại. Lượt này không bị tính sai.'
+                  : 'Enter để nộp.'}
+              </div>
+            </>
+          ) : (
           <>
             <div className="prompt">
               <div className="ask">Gõ hán tự</div>
@@ -81,6 +116,7 @@ export default function App() {
                 : 'Enter để nộp. Pinyin chỉ hiện sau khi bạn trả lời.'}
             </div>
           </>
+          )
         ) : (
           <Result result={result} onNext={load} onReport={() => setReporting('grading')} />
         )}
@@ -119,6 +155,7 @@ function Result({ result, onNext, onReport }: { result: any; onNext: () => void;
           ? result.shaky ? '✓ Đúng — nhưng hơi chậm, sẽ gặp lại sớm' : '✓ Đúng'
           : result.errorType === 'homophone_wrong_char'
             ? '✗ Đúng âm, sai chữ — đây đúng là lỗi cần chữa'
+            : result.errorType === 'meaning_wrong' ? '✗ Chọn sai nghĩa'
             : result.errorType === 'blank' ? '✗ Bỏ trống' : '✗ Sai'}
       </div>
 
@@ -175,8 +212,16 @@ function Result({ result, onNext, onReport }: { result: any; onNext: () => void;
 
       {!result.correct && result.stillNeeded > 0 && (
         <div className="pos" style={{ marginTop: 14 }}>
-          Từ này cần đúng thêm {result.stillNeeded} lần nữa mới tính là pass.
+          Cổng "{STAGE_LABEL[result.stage] ?? result.stage}" cần đúng thêm {result.stillNeeded} lần nữa.
         </div>
+      )}
+      {result.correct && !result.justPassed && result.nextStage && (
+        <div className="pos" style={{ marginTop: 14 }}>
+          Qua cổng này. Tiếp theo: <b>{STAGE_LABEL[result.nextStage] ?? result.nextStage}</b>.
+        </div>
+      )}
+      {result.justPassed && (
+        <div style={{ marginTop: 14, color: 'var(--ok)' }}>✓ Từ này đã pass đủ các cổng hôm nay.</div>
       )}
 
       <div className="actions" style={{ marginTop: 22 }}>

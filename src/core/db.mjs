@@ -1,6 +1,7 @@
 // Lớp dữ liệu: mở DB, nạp seed, và các truy vấn app dùng.
 import Database from 'better-sqlite3';
 import { SCHEMA } from './schema.mjs';
+import { stagesFor } from './stages.mjs';
 
 export function openDb(file) {
   const db = new Database(file);
@@ -19,6 +20,8 @@ function migrate(db) {
     example_pinyin: "TEXT NOT NULL DEFAULT ''",
     meaning_vi_alt: "TEXT NOT NULL DEFAULT ''",
     standard: "TEXT NOT NULL DEFAULT 'hsk3'",
+    stages: `TEXT NOT NULL DEFAULT '["production"]'`,
+    anchor: "TEXT NOT NULL DEFAULT 'production'",
   };
   for (const [col, decl] of Object.entries(want))
     if (!have.has(col)) db.exec(`ALTER TABLE words ADD COLUMN ${col} ${decl}`);
@@ -48,10 +51,10 @@ export function upsertWords(db, rows) {
   const stmt = db.prepare(`
     INSERT INTO words (hanzi,pinyin,hanviet,meaning_vi,meaning_vi_alt,pos_vi,hsk_level,standard,
                        lesson,radical,example_zh,example_pinyin,example_vi,note,
-                       homophone_key,frequency,active,quarantined)
+                       homophone_key,frequency,active,quarantined,stages,anchor)
     VALUES (@hanzi,@pinyin,@hanviet,@meaning_vi,@meaning_vi_alt,@pos_vi,@hsk_level,@standard,
             @lesson,@radical,@example_zh,@example_pinyin,@example_vi,@note,
-            @homophone_key,@frequency,@active,@quarantined)
+            @homophone_key,@frequency,@active,@quarantined,@stages,@anchor)
     ON CONFLICT(hanzi) DO UPDATE SET
       pinyin=excluded.pinyin, hanviet=excluded.hanviet, meaning_vi=excluded.meaning_vi,
       meaning_vi_alt=excluded.meaning_vi_alt, pos_vi=excluded.pos_vi,
@@ -59,7 +62,8 @@ export function upsertWords(db, rows) {
       radical=excluded.radical, example_zh=excluded.example_zh,
       example_pinyin=excluded.example_pinyin, example_vi=excluded.example_vi,
       note=excluded.note, homophone_key=excluded.homophone_key, frequency=excluded.frequency,
-      active=excluded.active, updated_at=datetime('now')
+      active=excluded.active, stages=excluded.stages, anchor=excluded.anchor,
+      updated_at=datetime('now')
   `);
   const tx = db.transaction((list) => {
     for (const r of list)
@@ -74,6 +78,10 @@ export function upsertWords(db, rows) {
         // Cách ly chỉ áp lúc INSERT: sync lại không được tự bỏ hoặc tự bật lại
         // cách ly mà bạn đã xử lý bằng tay.
         quarantined: r.quarantined ? 1 : 0,
+        // Cổng áp dụng cho từ này, tính một lần lúc nạp. anchor = cổng đầu tiên,
+        // dùng làm card lên lịch FSRS cho cả từ.
+        stages: JSON.stringify(stagesFor(r)),
+        anchor: stagesFor(r)[0],
         pos_vi: r.pos_vi ?? '',
         hsk_level: r.hsk_level,
         lesson: r.lesson ?? '',
@@ -90,16 +98,24 @@ export function upsertWords(db, rows) {
   return rows.length;
 }
 
-/** Tạo card còn thiếu cho mọi từ đã sẵn sàng học (có nghĩa tiếng Việt, không bị cách ly). */
-export function ensureCards(db, direction = 'production', today = isoDate()) {
-  return db
-    .prepare(
-      `INSERT INTO cards (word_id, direction, due, state)
-       SELECT w.id, ?, ?, 0 FROM words w
-       WHERE w.active = 1 AND w.quarantined = 0 AND w.meaning_vi <> ''
-         AND NOT EXISTS (SELECT 1 FROM cards c WHERE c.word_id = w.id AND c.direction = ?)`
-    )
-    .run(direction, today, direction).changes;
+/**
+ * Tạo card còn thiếu — MỘT card cho mỗi cổng của mỗi từ.
+ * FSRS giữ lịch riêng cho từng cổng vì chúng kiểm những kỹ năng khác nhau.
+ */
+export function ensureCards(db, today = isoDate()) {
+  const rows = db.prepare(
+    `SELECT id, stages FROM words
+     WHERE active = 1 AND quarantined = 0 AND meaning_vi <> ''`
+  ).all();
+  const ins = db.prepare(
+    `INSERT OR IGNORE INTO cards (word_id, direction, due, state) VALUES (?,?,?,0)`
+  );
+  let n = 0;
+  db.transaction(() => {
+    for (const w of rows)
+      for (const st of JSON.parse(w.stages)) n += ins.run(w.id, st, today).changes;
+  })();
+  return n;
 }
 
 /**
@@ -153,5 +169,21 @@ export function stats(db) {
     words: one('SELECT COUNT(*) n FROM words').n,
     ready: one("SELECT COUNT(*) n FROM words WHERE active=1 AND quarantined=0 AND meaning_vi<>''").n,
     quarantined: one('SELECT COUNT(*) n FROM words WHERE quarantined=1').n,
+  };
+}
+
+/**
+ * Nguồn mồi nhử cho cổng đọc hiểu, xếp theo mức dễ lẫn giảm dần.
+ * Mồi ngẫu nhiên thì loại trừ là đoán ra; mồi cùng âm mới ép nhận mặt chữ.
+ */
+export function distractorPools(db, word, limit = 8) {
+  const ready = `active=1 AND quarantined=0 AND meaning_vi<>'' AND id<>@id`;
+  const q = (extra, params) =>
+    db.prepare(`SELECT hanzi, meaning_vi, pinyin FROM words WHERE ${ready} AND ${extra} LIMIT ${limit}`)
+      .all({ id: word.id, ...params });
+  return {
+    homophones: word.homophone_key ? q('homophone_key=@k', { k: word.homophone_key }) : [],
+    sameRadical: word.radical ? q('radical=@r AND hsk_level<=@l', { r: word.radical, l: word.hsk_level }) : [],
+    sameLevel: q('hsk_level=@l ORDER BY RANDOM()', { l: word.hsk_level }),
   };
 }

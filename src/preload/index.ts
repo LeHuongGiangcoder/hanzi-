@@ -2,7 +2,8 @@ import { contextBridge, ipcRenderer } from 'electron';
 
 const api = {
   question: () => ipcRenderer.invoke('session:question'),
-  answer: (wordId: number, raw: string) => ipcRenderer.invoke('session:answer', { wordId, raw }),
+  answer: (wordId: number, raw: string, choice?: number) =>
+    ipcRenderer.invoke('session:answer', { wordId, raw, choice }),
   report: (p: Record<string, unknown>) => ipcRenderer.invoke('session:report', p),
   snooze: () => ipcRenderer.invoke('session:snooze'),
   surrender: (typed: string) => ipcRenderer.invoke('session:surrender', { typed }),

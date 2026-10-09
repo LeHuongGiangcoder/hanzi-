@@ -4,7 +4,9 @@ import { fileURLToPath } from 'node:url';
 import { randomUUID } from 'node:crypto';
 import { readFileSync, existsSync } from 'node:fs';
 // @ts-ignore — lõi viết bằng .mjs để test được bằng node mà không cần Electron
-import { openDb, upsertWords, ensureCards, isoDate, homophonesOf, quarantineWord, stats, getSetting, setSetting, wordByHanzi } from '../core/db.mjs';
+import { openDb, upsertWords, ensureCards, isoDate, homophonesOf, quarantineWord, stats, getSetting, setSetting, wordByHanzi, distractorPools } from '../core/db.mjs';
+// @ts-ignore
+import { buildCloze, buildChoices } from '../core/stages.mjs';
 // @ts-ignore
 import { startSession, applyReview, markPassed, replaceInQueue } from '../core/scheduler.mjs';
 // @ts-ignore
@@ -79,21 +81,65 @@ function createWindow() {
     win.webContents.on('did-finish-load', async () => {
       // Kiểm phía renderer: React mount được chưa, IPC gọi được chưa, có rò đáp án không.
       const out = await win!.webContents.executeJavaScript(`(async () => {
+        const sleep = (ms) => new Promise(r => setTimeout(r, ms));
         const root = document.getElementById('root');
-        const q = await window.hanzi.question();
-        const html = root.innerHTML;
-        return {
-          mounted: root.children.length > 0,
-          hasInput: !!document.querySelector('input.ime'),
-          progressShown: /\\d+\\/\\d+/.test(root.innerText),
-          meaningShown: !!document.querySelector('.meaning')?.textContent?.trim(),
-          ipcOk: !!q && typeof q.done === 'boolean',
-          leaksHanzi: /[\\u4e00-\\u9fff]/.test(document.querySelector('.prompt')?.innerText || ''),
-          text: root.innerText.replace(/\\n+/g, ' | ').slice(0, 180)
-        };
+        const res = { steps: [], learned: 0 };
+        // Nhớ đáp án nhìn thấy ở màn hình reveal, để lượt sau trả lời ĐÚNG và
+        // đẩy từ sang cổng kế — nếu luôn sai thì không bao giờ tới cổng 2.
+        const known = new Map();
+        const keyOf = () =>
+          (document.querySelector('.sentence')?.innerText
+            || document.querySelector('.meaning')?.innerText
+            || document.querySelector('.hz.big')?.innerText || '').trim();
+
+        for (let turn = 0; turn < 24; turn++) {
+          await sleep(90);
+          const stage = document.querySelector('.stagename')?.textContent || '?';
+          const key = keyOf();
+          const choiceBtns = [...document.querySelectorAll('.choices button')];
+          const step = { stage, key: key.slice(0, 18) };
+
+          if (choiceBtns.length) {
+            step.kind = 'reading';
+            step.choices = choiceBtns.length;
+            step.showsBigHanzi = !!document.querySelector('.hz.big');
+            step.showsPinyinInPrompt = !!document.querySelector('.prompt .py');
+            choiceBtns[0].click();
+          } else {
+            const input = document.querySelector('input.ime');
+            if (!input) { step.kind = 'none'; res.steps.push(step); break; }
+            step.kind = document.querySelector('.sentence') ? 'cloze' : 'production';
+            const answer = known.get(key) || '狗';
+            step.answeredKnown = known.has(key);
+            const setter = Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype, 'value').set;
+            setter.call(input, answer);
+            input.dispatchEvent(new Event('input', { bubbles: true }));
+            input.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
+          }
+
+          await sleep(220);
+          const card = document.querySelector('.card');
+          step.resultCard = !!card;
+          if (card) {
+            const hz = card.querySelector('.hz:not(.big)')?.innerText?.trim();
+            if (hz && key) { known.set(key, hz); res.learned = known.size; }
+            step.passedAll = card.innerText.includes('pass đủ các cổng');
+            card.querySelector('button.primary')?.click();
+          } else break;
+          res.steps.push(step);
+        }
+        res.crashed = root.children.length === 0;
+        res.stageKinds = [...new Set(res.steps.map(s => s.kind))];
+        return res;
       })()`);
       console.log('\n===RENDERER===\n' + JSON.stringify(out, null, 1) + '\n===END===');
-      app.exit(out.mounted && out.hasInput && out.ipcOk && !out.leaksHanzi ? 0 : 1);
+      const reading = out.steps.filter((s: any) => s.kind === 'reading');
+      const bad = out.crashed
+        || out.steps.length < 10
+        || out.steps.some((s: any) => s.resultCard === false)
+        || !out.stageKinds.includes('reading')
+        || reading.some((s: any) => s.choices !== 4 || !s.showsBigHanzi || s.showsPinyinInPrompt);
+      app.exit(bad ? 1 : 0);
     });
   }
   return win;
@@ -124,24 +170,57 @@ function ensureRunner() {
   if (runner && session && session.date === isoDate()) return;
   const r = startSession(db);
   session = r.session;
-  runner = new SessionRunner(r.items);
-  // Khôi phục tiến độ nếu hôm nay đã học dở.
-  for (const it of r.items) if (it.passed_at) runner.answer(it.id, true);
+  runner = new SessionRunner(
+    r.items.map((it: any) => ({ ...it, stages: JSON.parse(it.stages) }))
+  );
+  // Khôi phục tiến độ nếu hôm nay đã học dở: từ đã pass thì cho qua hết các cổng.
+  for (const it of r.items)
+    if (it.passed_at) for (const _ of JSON.parse(it.stages)) runner.answer(it.id, true);
 }
+
+/** Lựa chọn của cổng đọc hiểu, giữ ở main để đáp án không nằm sẵn trong renderer. */
+let readingChoices: { hanzi: string; meaning_vi: string; correct: boolean }[] = [];
 
 function currentQuestion() {
   ensureRunner();
   const w = runner.next();
   if (!w) return { done: true, progress: runner.progress() };
   questionShownAt = Date.now();
+
+  const base = {
+    id: w.id, stage: w.stage, stageIndex: w.stageIndex, stageCount: w.stageCount,
+    hsk_level: w.hsk_level,
+  };
+
+  // Mỗi cổng chỉ gửi xuống renderer đúng thứ nó cần hiển thị. Hán tự đáp án
+  // không bao giờ đi kèm ở cổng production và cloze.
+  if (w.stage === 'production') {
+    return {
+      done: false, progress: runner.progress(),
+      word: { ...base, hanzi_len: [...String(w.hanzi)].length, meaning_vi: w.meaning_vi, pos_vi: w.pos_vi },
+    };
+  }
+
+  if (w.stage === 'reading') {
+    // Ở cổng này hán tự CHÍNH LÀ câu hỏi, nên gửi xuống là đúng — nhưng vẫn
+    // không gửi pinyin: pinyin chỉ hiện ở màn hình reveal.
+    readingChoices = buildChoices(w, distractorPools(db, w));
+    return {
+      done: false, progress: runner.progress(),
+      word: {
+        ...base, hanzi: w.hanzi,
+        choices: readingChoices.map((c, i) => ({ i, meaning_vi: c.meaning_vi })),
+      },
+    };
+  }
+
+  const cz = buildCloze(w);
   return {
-    done: false,
-    progress: runner.progress(),
+    done: false, progress: runner.progress(),
     word: {
-      id: w.id, hanzi_len: [...String(w.hanzi)].length,
-      meaning_vi: w.meaning_vi, pos_vi: w.pos_vi, hsk_level: w.hsk_level,
-      // CỐ Ý không gửi hanzi/pinyin/hanviet xuống renderer trước khi trả lời,
-      // để không có cách nào rò đáp án ra devtools.
+      ...base, hanzi_len: [...String(w.hanzi)].length,
+      meaning_vi: w.meaning_vi,
+      cloze: cz ? { before: cz.before, after: cz.after, blankLength: cz.blankLength, translation: cz.translation } : null,
     },
   };
 }
@@ -159,12 +238,24 @@ function reveal(w: any) {
 function registerIpc() {
   ipcMain.handle('session:question', () => currentQuestion());
 
-  ipcMain.handle('session:answer', (_e, { wordId, raw }) => {
+  ipcMain.handle('session:answer', (_e, { wordId, raw, choice }) => {
     ensureRunner();
     const w = db.prepare('SELECT * FROM words WHERE id=?').get(wordId);
-    const card = db.prepare("SELECT * FROM cards WHERE word_id=? AND direction='production'").get(wordId);
+    const stage = runner.stageOf(wordId);
+    const card = db.prepare('SELECT * FROM cards WHERE word_id=? AND direction=?').get(wordId, stage);
     const latency = Date.now() - questionShownAt;
-    const g = gradeAnswer(raw, w.hanzi, latency);
+
+    // Cổng đọc hiểu chấm theo lựa chọn, hai cổng còn lại chấm chuỗi gõ bằng IME.
+    const g =
+      stage === 'reading'
+        ? {
+            correct: !!readingChoices[choice]?.correct,
+            errorType: readingChoices[choice]?.correct ? 'none' : 'meaning_wrong',
+            grade: readingChoices[choice]?.correct ? (latency > 8000 ? 2 : 3) : 1,
+            shaky: latency > 8000, answer: readingChoices[choice]?.meaning_vi ?? '',
+            answerPinyin: '', sameSound: false, imeOff: false,
+          }
+        : gradeAnswer(raw, w.hanzi, latency);
 
     // Chưa bật IME không phải lỗi kiến thức: không ghi review, không phạt lịch.
     if (g.imeOff) return { imeOff: true, progress: runner.progress() };
@@ -183,9 +274,12 @@ function registerIpc() {
     return {
       correct: g.correct,
       errorType: g.errorType,
+      stage,
       shaky: g.shaky,
       latencyMs: latency,
       justPassed: !!res?.justPassed,
+      clearedStage: !!res?.clearedStage,
+      nextStage: res?.justPassed ? null : (runner.stageOf(wordId) ?? null),
       stillNeeded: res?.needed ?? 0,
       reveal: reveal(w),
       hint: g.correct ? null : pickHint(w, sibs),
@@ -205,10 +299,11 @@ function registerIpc() {
 
     if (field === 'grading') {
       // Dữ liệu đúng, app chấm sai → cho qua tại chỗ, KHÔNG tính lapse.
-      const card = db.prepare("SELECT * FROM cards WHERE word_id=? AND direction='production'").get(wordId);
+      const card = db.prepare('SELECT * FROM cards WHERE word_id=? AND direction=?')
+        .get(wordId, runner.stageOf(wordId) ?? 'production');
       applyReview(db, card, { grade: 3, latencyMs: 0, answerRaw: '', errorType: 'none', sessionId: session.id });
       const st = runner.state.get(wordId);
-      if (st) { st.needed = 1; }
+      if (st) { st.needed = 1; st.stageIdx = st.stages.length - 1; }
       runner.answer(wordId, true);
       markPassed(db, session.id, wordId);
       return { kind: 'grading', progress: runner.progress() };
@@ -296,12 +391,15 @@ function runSmoke() {
        !('hanzi' in (q1.word ?? {})) && !('pinyin' in (q1.word ?? {})));
 
     const w: any = db.prepare('SELECT * FROM words WHERE id=?').get(q1.word.id);
-    const card: any = db.prepare("SELECT * FROM cards WHERE word_id=? AND direction='production'").get(w.id);
+    const card: any = db.prepare('SELECT * FROM cards WHERE word_id=? AND direction=?')
+      .get(w.id, runner.stageOf(w.id));
     const g = gradeAnswer(w.hanzi, w.hanzi, 1000);
     applyReview(db, card, { grade: g.grade, latencyMs: 1000, answerRaw: w.hanzi, errorType: g.errorType, sessionId: session.id });
-    runner.answer(w.id, true);
+    const nStages = JSON.parse(w.stages).length;
+    for (let i = 0; i < nStages; i++) runner.answer(w.id, true);
     markPassed(db, session.id, w.id);
-    ok('chấm đúng + ghi lịch', runner.progress().passed === 1, `${runner.progress().passed}/${runner.progress().total}`);
+    ok('vượt đủ cổng mới pass', runner.progress().passed === 1,
+       `${w.hanzi} có ${nStages} cổng → ${runner.progress().passed}/${runner.progress().total}`);
 
     const q2: any = currentQuestion();
     const before = runner.total;
@@ -313,6 +411,50 @@ function runSmoke() {
     const withEx: any = db.prepare(
       "SELECT COUNT(*) n FROM words WHERE example_zh <> ''").get();
     ok('có câu ví dụ', withEx.n > 3000, `${withEx.n} câu`);
+
+    // --- đi qua cả ba cổng của một từ, kiểm payload từng cổng ---
+    const target: any = db.prepare(
+      `SELECT * FROM words WHERE stages = '["production","reading","cloze"]'
+         AND quarantined = 0 LIMIT 1`).get();
+    const st = runner.state.get(target.id)
+      ?? (runner.state.set(target.id, {
+            word: { ...target, stages: JSON.parse(target.stages) },
+            stages: JSON.parse(target.stages), stageIdx: 0, needed: 1, wrongCount: 0,
+            passed: false, removed: false, notBefore: 0,
+          }), runner.queue.unshift(target.id), runner.state.get(target.id));
+    st.stageIdx = 0; st.passed = false; st.removed = false; st.notBefore = 0;
+    if (!runner.queue.includes(target.id)) runner.queue.unshift(target.id);
+
+    const seen: string[] = [];
+    for (let i = 0; i < 3; i++) {
+      runner.queue = [target.id, ...runner.queue.filter((x: number) => x !== target.id)];
+      const q: any = currentQuestion();
+      seen.push(q.word.stage);
+      if (q.word.stage === 'production') {
+        ok('cổng 1 production: có nghĩa, KHÔNG có hán tự',
+           !!q.word.meaning_vi && !('hanzi' in q.word));
+      } else if (q.word.stage === 'reading') {
+        ok('cổng 2 reading: có hán tự + 4 lựa chọn, KHÔNG có pinyin',
+           q.word.hanzi === target.hanzi && q.word.choices?.length === 4 && !('pinyin' in q.word),
+           q.word.choices?.map((c: any) => c.meaning_vi).join(' | ').slice(0, 70));
+        ok('đúng một lựa chọn là đáp án',
+           readingChoices.filter((c) => c.correct).length === 1);
+        ok('mồi nhử không lặp nghĩa',
+           new Set(readingChoices.map((c) => c.meaning_vi)).size === readingChoices.length);
+      } else {
+        ok('cổng 3 cloze: có câu khoét trống, KHÔNG có hán tự đáp án',
+           !!q.word.cloze && !('hanzi' in q.word),
+           q.word.cloze ? `${q.word.cloze.before}[${q.word.cloze.blankLength} ô]${q.word.cloze.after}` : '');
+      }
+      runner.answer(target.id, true);
+    }
+    ok('thứ tự cổng: tạo chữ → đọc hiểu → dùng trong câu',
+       seen.join('>') === 'production>reading>cloze', seen.join(' > '));
+
+    const particle: any = db.prepare(
+      "SELECT hanzi, anchor FROM words WHERE pos_vi LIKE '%trợ từ%' AND example_zh <> '' LIMIT 1").get();
+    ok('trợ từ vào thẳng cloze, không bị bắt gõ từ nghĩa',
+       particle?.anchor === 'cloze', `${particle?.hanzi} → ${particle?.anchor}`);
 
     const mai: any = wordByHanzi(db, '买');
     const h = pickHint(mai, homophonesOf(db, mai.id));

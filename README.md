@@ -19,7 +19,7 @@ Mục tiêu cụ thể: chữa tật phụ thuộc pinyin mà không nhớ mặt
 - [x] Phase 0b — nghĩa tiếng Việt + âm Hán-Việt: 1193/1193 từ (bộ HSK 2.0)
 - [x] Phase 0c — hợp nhất sang **HSK 3.0: 3304 từ, 3156 câu ví dụ**
 - [x] Phase 1 — Electron app: scheduler, SQLite, FSRS, cổng gõ IME, luật pass-20, báo lỗi, sync Sheet
-- [ ] Phase 2 — stage đọc + cloze, màn hình đối chiếu đồng âm, phân loại lỗi
+- [x] Phase 2 — ba cổng (tạo chữ → đọc hiểu → dùng trong câu), mồi nhử cùng âm
 - [ ] Phase 3 — dashboard, streak, xử lý từ hay sai
 - [ ] Phase 4 (tuỳ) — viết tay trackpad, luyện nghe
 
@@ -45,9 +45,15 @@ thống: `better-sqlite3` được build cho ABI của Electron nên node thư�
 | Preload | `src/preload/index.ts` | `contextBridge`, không bật nodeIntegration |
 | Renderer | `src/renderer/` | React + TS |
 
-**Đáp án không bao giờ đi xuống renderer trước khi bạn trả lời.** IPC `session:question`
-chỉ gửi nghĩa tiếng Việt, từ loại, level và *số lượng chữ* — không gửi `hanzi`, `pinyin`
-hay `hanviet`. Mở devtools cũng không đọc được đáp án. Có test tự động cho điều này.
+**Đáp án không bao giờ đi xuống renderer trước khi bạn trả lời.** `session:question` chỉ
+gửi đúng thứ mỗi cổng cần hiển thị:
+
+- `production` → nghĩa, từ loại, *số lượng chữ*. Không có `hanzi`.
+- `reading` → `hanzi` (ở cổng này nó chính là câu hỏi) + 4 nghĩa. Không có `pinyin`.
+- `cloze` → phần câu trước/sau chỗ trống + số ô. Không có `hanzi`.
+
+Lựa chọn nào là đáp án được giữ ở main process, renderer chỉ gửi lên chỉ số đã bấm. Mở
+devtools cũng không đọc được đáp án. Có test tự động cho cả ba cổng.
 
 ### Cách app bật lên
 
@@ -100,6 +106,38 @@ node scripts/4-export-sheet.mjs 1 2   # → data/sheet-hsk12.csv (đúng cột G
 npm run data:validate -- dump.json    # kiểm dòng đọc từ Sheet trước khi nạp vào deck
 npm run data:reports  -- reports.json # xử lý báo lỗi → overrides + việc cần làm tay
 ```
+
+## Ba cổng của một từ
+
+Một từ chỉ tính là PASS trong ngày khi vượt **hết** các cổng của nó:
+
+| # | Cổng | Hiện gì | Bạn làm gì |
+|---|---|---|---|
+| 1 | `production` | nghĩa tiếng Việt + từ loại | gõ hán tự bằng IME |
+| 2 | `reading` | hán tự trần, **không pinyin** | chọn nghĩa đúng trong 4 |
+| 3 | `cloze` | câu ví dụ khoét chỗ trống | gõ hán tự vào chỗ trống |
+
+Thứ tự cố ý: **bắt tạo ra chữ trước rồi mới kiểm đọc hiểu**. Nhận ra chữ dễ hơn viết ra chữ
+rất nhiều, nên nhận diện không bao giờ được tính là pass.
+
+Sai ở cổng nào thì làm lại **đúng cổng đó** 2 lần, không tụt về cổng đầu — và vẫn phải có
+ít nhất 3 lượt khác chen vào giữa.
+
+### Trợ từ không đi cổng production
+
+Bắt gõ 吧 từ prompt *"trợ từ đề nghị hoặc phỏng đoán"* là bài kiểm tra về cách diễn đạt của
+người soạn, không phải về việc bạn có nhớ mặt chữ hay không. 的, 了, 吗, 呢, 吧, 着 và các hư
+từ khác **bỏ cổng production, vào thẳng cloze** — điền vào chỗ trống mới đúng bản chất của
+nhóm này. Cổng neo (`words.anchor`) của chúng là `cloze`, nên FSRS cũng lên lịch theo đó.
+
+### Mồi nhử không lấy ngẫu nhiên
+
+Bốn lựa chọn ở cổng đọc hiểu ưu tiên **từ cùng âm** trước, rồi tới **cùng bộ thủ**, rồi mới
+tới cùng cấp. Mồi ngẫu nhiên thì loại trừ là đoán ra; mồi cùng âm thì ép bạn thật sự nhận
+ra mặt chữ — cùng một logic với bẫy đồng âm.
+
+Mỗi cổng có **card FSRS riêng**, vì ba cổng kiểm ba kỹ năng khác nhau và quên với tốc độ
+khác nhau.
 
 ## Âm Hán-Việt: kênh ghi nhớ đi tắt qua pinyin
 

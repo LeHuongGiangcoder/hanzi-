@@ -1,8 +1,9 @@
 // Luật "pass đủ 20" bên trong một phiên học.
 //
-// Một từ chỉ được tính PASS khi trả lời đúng. Sai thì nó quay lại hàng đợi và
-// phải đúng thêm REQUEUE_CORRECT lần nữa, với ít nhất MIN_GAP từ khác chen vào
-// giữa — để bạn không trả lời đúng chỉ vì vừa mới nhìn thấy đáp án.
+// Một từ chỉ PASS khi vượt qua HẾT các cổng của nó (production → reading → cloze).
+// Sai ở cổng nào thì phải làm đúng cổng đó thêm REQUEUE_CORRECT lần nữa, với ít
+// nhất MIN_GAP lượt khác chen vào giữa — để bạn không trả lời đúng chỉ vì vừa
+// mới nhìn thấy đáp án.
 //
 // Lớp này là máy trạng thái thuần, không đụng DB, nên test được trực tiếp.
 
@@ -19,7 +20,9 @@ export class SessionRunner {
     for (const it of items) {
       this.state.set(it.id, {
         word: it,
-        needed: 1,          // số lần đúng còn phải đạt
+        stages: it.stages?.length ? [...it.stages] : ['production'],
+        stageIdx: 0,
+        needed: 1,          // số lần đúng còn phải đạt Ở CỔNG HIỆN TẠI
         wrongCount: 0,
         passed: false,
         removed: false,
@@ -33,7 +36,13 @@ export class SessionRunner {
   get passedCount() { return [...this.state.values()].filter((s) => s.passed).length; }
   get done() { return this.total > 0 && this.passedCount >= this.total; }
 
-  /** Từ tiếp theo nên hỏi; null nếu đã xong. */
+  /** Cổng hiện tại của một từ. */
+  stageOf(wordId) {
+    const s = this.state.get(wordId);
+    return s ? s.stages[s.stageIdx] : null;
+  }
+
+  /** Từ tiếp theo nên hỏi, kèm cổng; null nếu đã xong. */
   next() {
     if (this.done) return null;
     const ready = this.queue.filter((id) => {
@@ -60,7 +69,8 @@ export class SessionRunner {
         return (B.wrongCount > 0) - (A.wrongCount > 0);
       });
     }
-    return this.state.get(pool[0]).word;
+    const s = this.state.get(pool[0]);
+    return { ...s.word, stage: s.stages[s.stageIdx], stageIndex: s.stageIdx, stageCount: s.stages.length };
   }
 
   /** Ghi kết quả một lượt. Trả về trạng thái mới của từ đó. */
@@ -73,8 +83,17 @@ export class SessionRunner {
     if (correct) {
       s.needed -= 1;
       if (s.needed <= 0) {
-        s.passed = true;
-        return { ...s, justPassed: true };
+        s.stageIdx += 1;              // qua cổng này, sang cổng kế
+        s.needed = 1;
+        if (s.stageIdx >= s.stages.length) {
+          s.passed = true;
+          return { ...s, justPassed: true, clearedStage: true };
+        }
+        // Cổng kế hỏi ngay cũng được: nó kiểm một kỹ năng khác, không phải
+        // hỏi lại cùng một câu.
+        s.notBefore = this.served;
+        this.queue.unshift(wordId);
+        return { ...s, justPassed: false, clearedStage: true };
       }
     } else {
       s.wrongCount += 1;
@@ -92,7 +111,9 @@ export class SessionRunner {
     this.queue = this.queue.filter((id) => id !== wordId);
     if (replacement) {
       this.state.set(replacement.id, {
-        word: replacement, needed: 1, wrongCount: 0,
+        word: replacement,
+        stages: replacement.stages?.length ? [...replacement.stages] : ['production'],
+        stageIdx: 0, needed: 1, wrongCount: 0,
         passed: false, removed: false, notBefore: this.served,
       });
       this.queue.push(replacement.id);

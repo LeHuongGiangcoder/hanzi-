@@ -264,3 +264,134 @@ test('sửa lỗi xong thì card reset về new, không giữ lịch đã nhiễ
   assert.equal(after.stability, 0);
   assert.equal(after.reps, 0);
 });
+
+// ---------- ba cổng ----------
+import { stagesFor, isFunctionWord, hasCloze, buildCloze, buildChoices } from '../src/core/stages.mjs';
+
+test('từ thường đi đủ ba cổng, production trước', () => {
+  const w = { hanzi: '买', meaning_vi: 'mua', pos_vi: 'động từ', example_zh: '我买了一本书' };
+  assert.deepEqual(stagesFor(w), ['production', 'reading', 'cloze']);
+});
+
+test('từ không có câu ví dụ thì chỉ hai cổng', () => {
+  assert.deepEqual(stagesFor({ hanzi: '踢', meaning_vi: 'đá', pos_vi: 'động từ', example_zh: '' }),
+                   ['production', 'reading']);
+});
+
+test('TRỢ TỪ bỏ cổng production, vào thẳng cloze', () => {
+  const ba = { hanzi: '吧', meaning_vi: 'trợ từ đề nghị', pos_vi: 'trợ từ', example_zh: '我们走吧' };
+  assert.equal(isFunctionWord(ba), true);
+  assert.deepEqual(stagesFor(ba), ['cloze', 'reading']);
+});
+
+test('trợ từ KHÔNG có câu ví dụ thì vẫn phải dùng production (không còn cách nào khác)', () => {
+  const de = { hanzi: '的', meaning_vi: 'trợ từ sở hữu', pos_vi: 'trợ từ', example_zh: '' };
+  assert.deepEqual(stagesFor(de), ['production', 'reading']);
+});
+
+test('cloze khoét đúng chỗ và giữ phần còn lại của câu', () => {
+  const c = buildCloze({ hanzi: '买', example_zh: '我买了一本书', example_vi: 'Tôi đã mua một quyển sách' });
+  assert.equal(c.before, '我');
+  assert.equal(c.after, '了一本书');
+  assert.equal(c.blankLength, 1);
+  assert.equal(c.answer, '买');
+});
+
+test('cloze với từ hai chữ đếm đúng số ô trống', () => {
+  const c = buildCloze({ hanzi: '学习', example_zh: '我喜欢学习中文' });
+  assert.equal(c.blankLength, 2);
+  assert.equal(c.before, '我喜欢');
+  assert.equal(c.after, '中文');
+});
+
+test('câu ví dụ không chứa từ khoá thì không dựng được cloze', () => {
+  assert.equal(hasCloze({ hanzi: '买', example_zh: '他卖东西' }), false);
+  assert.equal(buildCloze({ hanzi: '买', example_zh: '他卖东西' }), null);
+});
+
+test('mồi nhử ưu tiên từ CÙNG ÂM, không lấy ngẫu nhiên', () => {
+  const word = { hanzi: '买', meaning_vi: 'mua' };
+  const opts = buildChoices(word, {
+    homophones: [{ hanzi: '卖', meaning_vi: 'bán' }, { hanzi: '迈', meaning_vi: 'bước' }],
+    sameRadical: [{ hanzi: '头', meaning_vi: 'đầu' }],
+    sameLevel: [{ hanzi: '狗', meaning_vi: 'con chó' }],
+  }, { rand: () => 0 });
+  assert.equal(opts.length, 4);
+  assert.equal(opts.filter((o) => o.correct).length, 1);
+  const set = new Set(opts.map((o) => o.hanzi));
+  assert.ok(set.has('卖') && set.has('迈'), 'phải dùng hết từ cùng âm trước');
+  assert.ok(!set.has('狗'), 'chưa cần tới mồi cùng cấp khi còn từ cùng âm');
+});
+
+test('mồi nhử không trùng nghĩa với đáp án', () => {
+  const opts = buildChoices({ hanzi: '买', meaning_vi: 'mua' },
+    { homophones: [{ hanzi: '沶', meaning_vi: 'mua' }, { hanzi: '卖', meaning_vi: 'bán' }] },
+    { rand: () => 0 });
+  assert.equal(opts.filter((o) => o.meaning_vi === 'mua').length, 1);
+});
+
+test('một từ ba cổng phải trả lời đúng CẢ BA mới pass', () => {
+  const r = new SessionRunner([{ id: 1, hanzi: '买', stages: ['production', 'reading', 'cloze'] }]);
+  assert.equal(r.stageOf(1), 'production');
+  assert.equal(r.answer(1, true).justPassed, false);
+  assert.equal(r.stageOf(1), 'reading');
+  assert.equal(r.answer(1, true).justPassed, false);
+  assert.equal(r.stageOf(1), 'cloze');
+  assert.equal(r.answer(1, true).justPassed, true);
+  assert.equal(r.done, true);
+});
+
+test('sai ở cổng giữa thì phải làm lại ĐÚNG CỔNG ĐÓ 2 lần, không tụt về cổng đầu', () => {
+  const r = new SessionRunner([
+    { id: 1, hanzi: '买', stages: ['production', 'reading', 'cloze'] },
+    { id: 2, hanzi: '卖', stages: ['production'] },
+    { id: 3, hanzi: '狗', stages: ['production'] },
+    { id: 4, hanzi: '猫', stages: ['production'] },
+    { id: 5, hanzi: '鱼', stages: ['production'] },
+  ]);
+  r.answer(1, true);                       // qua production
+  assert.equal(r.stageOf(1), 'reading');
+  r.answer(1, false);                      // sai ở reading
+  assert.equal(r.stageOf(1), 'reading', 'không được tụt về production');
+  assert.equal(r.state.get(1).needed, 2);
+  r.answer(1, true); r.answer(1, true);
+  assert.equal(r.stageOf(1), 'cloze');
+});
+
+test('next() cho biết đang ở cổng nào và tiến độ cổng', () => {
+  const r = new SessionRunner([{ id: 1, hanzi: '买', stages: ['production', 'reading', 'cloze'] }]);
+  const q = r.next();
+  assert.equal(q.stage, 'production');
+  assert.equal(q.stageIndex, 0);
+  assert.equal(q.stageCount, 3);
+});
+
+test('kho từ thật: trợ từ được định tuyến sang cloze, không bắt gõ từ nghĩa', () => {
+  const db = freshDb();
+  const rows = db.prepare("SELECT * FROM words WHERE pos_vi LIKE '%trợ từ%' AND example_zh <> ''").all();
+  assert.ok(rows.length > 5, 'phải có trợ từ có câu ví dụ trong kho');
+  for (const w of rows) assert.equal(stagesFor(w)[0], 'cloze', `${w.hanzi} vẫn bị hỏi production`);
+});
+
+test('mỗi cổng của một từ có card riêng, lịch FSRS riêng', () => {
+  const db = freshDb();
+  const w = db.prepare("SELECT * FROM words WHERE hanzi='买'").get();
+  const dirs = db.prepare('SELECT direction FROM cards WHERE word_id=? ORDER BY direction').all(w.id)
+    .map((r) => r.direction);
+  assert.deepEqual(dirs, ['cloze', 'production', 'reading']);
+});
+
+test('trợ từ có cổng neo là cloze, nên lên lịch không qua production', () => {
+  const db = freshDb();
+  const rows = db.prepare("SELECT hanzi, anchor FROM words WHERE pos_vi LIKE '%trợ từ%' AND example_zh <> ''").all();
+  assert.ok(rows.length > 5);
+  for (const r of rows) assert.equal(r.anchor, 'cloze', r.hanzi);
+});
+
+test('hàng đợi vẫn đủ 20 từ sau khi chuyển sang nhiều cổng', () => {
+  const db = freshDb();
+  const q = buildQueue(db);
+  assert.equal(q.length, 20);
+  assert.equal(new Set(q.map((w) => w.id)).size, 20);
+  for (const w of q) assert.ok(w.card_id, `${w.hanzi} thiếu card neo`);
+});
