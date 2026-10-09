@@ -10,9 +10,35 @@
     "data:qa": "node scripts/3-qa-report.mjs",
     "data:all": "npm run data:fetch && npm run data:build && npm run data:qa",
     "data:validate": "node scripts/5-validate-sheet.mjs",
-    "data:reports": "node scripts/6-apply-reports.mjs"
+    "data:reports": "node scripts/6-apply-reports.mjs",
+    "dev": "electron-vite dev",
+    "build": "electron-vite build",
+    "start": "electron-vite preview",
+    "test": "ELECTRON_RUN_AS_NODE=1 electron --test test/*.test.mjs",
+    "postinstall": "electron-rebuild -f -w better-sqlite3",
+    "smoke": "HANZI_SMOKE=1 electron .",
+    "sheet:push": "node scripts/7-sync-sheet.mjs push",
+    "sheet:pull": "node scripts/7-sync-sheet.mjs pull",
+    "sheet:reports": "node scripts/7-sync-sheet.mjs reports"
   },
   "dependencies": {
-    "pinyin-pro": "^3.29.4"
-  }
+    "better-sqlite3": "^11.10.0",
+    "google-auth-library": "^9.15.1",
+    "pinyin-pro": "^3.29.4",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "ts-fsrs": "^4.6.1"
+  },
+  "devDependencies": {
+    "@electron/rebuild": "^3.7.2",
+    "@types/node": "^22.18.1",
+    "@types/react": "^18.3.12",
+    "@types/react-dom": "^18.3.1",
+    "@vitejs/plugin-react": "^4.6.0",
+    "electron": "^38.2.0",
+    "electron-vite": "^4.0.0",
+    "typescript": "^5.9.2",
+    "vite": "^6.3.5"
+  },
+  "main": "out/main/index.js"
 }

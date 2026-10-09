@@ -18,10 +18,74 @@ Mục tiêu cụ thể: chữa tật phụ thuộc pinyin mà không nhớ mặt
 - [x] Phase 0a — Google Sheet (tab `words` + `_reports`), validator sync, vòng báo lỗi
 - [x] Phase 0b — nghĩa tiếng Việt + âm Hán-Việt: **1193/1193 từ** (Hán-Việt 1146)
 - [ ] Phase 0c — câu ví dụ (1193 từ, có validator i+1)
-- [ ] Phase 1 — Electron app: scheduler, SQLite, FSRS, cổng gõ IME, luật pass-20
+- [x] Phase 1 — Electron app: scheduler, SQLite, FSRS, cổng gõ IME, luật pass-20, báo lỗi, sync Sheet
 - [ ] Phase 2 — stage đọc + cloze, màn hình đối chiếu đồng âm, phân loại lỗi
 - [ ] Phase 3 — dashboard, streak, xử lý từ hay sai
 - [ ] Phase 4 (tuỳ) — viết tay trackpad, luyện nghe
+
+## Chạy app
+
+```bash
+npm install          # postinstall tự rebuild better-sqlite3 cho ABI của Electron
+npm run dev          # chế độ phát triển, hot reload
+npm run build        # build vào out/
+npm test             # 28 test phần lõi
+npm run smoke        # kiểm toàn bộ đường dây phía main rồi thoát
+```
+
+`npm test` chạy bằng **node của Electron** (`ELECTRON_RUN_AS_NODE=1`), không phải node hệ
+thống: `better-sqlite3` được build cho ABI của Electron nên node thường không nạp được nó.
+
+### Kiến trúc
+
+| Tầng | Nơi | Ghi chú |
+|---|---|---|
+| Lõi | `src/core/*.mjs` | Thuần, không phụ thuộc Electron → test được bằng node |
+| Main | `src/main/index.ts` | Vòng đời app, tray, lịch nhắc, IPC |
+| Preload | `src/preload/index.ts` | `contextBridge`, không bật nodeIntegration |
+| Renderer | `src/renderer/` | React + TS |
+
+**Đáp án không bao giờ đi xuống renderer trước khi bạn trả lời.** IPC `session:question`
+chỉ gửi nghĩa tiếng Việt, từ loại, level và *số lượng chữ* — không gửi `hanzi`, `pinyin`
+hay `hanviet`. Mở devtools cũng không đọc được đáp án. Có test tự động cho điều này.
+
+### Cách app bật lên
+
+Tự chạy lúc đăng nhập và nằm im trên menu bar (`汉`). Tới giờ đặt trước (mặc định 20:30)
+mà hôm nay chưa pass đủ 20 từ thì mở cửa sổ. Laptop ngủ qua giờ hẹn thì `powerMonitor`
+bắt lại lúc mở nắp — không bỏ sót ngày nào.
+
+Cửa sổ `alwaysOnTop`, không có nút đóng. Lối thoát: hoãn 10 phút (tối đa 3 lần/ngày),
+hoặc **gõ đúng `我放弃` bằng IME** — đầu hàng cũng phải học. Cố ý dừng ở mức "rất phiền
+nếu bỏ" chứ không khoá cứng máy: ép quá tay thì app bị gỡ sau một tuần.
+
+## Đồng bộ Google Sheet
+
+Sheet do **code ghi**, không ai gõ tay. Lần bơm dữ liệu đầu tiên làm bằng tay đã sinh ra
+một lỗi câm (`晚上` → `晥上`), nên toàn bộ đường ghi giờ đi qua service account.
+
+```bash
+npm run sheet:push      # đẩy seed lên tab words (giữ nguyên cột lesson/verified bạn nhập)
+npm run sheet:pull      # kéo Sheet về + chạy validator trước khi nạp vào deck
+npm run sheet:reports   # kéo trạng thái báo lỗi về
+```
+
+Chuẩn bị một lần:
+
+1. [console.cloud.google.com](https://console.cloud.google.com) → tạo project → bật
+   **Google Sheets API**
+2. *IAM & Admin → Service Accounts* → tạo account → *Keys* → **Add key → JSON** → tải về
+3. Mở Sheet, bấm **Share**, dán email của service account (dạng
+   `…@….iam.gserviceaccount.com`), cấp quyền **Editor**
+4. Tạo `.env.local` cạnh `package.json` (đã nằm trong `.gitignore`):
+
+```
+HANZI_SHEET_ID=1nXjE2TOoU_tggH8JRNw-zjX3CcGjMfY4XUVZgITudsk
+HANZI_SA_KEY=/đường/dẫn/tới/service-account.json
+```
+
+`sheet:push` **không** ghi đè cột `lesson` và `verified` — hai cột đó là của bạn, pipeline
+không đụng vào.
 
 ## Pipeline dữ liệu
 
