@@ -116,6 +116,22 @@ npm run data:validate -- dump.json    # kiểm dòng đọc từ Sheet trước 
 npm run data:reports  -- reports.json # xử lý báo lỗi → overrides + việc cần làm tay
 ```
 
+## Chỉ tiêu mỗi ngày
+
+Mặc định 20 từ. Đổi trong menu biểu tượng `汉` → **Chỉ tiêu mỗi ngày** (20 / 30 / 40 / 50).
+
+Tỷ lệ trộn giữ nguyên khi đổi: **60% từ đến hạn ôn, 15% từ hay sai, 25% từ mới**. Ôn phải
+nhiều hơn học mới, nếu không thì mỗi ngày nạp thêm một đống rồi quên sạch đống hôm trước.
+
+| Chỉ tiêu | ôn | hay sai | mới |
+|---|---|---|---|
+| 20 | 12 | 3 | 5 |
+| 30 | 18 | 5 | 7 |
+| 50 | 30 | 8 | 12 |
+
+Đổi chỉ tiêu **chỉ ảnh hưởng tới phiên chưa dựng**: phiên hôm nay đã chốt `target_count`
+rồi, nên đổi hôm nay thì mai mới có hiệu lực.
+
 ## Ba cổng của một từ
 
 Một từ chỉ tính là PASS trong ngày khi vượt **hết** các cổng của nó:
@@ -177,7 +193,10 @@ tất cả đều chưa học bao giờ — 14/20 từ dính nhóm đồng âm.
 
 Luật hiện tại:
 
-- hai từ cùng âm chỉ gặp nhau khi **cả hai đã thuộc** (`state ≠ new` và `reps ≥ 2`)
+- hai từ cùng âm chỉ gặp nhau khi **cả hai đã thuộc**: card đã tốt nghiệp sang trạng thái
+  ôn tập **và** giữ được ít nhất **7 ngày**. Ngưỡng đầu tiên tôi đặt (`state ≠ new` và
+  `reps ≥ 2`) quá lỏng — trả lời đúng vài lần trong *cùng một buổi* là đạt, và thực tế đã
+  cho ra một phiên ghép 是 với 时 khi cả hai mới có stability 0.1 ngày
 - mỗi phiên tối đa **2 nhóm** đồng âm, mỗi nhóm tối đa **2 từ**
 - mồi nhử ở cổng đọc hiểu cũng chỉ dùng từ đồng âm đã thuộc; từ mới thì lấy mồi cùng bộ thủ
   hoặc cùng cấp

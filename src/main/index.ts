@@ -8,7 +8,7 @@ import { openDb, upsertWords, ensureCards, isoDate, homophonesOf, quarantineWord
 // @ts-ignore
 import { buildCloze, buildChoices } from '../core/stages.mjs';
 // @ts-ignore
-import { resumeSession, applyReview, markPassed, replaceInQueue, saveStageIdx } from '../core/scheduler.mjs';
+import { resumeSession, applyReview, markPassed, replaceInQueue, saveStageIdx, mixForTarget, DEFAULT_TARGET } from '../core/scheduler.mjs';
 // @ts-ignore
 import { gradeAnswer } from '../core/grading.mjs';
 // @ts-ignore
@@ -309,7 +309,10 @@ function tick() {
 
 function ensureRunner() {
   if (runner && session && session.date === isoDate()) return;
-  const r = resumeSession(db);
+  // Đổi chỉ tiêu chỉ ảnh hưởng tới phiên CHƯA dựng: phiên hôm nay đã chốt
+  // target_count rồi, nên đổi hôm nay thì mai mới có hiệu lực.
+  const target = Number(getSetting(db, 'daily_target', String(DEFAULT_TARGET))) || DEFAULT_TARGET;
+  const r = resumeSession(db, { mix: mixForTarget(target) });
   session = r.session;
   runner = r.runner;
   refreshIndicators();
@@ -346,6 +349,18 @@ function refreshIndicators() {
     { label: 'Nhắc lại sau 30 phút', visible: !done, click: () => { deferPrompt(); win?.hide(); refreshIndicators(); } },
     { label: 'Nghỉ hôm nay', visible: !done, click: () => { deferPrompt(msUntilTomorrow()); win?.hide(); refreshIndicators(); } },
     { type: 'separator' },
+    {
+      label: `Chỉ tiêu mỗi ngày: ${getSetting(db, 'daily_target', String(DEFAULT_TARGET))} từ`,
+      submenu: [20, 30, 40, 50].map((n) => ({
+        label: `${n} từ/ngày`,
+        type: 'radio' as const,
+        checked: Number(getSetting(db, 'daily_target', String(DEFAULT_TARGET))) === n,
+        click: () => {
+          setSetting(db, 'daily_target', String(n));
+          refreshIndicators();
+        },
+      })),
+    },
     {
       label: 'Hiện ô tiến độ nhỏ',
       type: 'checkbox',

@@ -194,7 +194,7 @@ export function distractorPools(db, word, limit = 8) {
 
   const establishedHomophones = word.homophone_key
     ? q(
-        'w.homophone_key=@k AND c.state<>0 AND c.reps>=2',
+        'w.homophone_key=@k AND c.state=2 AND c.stability>=7',
         { k: word.homophone_key },
         'JOIN cards c ON c.word_id=w.id AND c.direction=w.anchor'
       )

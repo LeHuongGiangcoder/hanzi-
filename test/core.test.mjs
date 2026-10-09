@@ -547,7 +547,7 @@ test('mồi nhử ở cổng đọc hiểu cũng chỉ dùng từ đồng âm Đ
   assert.equal(distractorPools(db, mai).homophones.length, 0);
 
   const sell = db.prepare("SELECT id, anchor FROM words WHERE hanzi='卖'").get();
-  db.prepare('UPDATE cards SET state=2, reps=5 WHERE word_id=? AND direction=?')
+  db.prepare('UPDATE cards SET state=2, reps=5, stability=30 WHERE word_id=? AND direction=?')
     .run(sell.id, sell.anchor);
   const pools = distractorPools(db, mai);
   assert.ok(pools.homophones.some((w) => w.hanzi === '卖'), 'thuộc rồi thì mới được làm mồi');
@@ -675,4 +675,63 @@ test('nhịp học chưa đủ 3 ngày thì KHÔNG đưa ra dự báo', () => {
   assert.equal(pacePerDay(db), null, '2 ngày là chưa đủ để nói về nhịp');
   ins.run(card.id, '-2 day');
   assert.ok(pacePerDay(db) > 0, '3 ngày thì mới tính');
+});
+
+// ---------- đổi chỉ tiêu mỗi ngày ----------
+import { mixForTarget, DEFAULT_TARGET } from '../src/core/scheduler.mjs';
+
+test('bộ trộn giữ nguyên tỷ lệ khi đổi chỉ tiêu', () => {
+  assert.deepEqual(mixForTarget(20), { target: 20, due: 12, leech: 3, fresh: 5, maxConfusableGroups: 2 });
+  const m30 = mixForTarget(30);
+  assert.equal(m30.target, 30);
+  assert.equal(m30.due + m30.leech + m30.fresh, 30, 'ba phần phải cộng đúng bằng chỉ tiêu');
+  assert.ok(m30.due > m30.fresh, 'ôn phải nhiều hơn học mới');
+});
+
+test('chỉ tiêu 30 thì hàng đợi ra đúng 30 từ, không trùng', () => {
+  const db = freshDb();
+  const q = buildQueue(db, { mix: mixForTarget(30) });
+  assert.equal(q.length, 30);
+  assert.equal(new Set(q.map((w) => w.id)).size, 30);
+});
+
+test('đổi chỉ tiêu KHÔNG đụng phiên đã dựng của hôm nay', () => {
+  const db = freshDb();
+  const a = resumeSession(db, { mix: mixForTarget(20) });
+  assert.equal(a.session.target_count, 20);
+  const b = resumeSession(db, { mix: mixForTarget(30) });
+  assert.equal(b.session.target_count, 20, 'phiên hôm nay phải giữ nguyên 20');
+  assert.equal(b.items.length, 20);
+});
+
+test('phiên ngày hôm sau mới dùng chỉ tiêu mới', () => {
+  const db = freshDb();
+  resumeSession(db, { mix: mixForTarget(20) });
+  const t = new Date(); t.setDate(t.getDate() + 1);
+  const tomorrow = new Date(t.getTime() - t.getTimezoneOffset() * 60000).toISOString().slice(0, 10);
+  const next = resumeSession(db, { date: tomorrow, mix: mixForTarget(30) });
+  assert.equal(next.session.target_count, 30);
+  assert.equal(next.items.length, 30);
+});
+
+test('chỉ tiêu lớn vẫn giữ luật đồng âm', () => {
+  const db = freshDb();
+  const q = buildQueue(db, { mix: mixForTarget(50) });
+  const keys = q.filter((w) => w.homophone_key).map((w) => w.homophone_key);
+  assert.deepEqual(keys.filter((k, i) => keys.indexOf(k) !== i), []);
+});
+
+test('trả lời đúng vài lần trong CÙNG MỘT BUỔI chưa đủ để bật bẫy đồng âm', () => {
+  const db = freshDb();
+  for (const h of ['是', '时']) {
+    const w = db.prepare('SELECT id, anchor FROM words WHERE hanzi=?').get(h);
+    // đúng như dữ liệu thật đã gặp: đang học, ôn 3 lần, nhưng stability 0.1 ngày
+    db.prepare('UPDATE cards SET state=1, reps=3, stability=0.1 WHERE word_id=? AND direction=?')
+      .run(w.id, w.anchor);
+  }
+  for (let i = 0; i < 6; i++) {
+    const q = buildQueue(db, { mix: mixForTarget(30) });
+    const shi = q.filter((w) => w.homophone_key === 'shi').map((w) => w.hanzi);
+    assert.ok(shi.length <= 1, `ghép ${shi.join('/')} khi cả hai còn chưa qua nổi một đêm`);
+  }
 });

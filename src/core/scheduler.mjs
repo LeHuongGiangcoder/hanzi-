@@ -5,14 +5,38 @@ import { SessionRunner } from './session-runner.mjs';
 
 const f = fsrs(generatorParameters({ enable_fuzz: true }));
 
-export const DEFAULT_MIX = { due: 12, fresh: 5, leech: 3, target: 20, maxConfusableGroups: 2 };
+export const DEFAULT_TARGET = 20;
 
-// Một từ được coi là ĐÃ THUỘC khi nó rời trạng thái "mới" và đã được ôn vài lần.
-const MIN_REPS_ESTABLISHED = 2;
-const ESTABLISHED_SQL = `c.state <> 0 AND c.reps >= ${MIN_REPS_ESTABLISHED}`;
+// Tỷ lệ trộn, giữ nguyên khi đổi chỉ tiêu: 60% từ đến hạn ôn, 15% từ hay sai,
+// phần còn lại là từ mới. Ôn phải nhiều hơn học mới, nếu không thì mỗi ngày
+// nạp thêm một đống từ rồi quên sạch đống hôm trước.
+const RATIO = { due: 0.6, leech: 0.15 };
+
+/** Dựng bộ trộn cho một chỉ tiêu bất kỳ. 20 → 12/5/3 như trước. */
+export function mixForTarget(target = DEFAULT_TARGET, maxConfusableGroups = 2) {
+  const t = Math.max(1, Math.round(target));
+  const due = Math.round(t * RATIO.due);
+  const leech = Math.round(t * RATIO.leech);
+  return { target: t, due, leech, fresh: Math.max(0, t - due - leech), maxConfusableGroups };
+}
+
+export const DEFAULT_MIX = mixForTarget(DEFAULT_TARGET);
+
+// Một từ được coi là ĐÃ THUỘC — đủ vững để đem ra đối chiếu với từ đồng âm.
+//
+// Ngưỡng cũ (rời trạng thái "mới" + ôn 2 lần) quá lỏng: trả lời đúng vài lần
+// trong CÙNG MỘT BUỔI là đạt, dù stability mới 0.1 ngày. Thực tế đã cho ra một
+// phiên ghép 是 với 时 khi cả hai còn chưa qua nổi một đêm.
+//
+// Ngưỡng hiện tại: card phải tốt nghiệp sang trạng thái ôn tập (state = 2) VÀ
+// giữ được ít nhất một tuần — tức đã sống qua những khoảng nghỉ thật, không
+// phải trí nhớ tức thời trong buổi học.
+const MIN_STABILITY_DAYS = 7;
+const STATE_REVIEW = 2;
+const ESTABLISHED_SQL = `c.state = ${STATE_REVIEW} AND c.stability >= ${MIN_STABILITY_DAYS}`;
 
 export function isEstablished(row) {
-  return (row?.card_state ?? 0) !== 0 && (row?.card_reps ?? 0) >= MIN_REPS_ESTABLISHED;
+  return (row?.card_state ?? 0) === STATE_REVIEW && (row?.card_stability ?? 0) >= MIN_STABILITY_DAYS;
 }
 
 const maxConfusable = (mix) => mix.maxConfusableGroups ?? 2;
@@ -78,7 +102,7 @@ export function buildQueue(db, { date = isoDate(), mix = DEFAULT_MIX } = {}) {
   const pick = (sql, n, ...args) => (n > 0 ? db.prepare(sql).all(...args, n) : []);
   const READY = `w.active=1 AND w.quarantined=0 AND w.meaning_vi<>''`;
   const ANCHOR = 'c.direction=w.anchor';
-  const COLS = 'w.*, c.id card_id, c.state card_state, c.reps card_reps';
+  const COLS = 'w.*, c.id card_id, c.state card_state, c.reps card_reps, c.stability card_stability';
 
   const due = pick(
     `SELECT ${COLS} FROM cards c JOIN words w ON w.id=c.word_id AND ${ANCHOR}
