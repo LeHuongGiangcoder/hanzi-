@@ -54,9 +54,10 @@ export function validateRows(rows, seed, overrides = {}) {
         if (toneless(py) !== expect && !overrides[h])
           warn(`pinyin "${py}" lệch âm so với pinyin-pro ("${expect}") mà không có override`);
       }
-      const syl = py.split(/\s+/).length;
-      if (syl !== h.length && !/r$/.test(py) && !overrides[h])
-        warn(`số âm tiết (${syl}) ≠ số chữ (${h.length}): "${py}"`);
+      // Pinyin được chuẩn hoá về viết liền ("méiyǒu"), nên không còn đếm âm
+      // tiết theo dấu cách được nữa. Kiểm định dạng thay cho kiểm số âm tiết.
+      if (!/^[a-zA-ZüÜ\u00C0-\u024F\u1E00-\u1EFF'\u2019-]+$/.test(py))
+        warn(`pinyin sai định dạng: "${py}"`);
     }
 
     if (String(row.active).toUpperCase() === 'FALSE') return; // bạn tự tắt, bỏ qua im lặng

@@ -38,8 +38,11 @@ const seed = JSON.parse(readFileSync(ROOT + 'data/seed.hsk1-4.json', 'utf8'));
 
 if (cmd === 'push') {
   const r = await pushWords(sheets, seed);
+  if (r.sized?.resized) console.log(`Nới lưới: ${r.sized.from} → ${r.sized.to} dòng.`);
   console.log(`Đã ghi ${r.written} dòng lên tab words.`);
   console.log(`Giữ nguyên cột lesson/verified của ${r.preserved} dòng bạn đã nhập.`);
+  const q = seed.filter((w) => w.quarantined);
+  if (q.length) console.log(`Lưu ý: ${q.length} từ đang bị cách ly (${q.map((w) => w.hanzi).join(' ')}) — vẫn ghi lên Sheet nhưng app không đưa vào deck.`);
 } else if (cmd === 'pull') {
   const rows = await pullWords(sheets);
   let overrides = {};

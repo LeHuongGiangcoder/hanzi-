@@ -6,3 +6,8 @@ data/source/
 *.log
 .env
 .env.local
+
+# Khoá service account: không bao giờ để trong repo.
+*service-account*.json
+*-[0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f]*.json
+sa.json

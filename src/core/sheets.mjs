@@ -12,6 +12,8 @@ export const WORD_COLS = [
   'hanzi', 'pinyin', 'hanviet', 'meaning_vi', 'hsk', 'lesson',
   'example_zh', 'example_vi', 'note', 'verified', 'active',
 ];
+// Cột chỉ đọc, pipeline ghi ra để bạn soi — không dùng làm nguồn.
+export const EXTRA_COLS = ['standard', 'pos_vi', 'radical', 'quarantined'];
 export const REPORT_COLS = [
   'report_id', 'created_at', 'hanzi', 'field', 'app_value', 'my_correction',
   'reason', 'session_id', 'status', 'resolved_at', 'resolution_note',
@@ -40,6 +42,38 @@ export class SheetsClient {
       `${API}/${this.spreadsheetId}/values/${encodeURIComponent(range)}?valueInputOption=RAW`,
       { method: 'PUT', body: { values } }
     );
+  }
+  batchUpdate(requests) {
+    return this.req(`${API}/${this.spreadsheetId}:batchUpdate`, { method: 'POST', body: { requests } });
+  }
+  meta() {
+    return this.req(
+      `${API}/${this.spreadsheetId}?fields=sheets.properties.sheetId,sheets.properties.title,sheets.properties.gridProperties`
+    );
+  }
+  /**
+   * Nới lưới cho đủ chỗ. Sheets API từ chối ghi vượt rowCount/columnCount hiện
+   * có, nên phải nới TRƯỚC khi ghi chứ không thể để nó tự giãn.
+   */
+  async ensureSize(tab, rows, cols) {
+    const m = await this.meta();
+    const sh = (m.sheets ?? []).find((x) => x.properties.title === tab);
+    if (!sh) throw new Error(`Không thấy tab "${tab}" trong Sheet`);
+    const g = sh.properties.gridProperties ?? {};
+    if ((g.rowCount ?? 0) >= rows && (g.columnCount ?? 0) >= cols) return { resized: false };
+    await this.batchUpdate([{
+      updateSheetProperties: {
+        properties: {
+          sheetId: sh.properties.sheetId,
+          gridProperties: {
+            rowCount: Math.max(g.rowCount ?? 0, rows),
+            columnCount: Math.max(g.columnCount ?? 0, cols),
+          },
+        },
+        fields: 'gridProperties.rowCount,gridProperties.columnCount',
+      },
+    }]);
+    return { resized: true, from: g.rowCount, to: rows };
   }
   append(range, values) {
     return this.req(
@@ -86,9 +120,16 @@ export async function pushWords(sheets, words, { tab = 'words', preserve = ['les
     return row;
   });
 
+  const sized = await sheets.ensureSize(tab, out.length + 1, WORD_COLS.length);
   await sheets.update(`${tab}!A1:${col(WORD_COLS.length)}1`, [WORD_COLS]);
   await sheets.update(`${tab}!A2:${col(WORD_COLS.length)}${out.length + 1}`, out);
-  return { written: out.length, preserved: keep.size };
+  // Xoá phần thừa nếu lần này ít dòng hơn lần trước, tránh để lại rác bên dưới.
+  if (rows.length - 1 > out.length)
+    await sheets.update(
+      `${tab}!A${out.length + 2}:${col(WORD_COLS.length)}${rows.length}`,
+      Array.from({ length: rows.length - 1 - out.length }, () => WORD_COLS.map(() => ''))
+    );
+  return { written: out.length, preserved: keep.size, sized };
 }
 
 /** Đọc tab `words` về dạng object để validator kiểm trước khi nạp vào deck. */
