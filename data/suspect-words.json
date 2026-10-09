@@ -1,0 +1,172 @@
+[
+ {
+  "hanzi": "不是",
+  "hsk_level": 2,
+  "pinyin": "bùshì",
+  "meaning_vi": "Không phải",
+  "unknownChars": [],
+  "severity": "từ ghép không có trong từ điển",
+  "suggest": "",
+  "quarantine": false
+ },
+ {
+  "hanzi": "乒",
+  "hsk_level": 2,
+  "pinyin": "pīng",
+  "meaning_vi": "Bóng bàn",
+  "unknownChars": [],
+  "severity": "từ ghép không có trong từ điển",
+  "suggest": "",
+  "quarantine": false
+ },
+ {
+  "hanzi": "航",
+  "hsk_level": 2,
+  "pinyin": "háng",
+  "meaning_vi": "Hàng hải",
+  "unknownChars": [],
+  "severity": "từ ghép không có trong từ điển",
+  "suggest": "",
+  "quarantine": false
+ },
+ {
+  "hanzi": "阳",
+  "hsk_level": 2,
+  "pinyin": "yáng",
+  "meaning_vi": "Mặt trời, ánh sáng",
+  "unknownChars": [],
+  "severity": "từ ghép không có trong từ điển",
+  "suggest": "",
+  "quarantine": false
+ },
+ {
+  "hanzi": "阳天",
+  "hsk_level": 2,
+  "pinyin": "yángtiān",
+  "meaning_vi": "Ngày nắng",
+  "unknownChars": [],
+  "severity": "từ ghép không có trong từ điển",
+  "suggest": "晴天",
+  "quarantine": true
+ },
+ {
+  "hanzi": "仪",
+  "hsk_level": 3,
+  "pinyin": "yí",
+  "meaning_vi": "Nghi lễ, dáng vẻ (lịch thiệp)",
+  "unknownChars": [],
+  "severity": "từ ghép không có trong từ điển",
+  "suggest": "",
+  "quarantine": false
+ },
+ {
+  "hanzi": "孔儿",
+  "hsk_level": 3,
+  "pinyin": "kǒngr",
+  "meaning_vi": "Lỗ nhỏ, cái lỗ",
+  "unknownChars": [],
+  "severity": "từ ghép không có trong từ điển",
+  "suggest": "",
+  "quarantine": false
+ },
+ {
+  "hanzi": "桌",
+  "hsk_level": 3,
+  "pinyin": "zhuō",
+  "meaning_vi": "Bàn",
+  "unknownChars": [],
+  "severity": "từ ghép không có trong từ điển",
+  "suggest": "",
+  "quarantine": false
+ },
+ {
+  "hanzi": "塔车",
+  "hsk_level": 4,
+  "pinyin": "tǎchē",
+  "meaning_vi": "Cần cẩu tháp",
+  "unknownChars": [],
+  "severity": "từ ghép không có trong từ điển",
+  "suggest": "",
+  "quarantine": true
+ },
+ {
+  "hanzi": "娇",
+  "hsk_level": 4,
+  "pinyin": "jiāo",
+  "meaning_vi": "Yếu đuối, yếu mềm",
+  "unknownChars": [],
+  "severity": "từ ghép không có trong từ điển",
+  "suggest": "",
+  "quarantine": false
+ },
+ {
+  "hanzi": "娇小",
+  "hsk_level": 4,
+  "pinyin": "jiāoxiǎo",
+  "meaning_vi": "Nhỏ nhắn",
+  "unknownChars": [],
+  "severity": "từ ghép không có trong từ điển",
+  "suggest": "",
+  "quarantine": false
+ },
+ {
+  "hanzi": "拨脱",
+  "hsk_level": 4,
+  "pinyin": "bōtuō",
+  "meaning_vi": "Thoát ra, thoát khỏi",
+  "unknownChars": [],
+  "severity": "từ ghép không có trong từ điển",
+  "suggest": "摆脱",
+  "quarantine": true
+ },
+ {
+  "hanzi": "播动",
+  "hsk_level": 4,
+  "pinyin": "bōdòng",
+  "meaning_vi": "Xoay chuyển, lay động",
+  "unknownChars": [],
+  "severity": "từ ghép không có trong từ điển",
+  "suggest": "拨动",
+  "quarantine": true
+ },
+ {
+  "hanzi": "确",
+  "hsk_level": 4,
+  "pinyin": "què",
+  "meaning_vi": "Chắc chắn, thật sự",
+  "unknownChars": [],
+  "severity": "từ ghép không có trong từ điển",
+  "suggest": "",
+  "quarantine": false
+ },
+ {
+  "hanzi": "舒",
+  "hsk_level": 4,
+  "pinyin": "shū",
+  "meaning_vi": "Thư giãn, thoải mái",
+  "unknownChars": [],
+  "severity": "từ ghép không có trong từ điển",
+  "suggest": "",
+  "quarantine": false
+ },
+ {
+  "hanzi": "补子",
+  "hsk_level": 4,
+  "pinyin": "bǔzi",
+  "meaning_vi": "Miếng vá (trên vải)",
+  "unknownChars": [],
+  "severity": "từ ghép không có trong từ điển",
+  "suggest": "补丁",
+  "quarantine": true
+ },
+ {
+  "hanzi": "里米",
+  "hsk_level": 4,
+  "pinyin": "lǐmǐ",
+  "meaning_vi": "Mét",
+  "unknownChars": [],
+  "severity": "từ ghép không có trong từ điển",
+  "suggest": "厘米",
+  "quarantine": true
+ }
+]

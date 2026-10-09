@@ -16,8 +16,8 @@ Mục tiêu cụ thể: chữa tật phụ thuộc pinyin mà không nhớ mặt
 
 - [x] Phase 0 — pipeline dữ liệu: 1193 từ HSK 1–4, pinyin đã kiểm 3 nguồn, nhóm đồng âm
 - [x] Phase 0a — Google Sheet (tab `words` + `_reports`), validator sync, vòng báo lỗi
-- [x] Phase 0b — nghĩa tiếng Việt + âm Hán-Việt: **1193/1193 từ** (Hán-Việt 1146)
-- [ ] Phase 0c — câu ví dụ (1193 từ, có validator i+1)
+- [x] Phase 0b — nghĩa tiếng Việt + âm Hán-Việt: 1193/1193 từ (bộ HSK 2.0)
+- [x] Phase 0c — hợp nhất sang **HSK 3.0: 3304 từ, 3156 câu ví dụ**
 - [x] Phase 1 — Electron app: scheduler, SQLite, FSRS, cổng gõ IME, luật pass-20, báo lỗi, sync Sheet
 - [ ] Phase 2 — stage đọc + cloze, màn hình đối chiếu đồng âm, phân loại lỗi
 - [ ] Phase 3 — dashboard, streak, xử lý từ hay sai
@@ -117,17 +117,20 @@ Mạnh hơn thế: **với nhiều cặp đồng âm tiếng Trung, âm Hán-Vi�
 | 回 / 会 — `huì` | hồi / hội | ✅ |
 | 他 / 她 — `tā` | tha / tha | ❌ — nhưng khác **bộ thủ** (人 / 女) |
 
-Đo trên **toàn bộ 106 nhóm đồng âm** của HSK 1–4 (91 nhóm đủ dữ liệu Hán-Việt):
+Đo lại trên **toàn bộ 271 nhóm đồng âm** của kho từ HSK 3.0 (265 nhóm đủ dữ liệu Hán-Việt):
 
 | Mức phân biệt | Số nhóm | Tỷ lệ |
 |---|---|---|
-| Hán-Việt phân biệt **hoàn toàn** | 78 | 86% |
-| phân biệt **một phần** | 11 | 12% |
-| Hán-Việt **trùng hết** | 2 | 2% |
+| Hán-Việt phân biệt **hoàn toàn** | 208 | 78% |
+| phân biệt **một phần** | 46 | 17% |
+| Hán-Việt **trùng hết** | 11 | 4% |
 
-**98% các nhóm đồng âm được Hán-Việt phân biệt ít nhất một phần.** Và đúng 2 nhóm thất bại
-— `他/她/它` (đều "tha") và `下/夏` (đều "hạ") — thì **bộ thủ phân biệt được cả hai**
-(人/女/宀 và 一/夂).
+**96% các nhóm đồng âm được Hán-Việt phân biệt ít nhất một phần.** Trong 11 nhóm Hán-Việt
+trùng, **bộ thủ cứu được 9** (`他们/她们/它们`, `下/夏`, `后/厚`, `门/们`, `字/自`, `风/封`,
+`掉/调`, `层/曾`, `功夫/工夫`).
+
+Còn đúng **2 nhóm cả hai cơ chế đều bó tay**: `心里 / 心理` và `制定 / 制订` — trùng âm,
+trùng Hán-Việt, trùng cả bộ thủ chữ đầu. Hai cặp này phải phân biệt bằng ngữ cảnh dùng.
 
 Nên luật hiển thị gợi ý khi bạn trả lời sai là: **ưu tiên âm Hán-Việt nếu nó khác nhau
 trong nhóm đồng âm, rơi về bộ thủ nếu Hán-Việt trùng.** Hai cơ chế này phủ kín 100% các
@@ -166,9 +169,50 @@ sửa thành `mài` vẫn lọt, mà đó đúng là kiểu lẫn mà app này s
 
 | Nguồn | Dùng cho | Ghi chú |
 |---|---|---|
+| **Sheet từ vựng của bạn** | danh sách từ, cấp HSK 3.0, câu ví dụ + pinyin + dịch, Hán-Việt | 3245 dòng → 3156 từ sau khi bỏ trùng. Đủ 100% mọi trường |
 | [`drkameleon/complete-hsk-vocabulary`](https://github.com/drkameleon/complete-hsk-vocabulary) | hán tự, phồn thể, level HSK, bộ thủ, từ loại, hạng tần suất, nghĩa EN | MIT; dữ liệu từ CC-CEDICT. Dùng `wordlists/exclusive/old/{1..4}.json` = HSK 2.0, không lặp từ giữa các level |
 | `pinyin-pro` | **thẩm quyền pinyin cho hán tự đơn** | Chọn âm theo từ điển tần suất |
 | [`lxaw/hsk-infinite`](https://github.com/lxaw/hsk-infinite) | chỉ để cross-check | Thực chất là app luyện đề thi (5269 mp3). `site/vocab.json` cùng gốc CC-CEDICT nên **không độc lập** |
+
+### Chuẩn: HSK 3.0, hợp nhất hai nguồn
+
+Kho từ cuối cùng là **3304 từ**: toàn bộ HSK 3.0 cấp 1–4 từ sheet của bạn (3156) cộng 148
+từ chỉ có trong danh sách HSK 2.0 cũ.
+
+| Cấp | Số từ |
+|---|---|
+| HSK 1 | 496 |
+| HSK 2 | 753 |
+| HSK 3 | 972 |
+| HSK 4 | 1083 |
+
+Nguồn tốt nhất được chọn cho **từng cột**, dựa trên đối chiếu thật chứ không phải phỏng đoán:
+
+- **câu ví dụ** ← sheet, sau khi quy phồn thể → giản thể (2955 câu phải đổi)
+- **Hán-Việt** ← sheet; nhiều chỗ đúng hơn bản tôi soạn (办法 *biện pháp* chứ không phải *bạn pháp*)
+- **pinyin** ← bản đã vet cho 1045 từ trùng, sheet cho phần còn lại. Đối chiếu cho **0 ca lệch âm**; sheet lại đúng hơn ở vần hoá -r (`hǎowánr`, `nǎr`)
+- **nghĩa tiếng Việt** ← bản tôi soạn cho các từ trùng. Nghĩa của sheet cô đọng kiểu từ điển nên dùng làm prompt thì yếu: 把 ghi "Cầm nắm, để" trong khi HSK 3 dùng nó làm giới từ. Bản của sheet giữ ở `meaning_vi_alt`
+- **bộ thủ, tần suất** ← complete-hsk-vocabulary; thiếu cột này thì luật gợi ý rơi về bộ thủ sẽ hỏng
+
+Pinyin được chuẩn hoá về **viết liền** (`méiyǒu`), là chính tả đúng cho một từ và cũng là
+dạng của 2315/3304 mục.
+
+Chuyển đổi phồn → giản dùng `from:'t'` chứ **không** dùng `from:'tw'`: bộ `tw` còn đổi cả
+từ vựng kiểu Đài Loan và chuyển quá tay — nó biến 显著 (vốn đúng giản thể) thành 显着.
+
+### Sáu từ bị cách ly sẵn
+
+Đối chiếu với từ điển 11470 mục tìm ra 6 từ ghép không tra được, gần như chắc chắn là lỗi
+gõ trong sheet. Chúng bị cách ly ngay từ seed, không vào deck cho tới khi bạn đối chiếu sách:
+
+| Trong sheet | Có lẽ là |
+|---|---|
+| 阳天 *"ngày nắng"* | 晴天 |
+| 里米 *"mét"* | 厘米 (xăng-ti-mét) |
+| 拨脱 *"thoát khỏi"* | 摆脱 |
+| 播动 *"lay động"* | 拨动 |
+| 补子 *"miếng vá"* | 补丁 |
+| 塔车 *"cần cẩu tháp"* | chưa rõ |
 
 ### Quy tắc chọn pinyin — và tại sao cần nó
 

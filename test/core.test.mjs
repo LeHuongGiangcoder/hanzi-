@@ -1,6 +1,8 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
+import * as OpenCC from 'opencc-js';
+const t2s = OpenCC.Converter({ from: 't', to: 'cn' });
 import { gradeAnswer, normalizeAnswer } from '../src/core/grading.mjs';
 import { pickHint, buildComparison } from '../src/core/hints.mjs';
 import { SessionRunner } from '../src/core/session-runner.mjs';
@@ -161,8 +163,28 @@ test('báo lỗi dữ liệu: rút từ ra và bù từ khác, chỉ tiêu khôn
 test('kho từ nạp đủ và sẵn sàng học', () => {
   const db = freshDb();
   const s = stats(db);
-  assert.equal(s.words, 1193);
-  assert.equal(s.ready, 1193);
+  assert.equal(s.words, seed.length);
+  // Các từ đáng ngờ phát hiện lúc merge phải vào DB ở trạng thái đã cách ly.
+  assert.ok(s.quarantined > 0, 'phải có từ bị cách ly sẵn từ seed');
+  assert.equal(s.ready, s.words - s.quarantined);
+});
+
+test('từ đáng ngờ không lọt vào hàng đợi ngay từ đầu', () => {
+  const db = freshDb();
+  const bad = db.prepare('SELECT hanzi FROM words WHERE quarantined=1').all().map((r) => r.hanzi);
+  assert.ok(bad.length);
+  for (let i = 0; i < 5; i++)
+    assert.ok(buildQueue(db).every((w) => !bad.includes(w.hanzi)));
+});
+
+test('câu ví dụ đã quy về giản thể, không còn phồn thể', () => {
+  const db = freshDb();
+  const rows = db.prepare("SELECT hanzi, example_zh FROM words WHERE example_zh <> ''").all();
+  assert.ok(rows.length > 3000, 'phải có đủ câu ví dụ để kiểm');
+  // Dùng chính bộ chuyển đổi để kiểm: nếu câu đã là giản thể thì chuyển đổi
+  // không đổi gì. Liệt kê tay vài chữ phồn thể là không đủ chặt.
+  const bad = rows.filter((r) => t2s(r.example_zh) !== r.example_zh);
+  assert.equal(bad.length, 0, 'còn phồn thể: ' + bad.slice(0, 3).map((r) => r.example_zh).join(' | '));
 });
 
 test('hàng đợi ngày đúng 20 từ, không trùng', () => {

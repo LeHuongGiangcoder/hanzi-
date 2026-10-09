@@ -283,7 +283,9 @@ function runSmoke() {
     out.push(`${cond ? 'PASS' : 'FAIL'}  ${label}${extra ? '  — ' + extra : ''}`);
   try {
     const s = stats(db);
-    ok('nạp kho từ', s.words === 1193, `${s.words} từ, ${s.ready} sẵn sàng`);
+    ok('nạp kho từ', s.words > 3000 && s.ready > 3000,
+       `${s.words} từ, ${s.ready} sẵn sàng, ${s.quarantined} bị cách ly`);
+    ok('từ đáng ngờ đã bị cách ly sẵn', s.quarantined > 0);
 
     ensureRunner();
     ok('dựng phiên hôm nay', session && runner.total > 0, `${runner.total} từ`);
@@ -307,6 +309,10 @@ function runSmoke() {
     const repl = replaceInQueue(db, session.id, q2.word.id);
     runner.removeAndReplace(q2.word.id, repl);
     ok('báo lỗi → cách ly + bù từ, chỉ tiêu giữ nguyên', runner.total === before, `${runner.total} từ`);
+
+    const withEx: any = db.prepare(
+      "SELECT COUNT(*) n FROM words WHERE example_zh <> ''").get();
+    ok('có câu ví dụ', withEx.n > 3000, `${withEx.n} câu`);
 
     const mai: any = wordByHanzi(db, '买');
     const h = pickHint(mai, homophonesOf(db, mai.id));

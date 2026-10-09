@@ -8,7 +8,7 @@
     "data:fetch": "node scripts/1-fetch-source.mjs",
     "data:build": "node scripts/2-build-seed.mjs",
     "data:qa": "node scripts/3-qa-report.mjs",
-    "data:all": "npm run data:fetch && npm run data:build && npm run data:qa",
+    "data:all": "npm run data:fetch && npm run data:build && npm run data:merge && npm run data:qa",
     "data:validate": "node scripts/5-validate-sheet.mjs",
     "data:reports": "node scripts/6-apply-reports.mjs",
     "dev": "electron-vite dev",
@@ -19,11 +19,13 @@
     "smoke": "HANZI_SMOKE=1 electron .",
     "sheet:push": "node scripts/7-sync-sheet.mjs push",
     "sheet:pull": "node scripts/7-sync-sheet.mjs pull",
-    "sheet:reports": "node scripts/7-sync-sheet.mjs reports"
+    "sheet:reports": "node scripts/7-sync-sheet.mjs reports",
+    "data:merge": "node scripts/8-merge-sources.mjs"
   },
   "dependencies": {
     "better-sqlite3": "^11.10.0",
     "google-auth-library": "^9.15.1",
+    "opencc-js": "^1.0.5",
     "pinyin-pro": "^3.29.4",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",

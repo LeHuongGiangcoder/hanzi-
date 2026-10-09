@@ -5,7 +5,23 @@ import { SCHEMA } from './schema.mjs';
 export function openDb(file) {
   const db = new Database(file);
   db.exec(SCHEMA);
+  migrate(db);
   return db;
+}
+
+/**
+ * CREATE TABLE IF NOT EXISTS không thêm cột vào bảng đã tồn tại, nên DB cũ sẽ
+ * thiếu cột mới. SQLite không có ADD COLUMN IF NOT EXISTS → phải tự kiểm.
+ */
+function migrate(db) {
+  const have = new Set(db.prepare('PRAGMA table_info(words)').all().map((c) => c.name));
+  const want = {
+    example_pinyin: "TEXT NOT NULL DEFAULT ''",
+    meaning_vi_alt: "TEXT NOT NULL DEFAULT ''",
+    standard: "TEXT NOT NULL DEFAULT 'hsk3'",
+  };
+  for (const [col, decl] of Object.entries(want))
+    if (!have.has(col)) db.exec(`ALTER TABLE words ADD COLUMN ${col} ${decl}`);
 }
 
 /**
@@ -30,14 +46,18 @@ export function setSetting(db, key, value) {
  */
 export function upsertWords(db, rows) {
   const stmt = db.prepare(`
-    INSERT INTO words (hanzi,pinyin,hanviet,meaning_vi,pos_vi,hsk_level,lesson,radical,
-                       example_zh,example_vi,note,homophone_key,frequency,active)
-    VALUES (@hanzi,@pinyin,@hanviet,@meaning_vi,@pos_vi,@hsk_level,@lesson,@radical,
-            @example_zh,@example_vi,@note,@homophone_key,@frequency,@active)
+    INSERT INTO words (hanzi,pinyin,hanviet,meaning_vi,meaning_vi_alt,pos_vi,hsk_level,standard,
+                       lesson,radical,example_zh,example_pinyin,example_vi,note,
+                       homophone_key,frequency,active,quarantined)
+    VALUES (@hanzi,@pinyin,@hanviet,@meaning_vi,@meaning_vi_alt,@pos_vi,@hsk_level,@standard,
+            @lesson,@radical,@example_zh,@example_pinyin,@example_vi,@note,
+            @homophone_key,@frequency,@active,@quarantined)
     ON CONFLICT(hanzi) DO UPDATE SET
       pinyin=excluded.pinyin, hanviet=excluded.hanviet, meaning_vi=excluded.meaning_vi,
-      pos_vi=excluded.pos_vi, hsk_level=excluded.hsk_level, lesson=excluded.lesson,
-      radical=excluded.radical, example_zh=excluded.example_zh, example_vi=excluded.example_vi,
+      meaning_vi_alt=excluded.meaning_vi_alt, pos_vi=excluded.pos_vi,
+      hsk_level=excluded.hsk_level, standard=excluded.standard, lesson=excluded.lesson,
+      radical=excluded.radical, example_zh=excluded.example_zh,
+      example_pinyin=excluded.example_pinyin, example_vi=excluded.example_vi,
       note=excluded.note, homophone_key=excluded.homophone_key, frequency=excluded.frequency,
       active=excluded.active, updated_at=datetime('now')
   `);
@@ -48,6 +68,12 @@ export function upsertWords(db, rows) {
         pinyin: r.pinyin,
         hanviet: r.hanviet ?? '',
         meaning_vi: r.meaning_vi ?? '',
+        meaning_vi_alt: r.meaning_vi_alt ?? '',
+        standard: r.standard ?? 'hsk3',
+        example_pinyin: r.example_pinyin ?? '',
+        // Cách ly chỉ áp lúc INSERT: sync lại không được tự bỏ hoặc tự bật lại
+        // cách ly mà bạn đã xử lý bằng tay.
+        quarantined: r.quarantined ? 1 : 0,
         pos_vi: r.pos_vi ?? '',
         hsk_level: r.hsk_level,
         lesson: r.lesson ?? '',

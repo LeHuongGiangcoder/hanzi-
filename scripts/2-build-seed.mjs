@@ -163,7 +163,7 @@ const homoGroups = [...groups.entries()].filter(([, v]) => v.length > 1);
 for (const [, v] of homoGroups) for (const w of v) w.homophone_group_size = v.length;
 
 await mkdir(OUT, { recursive: true });
-await writeFile(OUT + 'seed.hsk1-4.json', JSON.stringify(words, null, 1), 'utf8');
+await writeFile(OUT + 'seed.hsk2-vetted.json', JSON.stringify(words, null, 1), 'utf8');
 
 // ---- báo cáo review ----
 const review = words.filter((w) => w.needs_review);
@@ -200,4 +200,4 @@ const withVi = words.filter((w) => w.meaning_vi).length;
 const withHv = words.filter((w) => w.hanviet).length;
 console.log(`Có nghĩa tiếng Việt    : ${withVi}/${words.length}`);
 console.log(`Có âm Hán-Việt         : ${withHv}/${withVi} (trên số từ đã có nghĩa)`);
-console.log(`Đã ghi                 : data/seed.hsk1-4.json`);
+console.log(`Đã ghi                 : data/seed.hsk2-vetted.json  (đầu vào cho bước merge)`);
