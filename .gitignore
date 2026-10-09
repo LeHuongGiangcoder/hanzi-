@@ -15,3 +15,4 @@ sa.json
 # Kết quả tạm của lệnh sync, sinh lại được bằng npm run sheet:pull
 data/sheet-pull.json
 data/reports-pull.json
+release/

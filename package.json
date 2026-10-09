@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "type": "module",
-  "description": "Daily HSK 1-4 hanzi drill - IME production gate, FSRS scheduling, homophone traps",
+  "description": "Ôn từ vựng HSK mỗi ngày — cổng gõ hán tự bằng IME, chống phụ thuộc pinyin",
   "scripts": {
     "data:fetch": "node scripts/1-fetch-source.mjs",
     "data:build": "node scripts/2-build-seed.mjs",
@@ -20,7 +20,9 @@
     "sheet:push": "node scripts/7-sync-sheet.mjs push",
     "sheet:pull": "node scripts/7-sync-sheet.mjs pull",
     "sheet:reports": "node scripts/7-sync-sheet.mjs reports",
-    "data:merge": "node scripts/8-merge-sources.mjs"
+    "data:merge": "node scripts/8-merge-sources.mjs",
+    "package": "electron-vite build && electron-builder --mac --dir",
+    "dist": "electron-vite build && electron-builder --mac"
   },
   "dependencies": {
     "better-sqlite3": "^11.10.0",
@@ -38,9 +40,47 @@
     "@types/react-dom": "^18.3.1",
     "@vitejs/plugin-react": "^4.6.0",
     "electron": "^38.2.0",
+    "electron-builder": "^25.1.8",
     "electron-vite": "^4.0.0",
     "typescript": "^5.9.2",
     "vite": "^6.3.5"
   },
-  "main": "out/main/index.js"
+  "main": "out/main/index.js",
+  "productName": "Hanzi Drill",
+  "build": {
+    "appId": "com.ginale.hanzidrill",
+    "productName": "Hanzi Drill",
+    "directories": {
+      "output": "release",
+      "buildResources": "build"
+    },
+    "files": [
+      "out/**/*",
+      "package.json"
+    ],
+    "extraResources": [
+      {
+        "from": "data/seed.hsk1-4.json",
+        "to": "data/seed.hsk1-4.json"
+      }
+    ],
+    "asarUnpack": [
+      "**/node_modules/better-sqlite3/**"
+    ],
+    "mac": {
+      "category": "public.app-category.education",
+      "target": [
+        {
+          "target": "dir",
+          "arch": [
+            "arm64"
+          ]
+        }
+      ],
+      "identity": null,
+      "extendInfo": {
+        "LSUIElement": false
+      }
+    }
+  }
 }

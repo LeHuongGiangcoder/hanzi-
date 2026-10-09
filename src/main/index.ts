@@ -21,6 +21,15 @@ const HERE = dirname(fileURLToPath(import.meta.url));
 
 const DRILL_TIME_DEFAULT = '20:30';
 const MAX_SNOOZE = 3;
+const REMIND_EVERY_MIN = 30;
+
+// CHỈ CHO PHÉP MỘT BẢN CHẠY. Hai bản cùng chạy nghĩa là hai cái timer, hai cái
+// tray, và cửa sổ bật lên gấp đôi — người dùng đóng một cái thì cái kia mở lại.
+if (!app.requestSingleInstanceLock()) {
+  app.quit();
+} else {
+  app.on('second-instance', () => createWindow());
+}
 
 let db: any;
 let win: BrowserWindow | null = null;
@@ -28,7 +37,8 @@ let tray: Tray | null = null;
 let runner: any = null;
 let session: any = null;
 let questionShownAt = 0;
-let snoozeUntil = 0;
+// Mốc sớm nhất được phép tự bật cửa sổ lần tới.
+let nextPromptAt = 0;
 let allowQuit = false;
 
 /* ---------------- dữ liệu ---------------- */
@@ -74,6 +84,8 @@ function createWindow() {
     if (allowQuit) return;
     e.preventDefault();
     win?.hide();
+    // Bạn vừa chủ động đóng → coi như xin hoãn, đừng bật lại ngay.
+    deferPrompt();
     refreshIndicators();
   });
 
@@ -179,16 +191,37 @@ function sessionDoneToday() {
   return !!row?.finished_at;
 }
 
+function remindMs() {
+  const n = Number(getSetting(db, 'remind_every_min', String(REMIND_EVERY_MIN)));
+  return (Number.isFinite(n) && n > 0 ? n : REMIND_EVERY_MIN) * 60_000;
+}
+
+/** Hoãn lần tự bật cửa sổ kế tiếp. */
+function deferPrompt(ms = remindMs()) {
+  nextPromptAt = Date.now() + ms;
+}
+
+function msUntilTomorrow() {
+  const t = new Date();
+  t.setHours(24, 0, 0, 0);
+  return t.getTime() - Date.now();
+}
+
 function shouldDrillNow() {
   if (sessionDoneToday()) return false;
-  if (Date.now() < snoozeUntil) return false;
+  if (Date.now() < nextPromptAt) return false;
   const [h, m] = (getSetting(db, 'drill_time', DRILL_TIME_DEFAULT) as string).split(':').map(Number);
   const now = new Date();
   return now.getHours() * 60 + now.getMinutes() >= h * 60 + m;
 }
 
 function tick() {
-  if (shouldDrillNow() && !win?.isVisible()) createWindow();
+  if (!shouldDrillNow()) return;
+  if (win && !win.isDestroyed() && win.isVisible()) return;
+  createWindow();
+  // Đã nhắc rồi thì im một lúc. Trước đây hàm này chạy mỗi 60 giây và mở lại
+  // cửa sổ ngay sau khi người dùng vừa đóng — đóng xong một phút sau lại hiện.
+  deferPrompt();
 }
 
 /* ---------------- phiên học ---------------- */
@@ -218,11 +251,30 @@ function refreshIndicators() {
   if (process.platform === 'darwin')
     app.dock?.setBadge(done || !row ? '' : String(left));
 
+  const waiting = nextPromptAt > Date.now()
+    ? `Nhắc lại lúc ${new Date(nextPromptAt).toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' })}`
+    : `Giờ học: ${getSetting(db, 'drill_time', DRILL_TIME_DEFAULT)}`;
+
   tray?.setContextMenu(Menu.buildFromTemplate([
     { label: done ? 'Hôm nay đã xong ✓' : `Còn ${left} / ${target} từ`, enabled: false },
+    { label: done ? '' : waiting, enabled: false, visible: !done },
     { type: 'separator' },
     { label: done ? 'Mở để học thêm' : 'Học tiếp', click: () => createWindow() },
-    { label: 'Ẩn cửa sổ', click: () => win?.hide(), enabled: !!win && !win.isDestroyed() },
+    { label: 'Nhắc lại sau 30 phút', visible: !done, click: () => { deferPrompt(); win?.hide(); refreshIndicators(); } },
+    { label: 'Nghỉ hôm nay', visible: !done, click: () => { deferPrompt(msUntilTomorrow()); win?.hide(); refreshIndicators(); } },
+    { type: 'separator' },
+    {
+      label: 'Mở cùng máy khi đăng nhập',
+      type: 'checkbox',
+      checked: getSetting(db, 'open_at_login', '1') !== '0',
+      enabled: app.isPackaged,
+      click: (item) => {
+        setSetting(db, 'open_at_login', item.checked ? '1' : '0');
+        if (app.isPackaged)
+          app.setLoginItemSettings({ openAtLogin: item.checked, openAsHidden: true });
+        refreshIndicators();
+      },
+    },
     { type: 'separator' },
     { label: 'Thoát hẳn', click: () => { allowQuit = true; app.quit(); } },
   ]));
@@ -372,7 +424,7 @@ function registerIpc() {
     const used = db.prepare('SELECT snoozes_used FROM sessions WHERE id=?').get(session?.id)?.snoozes_used ?? 0;
     if (used >= MAX_SNOOZE) return { ok: false, used, max: MAX_SNOOZE };
     db.prepare('UPDATE sessions SET snoozes_used=snoozes_used+1 WHERE id=?').run(session.id);
-    snoozeUntil = Date.now() + 10 * 60 * 1000;
+    deferPrompt(10 * 60_000);
     win?.hide();
     return { ok: true, used: used + 1, max: MAX_SNOOZE };
   });
@@ -427,7 +479,12 @@ app.whenReady().then(() => {
   // Giữ chỉ báo đúng cả khi sang ngày mới mà không mở app.
   setInterval(refreshIndicators, 5 * 60_000);
 
-  app.setLoginItemSettings({ openAtLogin: true, openAsHidden: true });
+  // CHỈ đăng ký khởi động cùng máy khi đã đóng gói. Bản dev chạy bằng binary
+  // Electron trong node_modules, đăng ký nó sẽ tạo một mục khởi động trỏ vào
+  // thư mục build — mỗi lần đóng gói lại là thành mục chết, và máy vẫn cố bật
+  // một thứ không còn ở đó.
+  if (app.isPackaged && getSetting(db, 'open_at_login', '1') !== '0')
+    app.setLoginItemSettings({ openAtLogin: true, openAsHidden: true });
   setInterval(tick, 60_000);
   powerMonitor.on('resume', tick);   // laptop ngủ qua giờ hẹn thì bắt lại khi mở nắp
   tick();
