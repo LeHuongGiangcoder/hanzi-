@@ -14,6 +14,7 @@ Mục tiêu cụ thể: chữa tật phụ thuộc pinyin mà không nhớ mặt
 ## Trạng thái
 
 - [x] Phase 0 — pipeline dữ liệu: 1193 từ HSK 1–4, pinyin đã kiểm 3 nguồn, nhóm đồng âm
+- [x] Phase 0a — Google Sheet (tab `words` + `_reports`), validator sync, vòng báo lỗi
 - [ ] Phase 0b — nghĩa tiếng Việt + câu ví dụ
 - [ ] Phase 1 — Electron app: scheduler, SQLite, FSRS, cổng gõ IME, luật pass-20
 - [ ] Phase 2 — stage đọc + cloze, màn hình đối chiếu đồng âm, phân loại lỗi
@@ -29,7 +30,23 @@ npm run data:qa      # kiểm toàn vẹn → char-whitelist.json + homophones.j
 npm run data:all     # cả ba
 
 node scripts/4-export-sheet.mjs 1 2   # → data/sheet-hsk12.csv (đúng cột Google Sheet)
+
+npm run data:validate -- dump.json    # kiểm dòng đọc từ Sheet trước khi nạp vào deck
+npm run data:reports  -- reports.json # xử lý báo lỗi → overrides + việc cần làm tay
 ```
+
+## Báo lỗi dữ liệu
+
+Kho từ dựng từ CC-CEDICT nên sẽ có lỗi, và lỗi trong app này độc hơn bình thường: một chữ
+sai sẽ được chính cơ chế spaced repetition dạy đi dạy lại hàng tháng. Nên app có nút
+`⚠ Báo lỗi` (⌘E) ở mọi bước, và báo lỗi **có hiệu lực ngay**: từ bị nghi sai được rút khỏi
+phiên học và bù từ khác vào, chứ không chờ tới lúc sửa xong.
+
+Thiết kế đầy đủ: [docs/error-reporting.md](docs/error-reporting.md).
+
+Lưới chặn đầu tiên là `src/data/validate-rows.mjs`, chạy mỗi lần sync Sheet → SQLite. Nó
+đối chiếu từng dòng với `seed.hsk1-4.json` và so pinyin **có dấu** — vì so bỏ dấu thì 买 bị
+sửa thành `mài` vẫn lọt, mà đó đúng là kiểu lẫn mà app này sinh ra để chống.
 
 ### Nguồn và lý do chọn
 
@@ -70,5 +87,6 @@ Vùng rủi ro đã soi tay: 33 hán tự đơn nhiều âm + 32 hán tự đơn
 | `data/homophones.json` | 106 nhóm đồng âm → app dùng làm bẫy và làm distractor |
 | `data/char-whitelist.json` | hán tự theo từng level (178 / 346 / 618 / 1071) → validate câu ví dụ theo nguyên tắc i+1 |
 | `data/sheet-hsk*.csv` | CSV đúng thứ tự cột Google Sheet |
+| `src/data/validate-rows.mjs` | validator cho dòng đọc từ Sheet (hàm thuần, test được) |
 
 `data/source/` không commit — chạy `npm run data:fetch` để tải lại.

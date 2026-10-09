@@ -8,7 +8,9 @@
     "data:fetch": "node scripts/1-fetch-source.mjs",
     "data:build": "node scripts/2-build-seed.mjs",
     "data:qa": "node scripts/3-qa-report.mjs",
-    "data:all": "npm run data:fetch && npm run data:build && npm run data:qa"
+    "data:all": "npm run data:fetch && npm run data:build && npm run data:qa",
+    "data:validate": "node scripts/5-validate-sheet.mjs",
+    "data:reports": "node scripts/6-apply-reports.mjs"
   },
   "dependencies": {
     "pinyin-pro": "^3.29.4"
