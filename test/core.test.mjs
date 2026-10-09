@@ -395,3 +395,41 @@ test('hàng đợi vẫn đủ 20 từ sau khi chuyển sang nhiều cổng', ()
   assert.equal(new Set(q.map((w) => w.id)).size, 20);
   for (const w of q) assert.ok(w.card_id, `${w.hanzi} thiếu card neo`);
 });
+
+// ---------- tách phím chốt chữ khỏi phím nộp bài ----------
+import { decideEnter, COMPOSITION_GUARD_MS } from '../src/core/ime-submit.mjs';
+
+const enter = (p) => decideEnter({
+  isComposing: false, composingState: false, msSinceCompositionEnd: -1,
+  withModifier: false, value: '在', ...p,
+});
+
+test('đang ghép chữ thì Enter là của IME, không nộp bài', () => {
+  assert.equal(enter({ isComposing: true }).submit, false);
+  assert.equal(enter({ composingState: true }).submit, false);
+});
+
+test('BUG ĐÃ GẶP: Enter ngay sau khi IME chốt chữ KHÔNG được nộp bài', () => {
+  // macOS bắn compositionend trước keydown, nên isComposing đã false.
+  // Nếu nộp luôn thì chữ IME tự chọn (phổ biến nhất) bị tính là đáp án.
+  const r = enter({ isComposing: false, composingState: false, msSinceCompositionEnd: 5 });
+  assert.equal(r.submit, false);
+  assert.equal(r.reason, 'just_committed');
+});
+
+test('sau khi đã kịp nhìn chữ thì Enter mới nộp', () => {
+  assert.equal(enter({ msSinceCompositionEnd: COMPOSITION_GUARD_MS + 10 }).submit, true);
+});
+
+test('⌘Enter luôn nộp, kể cả ngay sau khi chốt chữ — IME không nuốt tổ hợp này', () => {
+  assert.equal(enter({ msSinceCompositionEnd: 0, withModifier: true }).submit, true);
+});
+
+test('ô trống thì Enter không làm gì', () => {
+  assert.equal(enter({ value: '   ' }).submit, false);
+  assert.equal(enter({ value: '', withModifier: true }).submit, false);
+});
+
+test('gõ không qua IME (dán sẵn chữ) vẫn nộp được bằng Enter', () => {
+  assert.equal(enter({ msSinceCompositionEnd: -1 }).submit, true);
+});

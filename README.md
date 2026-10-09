@@ -123,6 +123,28 @@ rất nhiều, nên nhận diện không bao giờ được tính là pass.
 Sai ở cổng nào thì làm lại **đúng cổng đó** 2 lần, không tụt về cổng đầu — và vẫn phải có
 ít nhất 3 lượt khác chen vào giữa.
 
+### Enter chốt chữ, Enter nộp bài — hai việc khác nhau
+
+Bộ gõ tiếng Trung dùng Enter để **chốt chữ đang ghép**, và nó mặc định chọn chữ phổ biến
+nhất: gõ `zai` luôn ra 在 dù bạn đang cần 再. Nếu app cũng nộp bài khi thấy Enter thì một
+phím làm hai việc và bạn không kịp nhìn bộ gõ đã chọn gì — chính là lỗi đã gặp.
+
+Không dựa được vào `event.isComposing`: thứ tự `compositionend` và `keydown` khác nhau giữa
+các bộ gõ. Đo trong app cho thấy macOS bắn **`compositionend` trước**, nên tới lúc `keydown`
+chạy thì `isComposing` đã là `false` và guard không bắt được.
+
+Cách xử lý (ở `src/core/ime-submit.mjs`, có test riêng):
+
+| Tình huống | Kết quả |
+|---|---|
+| đang ghép chữ | Enter thuộc về IME |
+| Enter trong vòng 250ms sau khi chốt chữ | **nuốt**, hiện nhắc nhở |
+| Enter sau đó | nộp bài |
+| ⌘Enter bất cứ lúc nào | nộp bài (IME không nuốt tổ hợp này) |
+
+Sau khi chốt chữ, app hiện một thanh xác nhận **"sẽ nộp: 在"** cỡ lớn, để bạn thấy bộ gõ
+đã chọn gì trước khi quyết định.
+
 ### Trợ từ không đi cổng production
 
 Bắt gõ 吧 từ prompt *"trợ từ đề nghị hoặc phỏng đoán"* là bài kiểm tra về cách diễn đạt của

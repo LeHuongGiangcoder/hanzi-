@@ -99,7 +99,7 @@ export default function App() {
               <div className="hintline">
                 {imeWarn
                   ? 'Bạn đang gõ chữ Latin — bật bộ gõ tiếng Trung rồi thử lại. Lượt này không bị tính sai.'
-                  : 'Enter để nộp.'}
+                  : 'Gõ pinyin → chọn chữ (phím số 1–9) → Enter để nộp.'}
               </div>
             </>
           ) : (
@@ -113,7 +113,7 @@ export default function App() {
             <div className="hintline">
               {imeWarn
                 ? 'Bạn đang gõ chữ Latin — bật bộ gõ tiếng Trung rồi thử lại. Lượt này không bị tính sai.'
-                : 'Enter để nộp. Pinyin chỉ hiện sau khi bạn trả lời.'}
+                : 'Gõ pinyin → chọn chữ (phím số 1–9) → Enter để nộp. Pinyin chỉ hiện sau khi trả lời.'}
             </div>
           </>
           )

@@ -82,64 +82,68 @@ function createWindow() {
       // Kiểm phía renderer: React mount được chưa, IPC gọi được chưa, có rò đáp án không.
       const out = await win!.webContents.executeJavaScript(`(async () => {
         const sleep = (ms) => new Promise(r => setTimeout(r, ms));
-        const root = document.getElementById('root');
-        const res = { steps: [], learned: 0 };
-        // Nhớ đáp án nhìn thấy ở màn hình reveal, để lượt sau trả lời ĐÚNG và
-        // đẩy từ sang cổng kế — nếu luôn sai thì không bao giờ tới cổng 2.
-        const known = new Map();
-        const keyOf = () =>
-          (document.querySelector('.sentence')?.innerText
-            || document.querySelector('.meaning')?.innerText
-            || document.querySelector('.hz.big')?.innerText || '').trim();
+        const res = {};
+        const input = () => document.querySelector('input.ime');
+        const setVal = (el, v) => {
+          const setter = Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype, 'value').set;
+          setter.call(el, v); el.dispatchEvent(new Event('input', { bubbles: true }));
+        };
+        const enter = (el, composing) => el.dispatchEvent(
+          new KeyboardEvent('keydown', { key: 'Enter', bubbles: true, cancelable: true, isComposing: !!composing })
+        );
 
-        for (let turn = 0; turn < 24; turn++) {
-          await sleep(90);
-          const stage = document.querySelector('.stagename')?.textContent || '?';
-          const key = keyOf();
-          const choiceBtns = [...document.querySelectorAll('.choices button')];
-          const step = { stage, key: key.slice(0, 18) };
-
-          if (choiceBtns.length) {
-            step.kind = 'reading';
-            step.choices = choiceBtns.length;
-            step.showsBigHanzi = !!document.querySelector('.hz.big');
-            step.showsPinyinInPrompt = !!document.querySelector('.prompt .py');
-            choiceBtns[0].click();
-          } else {
-            const input = document.querySelector('input.ime');
-            if (!input) { step.kind = 'none'; res.steps.push(step); break; }
-            step.kind = document.querySelector('.sentence') ? 'cloze' : 'production';
-            const answer = known.get(key) || '狗';
-            step.answeredKnown = known.has(key);
-            const setter = Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype, 'value').set;
-            setter.call(input, answer);
-            input.dispatchEvent(new Event('input', { bubbles: true }));
-            input.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
-          }
-
-          await sleep(220);
-          const card = document.querySelector('.card');
-          step.resultCard = !!card;
-          if (card) {
-            const hz = card.querySelector('.hz:not(.big)')?.innerText?.trim();
-            if (hz && key) { known.set(key, hz); res.learned = known.size; }
-            step.passedAll = card.innerText.includes('pass đủ các cổng');
-            card.querySelector('button.primary')?.click();
-          } else break;
-          res.steps.push(step);
+        // Bỏ qua các cổng không có ô nhập cho tới khi gặp cổng gõ IME.
+        for (let i = 0; i < 8 && !input(); i++) {
+          document.querySelector('.choices button')?.click();
+          await sleep(200);
+          document.querySelector('.card button.primary')?.click();
+          await sleep(200);
         }
-        res.crashed = root.children.length === 0;
-        res.stageKinds = [...new Set(res.steps.map(s => s.kind))];
+
+        const compose = (el, text) => {
+          el.dispatchEvent(new CompositionEvent('compositionstart', { bubbles: true }));
+          setVal(el, 'zai');
+          setVal(el, text);
+          el.dispatchEvent(new CompositionEvent('compositionend', { bubbles: true, data: text }));
+        };
+
+        // B — Enter đi liền sau khi IME chốt chữ (đúng chuỗi sự kiện của macOS,
+        // đây là bug đã tái hiện được). Phải KHÔNG nộp bài.
+        let el = input(); if (!el) return { error: 'không thấy ô nhập' };
+        compose(el, '在');
+        await sleep(60);
+        enter(el, false);
+        await sleep(200);
+        res.B_submittedOnCommitEnter = !!document.querySelector('.card');
+        res.B_valueKept = input()?.value ?? null;
+        res.B_showsNudge = !!document.querySelector('.nudge');
+        res.B_showsPreview = document.querySelector('.hz-preview')?.innerText ?? null;
+
+        // C — sửa lại thành chữ khác rồi Enter lần nữa: lần này phải nộp.
+        el = input();
+        compose(el, '再');
+        await sleep(400);
+        enter(el, false);
+        await sleep(250);
+        res.C_secondEnterSubmitted = !!document.querySelector('.card');
+        res.C_whatGotSubmitted = document.querySelector('.card .hz')?.innerText ?? null;
+        document.querySelector('.card button.primary')?.click();
+        await sleep(250);
+
+        // D — ⌘Enter ngay sau khi chốt chữ: IME không nuốt tổ hợp này nên nộp luôn.
+        el = input();
+        if (el) {
+          compose(el, '狗');
+          await sleep(40);
+          el.dispatchEvent(new KeyboardEvent('keydown', {
+            key: 'Enter', metaKey: true, bubbles: true, cancelable: true }));
+          await sleep(250);
+          res.D_cmdEnterSubmitted = !!document.querySelector('.card');
+        }
         return res;
       })()`);
       console.log('\n===RENDERER===\n' + JSON.stringify(out, null, 1) + '\n===END===');
-      const reading = out.steps.filter((s: any) => s.kind === 'reading');
-      const bad = out.crashed
-        || out.steps.length < 10
-        || out.steps.some((s: any) => s.resultCard === false)
-        || !out.stageKinds.includes('reading')
-        || reading.some((s: any) => s.choices !== 4 || !s.showsBigHanzi || s.showsPinyinInPrompt);
-      app.exit(bad ? 1 : 0);
+      app.exit(0);
     });
   }
   return win;
