@@ -10,9 +10,9 @@ const rows = levels.length ? all.filter((w) => levels.includes(w.hsk_level)) : a
 
 // Cột trái = vùng bạn làm việc. Cột phải = dữ liệu tham chiếu, chỉ đọc.
 const COLS = [
-  'hanzi', 'pinyin', 'meaning_vi', 'hsk', 'lesson', 'pos',
+  'hanzi', 'pinyin', 'hanviet', 'meaning_vi', 'hsk', 'lesson',
   'example_zh', 'example_vi', 'note', 'verified', 'active',
-  'traditional', 'radical', 'frequency', 'homophone_key', 'meanings_en', 'flags',
+  'pos_vi', 'traditional', 'radical', 'frequency', 'homophone_key', 'meanings_en', 'flags',
 ];
 
 const cell = (v) => {
@@ -24,11 +24,11 @@ const lines = [COLS.join(',')];
 for (const w of rows) {
   lines.push(
     [
-      w.hanzi, w.pinyin, w.meaning_vi, w.hsk_level, '', w.pos,
+      w.hanzi, w.pinyin, w.hanviet, w.meaning_vi, w.hsk_level, '',
       w.example_zh, w.example_vi, w.note,
       w.flags.includes('override') ? 'TRUE' : 'FALSE', // override = tôi đã soi tay
       'TRUE',
-      w.traditional, w.radical, w.frequency, w.homophone_key,
+      w.pos_vi, w.traditional, w.radical, w.frequency, w.homophone_key,
       w.meanings_en, w.flags,
     ].map(cell).join(',')
   );

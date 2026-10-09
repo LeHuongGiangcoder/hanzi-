@@ -10,12 +10,14 @@ Mục tiêu cụ thể: chữa tật phụ thuộc pinyin mà không nhớ mặt
 - **Bẫy đồng âm**: app cố tình xếp các từ cùng âm vào cùng phiên (的/得, 在/再, 买/卖,
   他/她/它, 请/晴). Chỉ nhớ âm thì sẽ trượt.
 - **Lỗi "pinyin đúng, hán tự sai" được đếm riêng** → đây là thước đo tiến bộ chính.
+- **Dùng âm Hán-Việt làm kênh ghi nhớ thứ hai** — xem bên dưới.
 
 ## Trạng thái
 
 - [x] Phase 0 — pipeline dữ liệu: 1193 từ HSK 1–4, pinyin đã kiểm 3 nguồn, nhóm đồng âm
 - [x] Phase 0a — Google Sheet (tab `words` + `_reports`), validator sync, vòng báo lỗi
-- [ ] Phase 0b — nghĩa tiếng Việt + câu ví dụ
+- [x] Phase 0b — nghĩa tiếng Việt + âm Hán-Việt cho HSK 1 (150/1193 từ)
+- [ ] Phase 0c — nghĩa tiếng Việt HSK 2–4 + câu ví dụ
 - [ ] Phase 1 — Electron app: scheduler, SQLite, FSRS, cổng gõ IME, luật pass-20
 - [ ] Phase 2 — stage đọc + cloze, màn hình đối chiếu đồng âm, phân loại lỗi
 - [ ] Phase 3 — dashboard, streak, xử lý từ hay sai
@@ -34,6 +36,31 @@ node scripts/4-export-sheet.mjs 1 2   # → data/sheet-hsk12.csv (đúng cột G
 npm run data:validate -- dump.json    # kiểm dòng đọc từ Sheet trước khi nạp vào deck
 npm run data:reports  -- reports.json # xử lý báo lỗi → overrides + việc cần làm tay
 ```
+
+## Âm Hán-Việt: kênh ghi nhớ đi tắt qua pinyin
+
+Người Việt học tiếng Trung có một lợi thế mà người học tiếng Anh không có: **âm Hán-Việt
+gắn với mặt chữ, không gắn với phát âm tiếng Phổ thông.** 医院 = y viện, 学生 = học sinh,
+电影 = điện ảnh. Đúng là một đường từ hán tự sang nghĩa **không đi qua pinyin** — tức nhắm
+thẳng vào vấn đề mà app này tồn tại để giải quyết.
+
+Mạnh hơn thế: **với nhiều cặp đồng âm tiếng Trung, âm Hán-Việt lại khác nhau.**
+
+| Cùng pinyin | Âm Hán-Việt | Phân biệt được? |
+|---|---|---|
+| 坐 / 做 — `zuò` | tọa / tố | ✅ |
+| 十 / 是 — `shì` | thập / thị | ✅ |
+| 回 / 会 — `huì` | hồi / hội | ✅ |
+| 他 / 她 — `tā` | tha / tha | ❌ — nhưng khác **bộ thủ** (人 / 女) |
+
+Trong HSK 1, 3 trên 4 nhóm đồng âm (đã đủ dữ liệu) được âm Hán-Việt phân biệt. Nhóm duy
+nhất thất bại thì phân biệt được bằng bộ thủ. Hai cơ chế bù cho nhau, nên **luật hiển thị
+gợi ý khi bạn trả lời sai**: ưu tiên âm Hán-Việt nếu nó khác nhau trong nhóm đồng âm, rơi
+về bộ thủ nếu âm Hán-Việt trùng.
+
+Cột `hanviet` **chỉ điền khi âm Hán-Việt thật sự giúp nhớ**. Ở trợ từ và từ khẩu ngữ (的, 了,
+吗, 很, 吃, 喝, 那, 这…) nó để trống — bản thân việc trống đã là tín hiệu "đừng trông vào
+Hán-Việt ở từ này". HSK 1 có 130/150 từ được điền.
 
 ## Báo lỗi dữ liệu
 
@@ -87,6 +114,7 @@ Vùng rủi ro đã soi tay: 33 hán tự đơn nhiều âm + 32 hán tự đơn
 | `data/homophones.json` | 106 nhóm đồng âm → app dùng làm bẫy và làm distractor |
 | `data/char-whitelist.json` | hán tự theo từng level (178 / 346 / 618 / 1071) → validate câu ví dụ theo nguyên tắc i+1 |
 | `data/sheet-hsk*.csv` | CSV đúng thứ tự cột Google Sheet |
+| `data/meanings.vi.json` | nghĩa tiếng Việt + âm Hán-Việt + từ loại, do Claude soạn |
 | `src/data/validate-rows.mjs` | validator cho dòng đọc từ Sheet (hàm thuần, test được) |
 
 `data/source/` không commit — chạy `npm run data:fetch` để tải lại.

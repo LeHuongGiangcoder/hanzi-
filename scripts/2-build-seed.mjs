@@ -46,6 +46,16 @@ try {
 
 const srcB = await read('hskinfinite-vocab.json');
 
+// Nghĩa tiếng Việt + âm Hán-Việt do Claude soạn. Google Sheet là nguồn CHÍNH khi
+// bạn đã sửa trên đó; file này chỉ là bản soạn ban đầu để bơm lên Sheet lần đầu.
+let vi = {};
+try {
+  vi = JSON.parse(await readFile(OUT + 'meanings.vi.json', 'utf8'));
+  delete vi.$note;
+} catch {
+  console.log('(chưa có data/meanings.vi.json — bỏ qua nghĩa tiếng Việt)');
+}
+
 const entries = [];
 for (const lvl of [1, 2, 3, 4]) {
   for (const e of await read(`kameleon-hsk${lvl}.json`)) entries.push({ lvl, e });
@@ -128,7 +138,9 @@ for (const { lvl, e } of entries) {
     pos: (e.pos ?? []).join(','),
     frequency: e.frequency ?? null,
     meanings_en: (form.meanings ?? []).slice(0, 3),
-    meaning_vi: '', // tôi điền ở bước sau
+    meaning_vi: vi[hanzi]?.vi ?? '',
+    hanviet: vi[hanzi]?.hv ?? '',
+    pos_vi: vi[hanzi]?.pos ?? '',
     example_zh: '',
     example_vi: '',
     note: overrideWhy ?? '',
@@ -184,4 +196,8 @@ console.log(`Cờ                     :`, byFlag);
 console.log(`Nhóm đồng âm           : ${homoGroups.length} nhóm / ${inHomo} từ (${Math.round((inHomo / words.length) * 100)}%)`);
 const h12 = [...groups.entries()].filter(([, v]) => v.filter((w) => w.hsk_level <= 2).length > 1);
 console.log(`  riêng HSK 1-2        : ${h12.length} nhóm`);
+const withVi = words.filter((w) => w.meaning_vi).length;
+const withHv = words.filter((w) => w.hanviet).length;
+console.log(`Có nghĩa tiếng Việt    : ${withVi}/${words.length}`);
+console.log(`Có âm Hán-Việt         : ${withHv}/${withVi} (trên số từ đã có nghĩa)`);
 console.log(`Đã ghi                 : data/seed.hsk1-4.json`);
