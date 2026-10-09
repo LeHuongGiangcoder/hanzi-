@@ -11,3 +11,7 @@ data/source/
 *service-account*.json
 *-[0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f]*.json
 sa.json
+
+# Kết quả tạm của lệnh sync, sinh lại được bằng npm run sheet:pull
+data/sheet-pull.json
+data/reports-pull.json
