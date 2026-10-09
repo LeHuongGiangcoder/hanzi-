@@ -9,6 +9,9 @@ const api = {
   surrender: (typed: string) => ipcRenderer.invoke('session:surrender', { typed }),
   stats: () => ipcRenderer.invoke('stats:get'),
   composing: (on: boolean) => ipcRenderer.invoke('window:composing', on),
+  openDrill: () => ipcRenderer.invoke('window:open-drill'),
+  onProgress: (cb: (p: unknown) => void) =>
+    ipcRenderer.on('progress', (_e, p) => cb(p)),
   getSettings: () => ipcRenderer.invoke('settings:get'),
   setSetting: (key: string, value: string) => ipcRenderer.invoke('settings:set', { key, value }),
 };

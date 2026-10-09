@@ -1,0 +1,30 @@
+:root { color-scheme: dark; }
+* { box-sizing: border-box; margin: 0; }
+body.mini { background: transparent; overflow: hidden;
+  font-family: -apple-system, BlinkMacSystemFont, system-ui, sans-serif; }
+
+/* Cả viên thuốc là vùng kéo thả; riêng nội dung nhận được click. */
+.pill {
+  -webkit-app-region: drag;
+  display: flex; align-items: center; gap: 10px;
+  height: 52px; padding: 0 16px 0 10px;
+  background: rgba(26, 29, 39, .92);
+  border: 1px solid #2a2f3d; border-radius: 26px;
+  backdrop-filter: blur(14px);
+  color: #e8ecf5; cursor: pointer; user-select: none;
+}
+.pill:hover { border-color: #6ea8fe; }
+.pill.done { border-color: #4ade80; }
+
+.ring { flex: none; transform: rotate(-90deg); }
+.ring .track { fill: none; stroke: #2a2f3d; stroke-width: 3; }
+.ring .fill  { fill: none; stroke: #6ea8fe; stroke-width: 3; stroke-linecap: round;
+  transition: stroke-dashoffset .4s ease; }
+.pill.done .ring .fill { stroke: #4ade80; }
+.ring .glyph { transform: rotate(90deg); transform-origin: 18px 18px;
+  fill: #e8ecf5; font-size: 15px; text-anchor: middle; dominant-baseline: central;
+  font-family: "PingFang SC", serif; }
+
+.txt { display: flex; flex-direction: column; line-height: 1.15; }
+.txt b { font-size: 16px; font-variant-numeric: tabular-nums; }
+.txt span { font-size: 11px; color: #8b93a7; }

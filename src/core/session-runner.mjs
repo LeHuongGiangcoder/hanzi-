@@ -89,10 +89,14 @@ export class SessionRunner {
           s.passed = true;
           return { ...s, justPassed: true, clearedStage: true };
         }
-        // Cổng kế hỏi ngay cũng được: nó kiểm một kỹ năng khác, không phải
-        // hỏi lại cùng một câu.
-        s.notBefore = this.served;
-        this.queue.unshift(wordId);
+        // Cổng kế cũng phải giãn cách như khi trả lời sai.
+        //
+        // Ban đầu tôi cho hỏi cổng kế ngay, lập luận rằng nó kiểm một kỹ năng
+        // khác. Sai: nếu vừa gõ xong 的 và vừa nhìn thấy đáp án, thì cổng đọc
+        // hiểu ngay sau đó được trả lời bằng trí nhớ tức thời chứ không phải
+        // bằng cái đã thuộc — nó không kiểm được gì, chỉ làm buổi học dài ra.
+        s.notBefore = this.served + this.minGap;
+        this.queue.push(wordId);
         return { ...s, justPassed: false, clearedStage: true };
       }
     } else {

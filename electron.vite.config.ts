@@ -14,6 +14,13 @@ export default defineConfig({
   renderer: {
     root: resolve('src/renderer'),
     plugins: [react()],
-    build: { rollupOptions: { input: { index: resolve('src/renderer/index.html') } } },
+    build: {
+      rollupOptions: {
+        input: {
+          index: resolve('src/renderer/index.html'),
+          mini: resolve('src/renderer/mini.html'),   // cửa sổ nhỏ hiện tiến độ
+        },
+      },
+    },
   },
 });

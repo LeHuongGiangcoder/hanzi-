@@ -2,7 +2,7 @@ import { app, BrowserWindow, Tray, Menu, nativeImage, ipcMain, powerMonitor, dia
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { randomUUID } from 'node:crypto';
-import { readFileSync, existsSync } from 'node:fs';
+import { readFileSync, existsSync, mkdirSync } from 'node:fs';
 // @ts-ignore — lõi viết bằng .mjs để test được bằng node mà không cần Electron
 import { openDb, upsertWords, ensureCards, isoDate, homophonesOf, quarantineWord, stats, getSetting, setSetting, wordByHanzi, distractorPools } from '../core/db.mjs';
 // @ts-ignore
@@ -33,6 +33,7 @@ if (!app.requestSingleInstanceLock()) {
 
 let db: any;
 let win: BrowserWindow | null = null;
+let mini: BrowserWindow | null = null;
 let tray: Tray | null = null;
 let runner: any = null;
 let session: any = null;
@@ -184,6 +185,56 @@ function applyAlwaysOnTop() {
   win.setAlwaysOnTop(on, 'floating');
 }
 
+/* ---------------- cửa sổ nhỏ hiện tiến độ ---------------- */
+
+/**
+ * Viên thuốc nhỏ nổi trên màn hình, luôn thấy tiến độ hôm nay.
+ *
+ * focusable: false là điểm quan trọng — nếu nó giành được focus thì có thể
+ * cướp mất ô nhập đang gõ dở, và tệ hơn là chen vào giữa lúc bộ gõ đang ghép chữ.
+ */
+function createMini() {
+  if (getSetting(db, 'mini_window', '1') === '0') return null;
+  if (mini && !mini.isDestroyed()) return mini;
+
+  const saved = getSetting(db, 'mini_pos', '');
+  const [sx, sy] = saved ? saved.split(',').map(Number) : [];
+
+  mini = new BrowserWindow({
+    width: 190, height: 60,
+    x: Number.isFinite(sx) ? sx : undefined,
+    y: Number.isFinite(sy) ? sy : undefined,
+    frame: false, transparent: true, hasShadow: false,
+    resizable: false, movable: true, focusable: false,
+    skipTaskbar: true, show: false,
+    webPreferences: { preload: join(HERE, '../preload/index.mjs'), sandbox: false },
+  });
+  mini.setAlwaysOnTop(true, 'floating');
+  mini.setVisibleOnAllWorkspaces(true, { visibleOnFullScreen: true });
+
+  if (process.env.ELECTRON_RENDERER_URL)
+    mini.loadURL(`${process.env.ELECTRON_RENDERER_URL}/mini.html`);
+  else mini.loadFile(join(HERE, '../renderer/mini.html'));
+
+  mini.on('moved', () => {
+    const [x, y] = mini!.getPosition();
+    setSetting(db, 'mini_pos', `${x},${y}`);
+  });
+  mini.once('ready-to-show', () => { mini?.showInactive(); pushProgress(); });
+  return mini;
+}
+
+function pushProgress() {
+  const row = db.prepare('SELECT passed_count, target_count, finished_at FROM sessions WHERE date=?')
+    .get(isoDate());
+  const payload = {
+    passed: row?.passed_count ?? 0,
+    target: row?.target_count ?? 20,
+    done: !!row?.finished_at,
+  };
+  if (mini && !mini.isDestroyed()) mini.webContents.send('progress', payload);
+}
+
 /* ---------------- lịch nhắc ---------------- */
 
 function sessionDoneToday() {
@@ -255,6 +306,8 @@ function refreshIndicators() {
     ? `Nhắc lại lúc ${new Date(nextPromptAt).toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' })}`
     : `Giờ học: ${getSetting(db, 'drill_time', DRILL_TIME_DEFAULT)}`;
 
+  pushProgress();
+
   tray?.setContextMenu(Menu.buildFromTemplate([
     { label: done ? 'Hôm nay đã xong ✓' : `Còn ${left} / ${target} từ`, enabled: false },
     { label: done ? '' : waiting, enabled: false, visible: !done },
@@ -263,6 +316,17 @@ function refreshIndicators() {
     { label: 'Nhắc lại sau 30 phút', visible: !done, click: () => { deferPrompt(); win?.hide(); refreshIndicators(); } },
     { label: 'Nghỉ hôm nay', visible: !done, click: () => { deferPrompt(msUntilTomorrow()); win?.hide(); refreshIndicators(); } },
     { type: 'separator' },
+    {
+      label: 'Hiện ô tiến độ nhỏ',
+      type: 'checkbox',
+      checked: getSetting(db, 'mini_window', '1') !== '0',
+      click: (item) => {
+        setSetting(db, 'mini_window', item.checked ? '1' : '0');
+        if (item.checked) createMini();
+        else { mini?.destroy(); mini = null; }
+        refreshIndicators();
+      },
+    },
     {
       label: 'Mở cùng máy khi đăng nhập',
       type: 'checkbox',
@@ -456,6 +520,8 @@ function registerIpc() {
 
   // Lưới an toàn: nếu trên máy bạn bảng gợi ý vẫn bị che, hạ hẳn cửa sổ xuống
   // trong lúc đang ghép chữ rồi nâng lại khi xong.
+  ipcMain.handle('window:open-drill', () => { createWindow(); return true; });
+
   ipcMain.handle('window:composing', (_e, composing: boolean) => {
     if (!win || win.isDestroyed()) return false;
     if (getSetting(db, 'lower_while_composing', '0') === '0') return false;
@@ -468,13 +534,19 @@ function registerIpc() {
 /* ---------------- vòng đời ---------------- */
 
 app.whenReady().then(() => {
-  db = openDb(join(app.getPath('userData'), 'hanzi-drill.db'));
+  // HANZI_DATA_DIR cho phép chạy kiểm thử trên DB riêng. Không có nó thì mọi
+  // lần smoke/debug đều ghi vào dữ liệu học thật — và một lần đã làm smoke
+  // test fail chỉ vì phiên hôm đó đã hoàn thành.
+  const dataDir = process.env.HANZI_DATA_DIR || app.getPath('userData');
+  if (process.env.HANZI_DATA_DIR) mkdirSync(dataDir, { recursive: true });
+  db = openDb(join(dataDir, 'hanzi-drill.db'));
   if (!getSetting(db, 'seed_loaded_at')) loadSeed();
   ensureCards(db);
   registerIpc();
 
   tray = new Tray(nativeImage.createEmpty());
   tray.on('click', () => createWindow());
+  createMini();
   refreshIndicators();
   // Giữ chỉ báo đúng cả khi sang ngày mới mà không mở app.
   setInterval(refreshIndicators, 5 * 60_000);
@@ -497,7 +569,7 @@ app.whenReady().then(() => {
  * Kiểm tra nhanh toàn bộ đường dây phía main (SQLite dưới ABI Electron, nạp seed,
  * dựng phiên, chấm bài, cách ly) rồi thoát. Chạy: HANZI_SMOKE=1 npx electron .
  */
-function runSmoke() {
+async function runSmoke() {
   const out: string[] = [];
   const ok = (label: string, cond: unknown, extra = '') =>
     out.push(`${cond ? 'PASS' : 'FAIL'}  ${label}${extra ? '  — ' + extra : ''}`);
@@ -511,7 +583,13 @@ function runSmoke() {
     ok('dựng phiên hôm nay', session && runner.total > 0, `${runner.total} từ`);
 
     const q1: any = currentQuestion();
-    ok('sinh được câu hỏi', !q1.done && q1.word?.meaning_vi, q1.word?.meaning_vi);
+    ok('sinh được câu hỏi', !q1.done && q1.word?.meaning_vi,
+       q1.done ? 'phiên hôm nay đã hoàn thành' : q1.word?.meaning_vi);
+    if (q1.done) {
+      out.push('SKIP  bỏ qua các bước cần câu hỏi — phiên hôm nay đã xong');
+      console.log('\n===SMOKE===\n' + out.join('\n') + '\n===END===');
+      return app.exit(0);
+    }
     ok('câu hỏi KHÔNG rò hán tự/pinyin xuống renderer',
        !('hanzi' in (q1.word ?? {})) && !('pinyin' in (q1.word ?? {})));
 
@@ -552,6 +630,9 @@ function runSmoke() {
 
     const seen: string[] = [];
     for (let i = 0; i < 3; i++) {
+      // Bỏ giãn cách giữa các cổng để kiểm riêng THỨ TỰ cổng. Giãn cách là hành
+      // vi đúng và đã có test riêng; ở đây nó chỉ làm next() trả về từ khác.
+      st.notBefore = 0;
       runner.queue = [target.id, ...runner.queue.filter((x: number) => x !== target.id)];
       const q: any = currentQuestion();
       seen.push(q.word.stage);
@@ -580,6 +661,29 @@ function runSmoke() {
       "SELECT hanzi, anchor FROM words WHERE pos_vi LIKE '%trợ từ%' AND example_zh <> '' LIMIT 1").get();
     ok('trợ từ vào thẳng cloze, không bị bắt gõ từ nghĩa',
        particle?.anchor === 'cloze', `${particle?.hanzi} → ${particle?.anchor}`);
+
+    // --- ô tiến độ nhỏ ---
+    await new Promise((r) => setTimeout(r, 1200));
+    ok('ô tiến độ nhỏ đã mở', !!mini && !mini.isDestroyed());
+    ok('nó KHÔNG giành focus (không cướp ô nhập đang gõ)', mini?.isFocusable() === false);
+    ok('nó hiện khi chưa mở bài học', mini?.isVisible() === true);
+    const miniText = await mini!.webContents.executeJavaScript(
+      `document.querySelector('.pill')?.innerText.replace(/\\n/g, ' ') ?? ''`);
+    ok('nó hiện đúng tiến độ', /\d+\/\d+/.test(miniText), miniText);
+
+    const until = async (fn: () => boolean, ms = 6000) => {
+      const t0 = Date.now();
+      while (Date.now() - t0 < ms) {
+        if (fn()) return true;
+        await new Promise((r) => setTimeout(r, 100));
+      }
+      return false;
+    };
+    const w0 = createWindow();
+    ok('cửa sổ học mở được bên cạnh ô nhỏ', await until(() => w0.isVisible()));
+    ok('ô nhỏ vẫn còn đó khi đang học', mini?.isVisible() === true);
+    w0.hide();
+    ok('ô nhỏ vẫn còn sau khi đóng bài học', mini?.isVisible() === true);
 
     // --- đóng cửa sổ + chỉ báo luôn hiện ---
     const w2 = createWindow();

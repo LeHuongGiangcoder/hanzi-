@@ -16,7 +16,7 @@
     "start": "electron-vite preview",
     "test": "ELECTRON_RUN_AS_NODE=1 electron --test test/*.test.mjs",
     "postinstall": "electron-rebuild -f -w better-sqlite3",
-    "smoke": "HANZI_SMOKE=1 electron .",
+    "smoke": "HANZI_DATA_DIR=/tmp/hanzi-smoke HANZI_SMOKE=1 electron .",
     "sheet:push": "node scripts/7-sync-sheet.mjs push",
     "sheet:pull": "node scripts/7-sync-sheet.mjs pull",
     "sheet:reports": "node scripts/7-sync-sheet.mjs reports",

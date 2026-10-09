@@ -129,8 +129,13 @@ Một từ chỉ tính là PASS trong ngày khi vượt **hết** các cổng c�
 Thứ tự cố ý: **bắt tạo ra chữ trước rồi mới kiểm đọc hiểu**. Nhận ra chữ dễ hơn viết ra chữ
 rất nhiều, nên nhận diện không bao giờ được tính là pass.
 
-Sai ở cổng nào thì làm lại **đúng cổng đó** 2 lần, không tụt về cổng đầu — và vẫn phải có
-ít nhất 3 lượt khác chen vào giữa.
+Sai ở cổng nào thì làm lại **đúng cổng đó** 2 lần, không tụt về cổng đầu.
+
+**Ba cổng của một từ không bao giờ đứng liền nhau.** Ban đầu tôi cho hỏi cổng kế ngay sau
+khi qua cổng trước, lập luận rằng chúng kiểm những kỹ năng khác nhau. Sai: nếu vừa gõ xong
+的 và vừa nhìn thấy đáp án, thì cổng đọc hiểu ngay sau đó được trả lời bằng trí nhớ tức
+thời chứ không phải bằng cái đã thuộc — nó không kiểm được gì, chỉ làm buổi học dài ra.
+Giữa hai cổng của cùng một từ luôn có ít nhất 3 lượt khác chen vào.
 
 ### Enter chốt chữ, Enter nộp bài — hai việc khác nhau
 

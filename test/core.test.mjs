@@ -560,3 +560,33 @@ test('từ mới vẫn đủ 4 lựa chọn, lấy từ cùng bộ thủ / cùng
   assert.equal(opts.length, 4);
   assert.equal(opts.filter((o) => o.correct).length, 1);
 });
+
+test('qua cổng rồi KHÔNG hỏi cổng kế ngay, phải có từ khác chen vào', () => {
+  const r = new SessionRunner([
+    { id: 1, hanzi: '买', stages: ['production', 'reading', 'cloze'] },
+    { id: 2, hanzi: '卖', stages: ['production'] },
+    { id: 3, hanzi: '狗', stages: ['production'] },
+    { id: 4, hanzi: '猫', stages: ['production'] },
+    { id: 5, hanzi: '鱼', stages: ['production'] },
+  ]);
+  r.answer(1, true);                       // qua cổng production của từ 1
+  const seen = [];
+  for (let i = 0; i < 3; i++) { const w = r.next(); seen.push(w.id); r.answer(w.id, true); }
+  assert.ok(!seen.includes(1), `hỏi lại từ 1 quá sớm: ${seen.join(',')}`);
+});
+
+test('ba cổng của một từ không bao giờ đứng liền nhau trong cả phiên', () => {
+  const items = Array.from({ length: 8 }, (_, i) => ({
+    id: i + 1, hanzi: `w${i + 1}`, stages: ['production', 'reading', 'cloze'],
+  }));
+  const r = new SessionRunner(items);
+  let prev = null, backToBack = 0;
+  for (let i = 0; i < 400 && !r.done; i++) {
+    const w = r.next();
+    if (prev === w.id) backToBack++;
+    prev = w.id;
+    r.answer(w.id, true);
+  }
+  assert.equal(r.done, true);
+  assert.equal(backToBack, 0, 'có lượt hỏi cùng một từ hai lần liên tiếp');
+});
