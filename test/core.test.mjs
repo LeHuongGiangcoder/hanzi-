@@ -6,7 +6,7 @@ const t2s = OpenCC.Converter({ from: 't', to: 'cn' });
 import { gradeAnswer, normalizeAnswer } from '../src/core/grading.mjs';
 import { pickHint, buildComparison } from '../src/core/hints.mjs';
 import { SessionRunner } from '../src/core/session-runner.mjs';
-import { openDb, upsertWords, ensureCards, homophonesOf, stats, quarantineWord, resetCardsForWords } from '../src/core/db.mjs';
+import { openDb, upsertWords, ensureCards, homophonesOf, stats, quarantineWord, resetCardsForWords, distractorPools } from '../src/core/db.mjs';
 import { buildQueue, startSession, resumeSession, saveStageIdx, applyReview, markPassed, replaceInQueue } from '../src/core/scheduler.mjs';
 
 const seed = JSON.parse(readFileSync(new URL('../data/seed.hsk1-4.json', import.meta.url), 'utf8'));
@@ -194,12 +194,70 @@ test('hàng đợi ngày đúng 20 từ, không trùng', () => {
   assert.equal(new Set(q.map((w) => w.id)).size, 20);
 });
 
-test('hàng đợi có kéo từ đồng âm vào làm bẫy', () => {
+test('KHO TỪ MỚI: không bao giờ xếp hai từ cùng âm vào một phiên', () => {
   const db = freshDb();
+  for (let i = 0; i < 8; i++) {
+    const q = buildQueue(db);
+    const keys = q.filter((w) => w.homophone_key).map((w) => w.homophone_key);
+    const dup = keys.filter((k, i2) => keys.indexOf(k) !== i2);
+    assert.deepEqual(dup, [], 'từ chưa thuộc mà bị ghép cùng từ đồng âm: ' + dup.join(' '));
+  }
+});
+
+/** Đưa một từ về trạng thái "đã thuộc và tới hạn ôn". */
+function establish(db, hanzi) {
+  const w = db.prepare('SELECT id, anchor FROM words WHERE hanzi=?').get(hanzi);
+  db.prepare(
+    `UPDATE cards SET state=2, reps=5, stability=10, difficulty=5,
+     due=date('now','localtime','-1 day') WHERE word_id=? AND direction=?`
+  ).run(w.id, w.anchor);
+  return w;
+}
+
+test('ĐÃ THUỘC rồi thì bẫy đồng âm mới bật: hai từ được đem ra đối chiếu', () => {
+  const db = freshDb();
+  establish(db, '买');
+  establish(db, '卖');
   const q = buildQueue(db);
-  const keys = q.filter((w) => w.homophone_key).map((w) => w.homophone_key);
-  const dup = keys.filter((k, i) => keys.indexOf(k) !== i);
-  assert.ok(dup.length > 0, 'phải có ít nhất một cặp cùng âm trong phiên');
+  const hz = q.map((w) => w.hanzi);
+  assert.ok(hz.includes('买') && hz.includes('卖'),
+    'hai từ đã thuộc, cùng âm mǎi/mài — phải được xếp cùng phiên để đối chiếu');
+});
+
+test('một từ đã thuộc KHÔNG kéo theo từ đồng âm còn mới', () => {
+  const db = freshDb();
+  establish(db, '买');                       // chỉ 买 thuộc, 卖 vẫn mới
+  for (let i = 0; i < 5; i++) {
+    const q = buildQueue(db);
+    if (!q.some((w) => w.hanzi === '买')) continue;
+    assert.ok(!q.some((w) => w.hanzi === '卖'),
+      'từ còn mới không được lôi vào làm mồi đối chiếu');
+  }
+});
+
+test('mỗi phiên tối đa 2 nhóm đồng âm, mỗi nhóm tối đa 2 từ', () => {
+  const db = freshDb();
+  // Dựng sẵn nhiều cặp đã thuộc để ép hệ thống phải chọn lọc.
+  for (const h of ['买', '卖', '在', '再', '坐', '做', '是', '事', '十', '时'])
+    establish(db, h);
+  const q = buildQueue(db);
+  const byKey = {};
+  for (const w of q) if (w.homophone_key) (byKey[w.homophone_key] ??= []).push(w.hanzi);
+  const groups = Object.entries(byKey).filter(([, v]) => v.length > 1);
+  assert.ok(groups.length <= 2, `quá nhiều nhóm đồng âm: ${groups.length}`);
+  for (const [k, v] of groups)
+    assert.ok(v.length <= 2, `nhóm ${k} có ${v.length} từ: ${v.join(' ')}`);
+});
+
+test('nhóm shi 10 từ không bao giờ đổ cả vào một phiên', () => {
+  const db = freshDb();
+  const shi = db.prepare("SELECT hanzi FROM words WHERE homophone_key='shi'").all().map((r) => r.hanzi);
+  assert.ok(shi.length >= 8, 'kho từ phải có nhóm shi lớn để kiểm');
+  for (const h of shi) establish(db, h);
+  const q = buildQueue(db);
+  const inSession = q.filter((w) => w.homophone_key === 'shi');
+  assert.ok(inSession.length <= 2,
+    `có ${inSession.length} từ "shi" cùng phiên: ${inSession.map((w) => w.hanzi).join(' ')}`);
 });
 
 test('từ bị cách ly không bao giờ lọt vào hàng đợi', () => {
@@ -480,4 +538,25 @@ test('stage_idx không vượt quá số cổng của từ, kể cả khi dữ l
   saveStageIdx(db, a.session.id, w.id, 99);
   const b = resumeSession(db);
   assert.ok(b.runner.stageOf(w.id), 'phải vẫn trả về một cổng hợp lệ');
+});
+
+test('mồi nhử ở cổng đọc hiểu cũng chỉ dùng từ đồng âm ĐÃ THUỘC', () => {
+  const db = freshDb();
+  const mai = db.prepare("SELECT * FROM words WHERE hanzi='买'").get();
+  // 卖 còn mới → không được dùng làm mồi
+  assert.equal(distractorPools(db, mai).homophones.length, 0);
+
+  const sell = db.prepare("SELECT id, anchor FROM words WHERE hanzi='卖'").get();
+  db.prepare('UPDATE cards SET state=2, reps=5 WHERE word_id=? AND direction=?')
+    .run(sell.id, sell.anchor);
+  const pools = distractorPools(db, mai);
+  assert.ok(pools.homophones.some((w) => w.hanzi === '卖'), 'thuộc rồi thì mới được làm mồi');
+});
+
+test('từ mới vẫn đủ 4 lựa chọn, lấy từ cùng bộ thủ / cùng cấp', () => {
+  const db = freshDb();
+  const w = db.prepare("SELECT * FROM words WHERE hanzi='买'").get();
+  const opts = buildChoices(w, distractorPools(db, w));
+  assert.equal(opts.length, 4);
+  assert.equal(opts.filter((o) => o.correct).length, 1);
 });

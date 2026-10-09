@@ -161,6 +161,22 @@ người soạn, không phải về việc bạn có nhớ mặt chữ hay khôn
 từ khác **bỏ cổng production, vào thẳng cloze** — điền vào chỗ trống mới đúng bản chất của
 nhóm này. Cổng neo (`words.anchor`) của chúng là `cloze`, nên FSRS cũng lên lịch theo đó.
 
+### Bẫy đồng âm chỉ bật khi đã thuộc
+
+Bản đầu tiên tôi làm sai: nó kéo mọi từ cùng âm vào chung một phiên bất kể bạn đã học chúng
+chưa. Đo thực tế cho ra một phiên có **10 từ cùng đọc "shi"** (是 事 十 试 市 时 使 室 湿 诗),
+tất cả đều chưa học bao giờ — 14/20 từ dính nhóm đồng âm.
+
+Đặt hai từ cùng âm cạnh nhau lúc cả hai còn mới **không tạo ra sự phân biệt, nó tạo ra nhiễu**.
+Đối chiếu chỉ có tác dụng khi từng từ đã đứng vững riêng lẻ.
+
+Luật hiện tại:
+
+- hai từ cùng âm chỉ gặp nhau khi **cả hai đã thuộc** (`state ≠ new` và `reps ≥ 2`)
+- mỗi phiên tối đa **2 nhóm** đồng âm, mỗi nhóm tối đa **2 từ**
+- mồi nhử ở cổng đọc hiểu cũng chỉ dùng từ đồng âm đã thuộc; từ mới thì lấy mồi cùng bộ thủ
+  hoặc cùng cấp
+
 ### Mồi nhử không lấy ngẫu nhiên
 
 Bốn lựa chọn ở cổng đọc hiểu ưu tiên **từ cùng âm** trước, rồi tới **cùng bộ thủ**, rồi mới

@@ -178,16 +178,33 @@ export function stats(db) {
 
 /**
  * Nguồn mồi nhử cho cổng đọc hiểu, xếp theo mức dễ lẫn giảm dần.
+ *
  * Mồi ngẫu nhiên thì loại trừ là đoán ra; mồi cùng âm mới ép nhận mặt chữ.
+ * NHƯNG chỉ lấy từ đồng âm mà bạn ĐÃ THUỘC — cùng lý do với bẫy đồng âm ở
+ * hàng đợi: bày một loạt chữ lạ cùng âm ra trước mắt người mới học thì không
+ * tạo ra sự phân biệt, nó tạo ra nhiễu.
  */
 export function distractorPools(db, word, limit = 8) {
-  const ready = `active=1 AND quarantined=0 AND meaning_vi<>'' AND id<>@id`;
-  const q = (extra, params) =>
-    db.prepare(`SELECT hanzi, meaning_vi, pinyin FROM words WHERE ${ready} AND ${extra} LIMIT ${limit}`)
-      .all({ id: word.id, ...params });
+  const ready = `w.active=1 AND w.quarantined=0 AND w.meaning_vi<>'' AND w.id<>@id`;
+  const q = (extra, params, join = '') =>
+    db.prepare(
+      `SELECT w.hanzi, w.meaning_vi, w.pinyin FROM words w ${join}
+       WHERE ${ready} AND ${extra} LIMIT ${limit}`
+    ).all({ id: word.id, ...params });
+
+  const establishedHomophones = word.homophone_key
+    ? q(
+        'w.homophone_key=@k AND c.state<>0 AND c.reps>=2',
+        { k: word.homophone_key },
+        'JOIN cards c ON c.word_id=w.id AND c.direction=w.anchor'
+      )
+    : [];
+
   return {
-    homophones: word.homophone_key ? q('homophone_key=@k', { k: word.homophone_key }) : [],
-    sameRadical: word.radical ? q('radical=@r AND hsk_level<=@l', { r: word.radical, l: word.hsk_level }) : [],
-    sameLevel: q('hsk_level=@l ORDER BY RANDOM()', { l: word.hsk_level }),
+    homophones: establishedHomophones,
+    sameRadical: word.radical
+      ? q('w.radical=@r AND w.hsk_level<=@l', { r: word.radical, l: word.hsk_level })
+      : [],
+    sameLevel: q('w.hsk_level=@l ORDER BY RANDOM()', { l: word.hsk_level }),
   };
 }

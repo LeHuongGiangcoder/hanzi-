@@ -5,7 +5,37 @@ import { SessionRunner } from './session-runner.mjs';
 
 const f = fsrs(generatorParameters({ enable_fuzz: true }));
 
-export const DEFAULT_MIX = { due: 12, fresh: 5, leech: 3, target: 20 };
+export const DEFAULT_MIX = { due: 12, fresh: 5, leech: 3, target: 20, maxConfusableGroups: 2 };
+
+// Một từ được coi là ĐÃ THUỘC khi nó rời trạng thái "mới" và đã được ôn vài lần.
+const MIN_REPS_ESTABLISHED = 2;
+const ESTABLISHED_SQL = `c.state <> 0 AND c.reps >= ${MIN_REPS_ESTABLISHED}`;
+
+export function isEstablished(row) {
+  return (row?.card_state ?? 0) !== 0 && (row?.card_reps ?? 0) >= MIN_REPS_ESTABLISHED;
+}
+
+const maxConfusable = (mix) => mix.maxConfusableGroups ?? 2;
+
+/**
+ * Có được xếp `row` vào cùng phiên với các từ đồng âm đã có không?
+ *
+ * Bẫy đồng âm chỉ có tác dụng khi bạn ĐÃ THUỘC từng từ rồi mới đem ra đối chiếu.
+ * Đặt hai từ cùng âm cạnh nhau lúc cả hai còn mới thì không tạo ra sự phân biệt,
+ * nó tạo ra nhiễu — đo thực tế từng cho ra một phiên có 10 từ cùng đọc "shi"
+ * (是 事 十 试 市 时 使 室 湿 诗), tất cả đều chưa học bao giờ.
+ *
+ * Luật: hai từ cùng âm chỉ được gặp nhau khi CẢ HAI đã thuộc, và mỗi phiên chỉ
+ * cho tối đa `maxConfusableGroups` cặp như vậy — nó là gia vị, không phải món chính.
+ */
+export function canPair(row, siblingsInSession, confusableGroups, mix = DEFAULT_MIX) {
+  if (!row.homophone_key) return true;
+  const sibs = siblingsInSession ?? [];
+  if (!sibs.length) return true;
+  if (sibs.length >= 2) return false;                       // tối đa 2 từ mỗi nhóm
+  if (confusableGroups >= maxConfusable(mix)) return false;
+  return isEstablished(row) && sibs.every(isEstablished);
+}
 
 function cardToFsrs(row) {
   return {
@@ -47,11 +77,11 @@ export function applyReview(db, cardRow, { grade, latencyMs, answerRaw, errorTyp
 export function buildQueue(db, { date = isoDate(), mix = DEFAULT_MIX } = {}) {
   const pick = (sql, n, ...args) => (n > 0 ? db.prepare(sql).all(...args, n) : []);
   const READY = `w.active=1 AND w.quarantined=0 AND w.meaning_vi<>''`;
+  const ANCHOR = 'c.direction=w.anchor';
+  const COLS = 'w.*, c.id card_id, c.state card_state, c.reps card_reps';
 
-  // Lên lịch theo CỔNG NEO (cổng đầu tiên của từ), không cố định 'production':
-  // trợ từ không có cổng production.
   const due = pick(
-    `SELECT w.*, c.id card_id FROM cards c JOIN words w ON w.id=c.word_id AND c.direction=w.anchor
+    `SELECT ${COLS} FROM cards c JOIN words w ON w.id=c.word_id AND ${ANCHOR}
      WHERE c.due<=? AND c.state<>0 AND ${READY}
      ORDER BY c.due ASC, w.frequency IS NULL, w.frequency ASC LIMIT ?`,
     mix.due, date
@@ -59,55 +89,65 @@ export function buildQueue(db, { date = isoDate(), mix = DEFAULT_MIX } = {}) {
 
   // "Leech" = từ hay mắc đúng lỗi phụ thuộc pinyin. Ưu tiên bất kể lịch.
   const leech = pick(
-    `SELECT w.*, MIN(c.id) card_id, COUNT(r.id) bad
-     FROM cards c JOIN words w ON w.id=c.word_id
+    `SELECT ${COLS}, COUNT(r.id) bad
+     FROM cards c JOIN words w ON w.id=c.word_id AND ${ANCHOR}
      JOIN reviews r ON r.card_id=c.id AND r.error_type='homophone_wrong_char'
      WHERE ${READY}
      GROUP BY w.id HAVING bad>0 ORDER BY bad DESC LIMIT ?`,
     mix.leech
   );
 
-  const taken = new Set([...due, ...leech].map((r) => r.id));
   const fresh = pick(
-    `SELECT w.*, c.id card_id FROM cards c JOIN words w ON w.id=c.word_id AND c.direction=w.anchor
+    `SELECT ${COLS} FROM cards c JOIN words w ON w.id=c.word_id AND ${ANCHOR}
      WHERE c.state=0 AND ${READY}
      ORDER BY w.hsk_level ASC, w.lesson ASC, w.frequency IS NULL, w.frequency ASC LIMIT ?`,
-    mix.fresh + taken.size
+    mix.target * 4
   );
 
   const out = [];
+  const taken = new Set();
+  const byKey = new Map();          // homophone_key → các từ đã xếp vào phiên
+  let confusableGroups = 0;
+
   const add = (row, reason) => {
-    if (out.length >= mix.target || taken2.has(row.id)) return false;
-    taken2.add(row.id);
+    if (out.length >= mix.target || taken.has(row.id)) return false;
+    if (!canPair(row, byKey.get(row.homophone_key), confusableGroups, mix)) return false;
+    const siblings = byKey.get(row.homophone_key);
+    if (row.homophone_key && siblings?.length === 1) confusableGroups++;
+    taken.add(row.id);
     out.push({ ...row, reason });
+    if (row.homophone_key) byKey.set(row.homophone_key, [...(siblings ?? []), row]);
     return true;
   };
-  const taken2 = new Set();
+
   for (const r of due) add(r, 'due');
   for (const r of leech) add(r, 'leech');
   for (const r of fresh) add(r, 'new');
 
-  // Bẫy đồng âm: kéo anh em cùng âm vào, chiếm chỗ của từ mới.
-  const siblings = db.prepare(
-    `SELECT w.*, c.id card_id FROM words w JOIN cards c ON c.word_id=w.id AND c.direction=w.anchor
-     WHERE w.homophone_key=? AND w.id<>? AND ${READY}`
-  );
-  for (const seed of [...out]) {
-    if (out.length >= mix.target) break;
-    if (!seed.homophone_key) continue;
-    for (const s of siblings.all(seed.homophone_key, seed.id)) {
-      if (!add(s, 'homophone_sibling')) break;
+  // Bẫy đồng âm — CHỈ giữa những từ đã thuộc.
+  if (confusableGroups < maxConfusable(mix)) {
+    const siblings = db.prepare(
+      `SELECT ${COLS} FROM words w JOIN cards c ON c.word_id=w.id AND ${ANCHOR}
+       WHERE w.homophone_key=? AND w.id<>? AND ${READY} AND ${ESTABLISHED_SQL}
+       ORDER BY c.due ASC`
+    );
+    for (const seed of [...out]) {
+      if (out.length >= mix.target || confusableGroups >= maxConfusable(mix)) break;
+      if (!seed.homophone_key || !isEstablished(seed)) continue;
+      for (const s of siblings.all(seed.homophone_key, seed.id)) {
+        if (add(s, 'homophone_sibling')) break;   // mỗi lần chỉ thêm MỘT từ đối chiếu
+      }
     }
   }
 
-  // Còn thiếu thì bù thêm từ mới cho đủ chỉ tiêu.
+  // Còn thiếu thì bù thêm, vẫn tôn trọng luật trên.
   if (out.length < mix.target) {
     for (const r of pick(
-      `SELECT w.*, c.id card_id FROM cards c JOIN words w ON w.id=c.word_id AND c.direction=w.anchor
+      `SELECT ${COLS} FROM cards c JOIN words w ON w.id=c.word_id AND ${ANCHOR}
        WHERE ${READY} ORDER BY c.due ASC LIMIT ?`,
-      mix.target * 3
+      mix.target * 6
     )) {
-      if (!add(r, 'replacement')) continue;
+      add(r, 'replacement');
       if (out.length >= mix.target) break;
     }
   }
