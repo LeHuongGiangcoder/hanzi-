@@ -7,7 +7,7 @@ import { gradeAnswer, normalizeAnswer } from '../src/core/grading.mjs';
 import { pickHint, buildComparison } from '../src/core/hints.mjs';
 import { SessionRunner } from '../src/core/session-runner.mjs';
 import { openDb, upsertWords, ensureCards, homophonesOf, stats, quarantineWord, resetCardsForWords } from '../src/core/db.mjs';
-import { buildQueue, startSession, applyReview, markPassed, replaceInQueue } from '../src/core/scheduler.mjs';
+import { buildQueue, startSession, resumeSession, saveStageIdx, applyReview, markPassed, replaceInQueue } from '../src/core/scheduler.mjs';
 
 const seed = JSON.parse(readFileSync(new URL('../data/seed.hsk1-4.json', import.meta.url), 'utf8'));
 const freshDb = () => {
@@ -432,4 +432,52 @@ test('ô trống thì Enter không làm gì', () => {
 
 test('gõ không qua IME (dán sẵn chữ) vẫn nộp được bằng Enter', () => {
   assert.equal(enter({ msSinceCompositionEnd: -1 }).submit, true);
+});
+
+// ---------- đóng app giữa chừng không mất tiến độ ----------
+test('đóng app giữa chừng: từ đã pass vẫn được tính khi mở lại', () => {
+  const db = freshDb();
+  const a = resumeSession(db);
+  for (const w of a.items.slice(0, 3))
+    for (const _ of w.stages) { a.runner.answer(w.id, true); }
+  for (const w of a.items.slice(0, 3)) markPassed(db, a.session.id, w.id);
+
+  const b = resumeSession(db);              // ← như mở lại app
+  assert.equal(b.runner.progress().passed, 3);
+  assert.equal(b.runner.progress().total, 20);
+});
+
+test('đóng app giữa chừng: từ đang dở quay lại ĐÚNG CỔNG đang đứng', () => {
+  const db = freshDb();
+  const a = resumeSession(db);
+  const w = a.items.find((x) => x.stages.length === 3);
+  assert.ok(w, 'cần một từ có đủ ba cổng');
+
+  a.runner.answer(w.id, true);              // qua cổng 1
+  assert.equal(a.runner.stageOf(w.id), 'reading');
+  saveStageIdx(db, a.session.id, w.id, a.runner.state.get(w.id).stageIdx);
+
+  const b = resumeSession(db);
+  assert.equal(b.runner.stageOf(w.id), 'reading', 'không được bắt làm lại cổng đã qua');
+  assert.equal(b.runner.progress().passed, 0, 'nhưng vẫn chưa tính là pass');
+});
+
+test('mở lại không dựng hàng đợi mới, vẫn đúng 20 từ cũ', () => {
+  const db = freshDb();
+  const a = resumeSession(db);
+  const b = resumeSession(db);
+  assert.equal(b.resumed, true);
+  assert.deepEqual(
+    a.items.map((w) => w.id).sort((x, y) => x - y),
+    b.items.map((w) => w.id).sort((x, y) => x - y)
+  );
+});
+
+test('stage_idx không vượt quá số cổng của từ, kể cả khi dữ liệu cũ sai', () => {
+  const db = freshDb();
+  const a = resumeSession(db);
+  const w = a.items.find((x) => x.stages.length === 2);
+  saveStageIdx(db, a.session.id, w.id, 99);
+  const b = resumeSession(db);
+  assert.ok(b.runner.stageOf(w.id), 'phải vẫn trả về một cổng hợp lệ');
 });

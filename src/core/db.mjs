@@ -25,6 +25,10 @@ function migrate(db) {
   };
   for (const [col, decl] of Object.entries(want))
     if (!have.has(col)) db.exec(`ALTER TABLE words ADD COLUMN ${col} ${decl}`);
+
+  const dq = new Set(db.prepare('PRAGMA table_info(daily_queue)').all().map((c) => c.name));
+  if (!dq.has('stage_idx'))
+    db.exec('ALTER TABLE daily_queue ADD COLUMN stage_idx INTEGER NOT NULL DEFAULT 0');
 }
 
 /**

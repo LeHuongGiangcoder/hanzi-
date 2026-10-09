@@ -62,6 +62,7 @@ CREATE TABLE IF NOT EXISTS daily_queue (
   word_id    INTEGER NOT NULL REFERENCES words(id) ON DELETE CASCADE,
   position   INTEGER NOT NULL,
   reason     TEXT NOT NULL,               -- due | new | leech | homophone_sibling | replacement
+  stage_idx  INTEGER NOT NULL DEFAULT 0,   -- đã qua mấy cổng, để đóng app giữa chừng không mất
   passed_at  TEXT,
   PRIMARY KEY (session_id, word_id)
 );

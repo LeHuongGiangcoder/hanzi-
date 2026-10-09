@@ -1,6 +1,7 @@
 // Lên lịch bằng FSRS và dựng hàng đợi 20 từ mỗi ngày.
 import { fsrs, generatorParameters, Rating, State } from 'ts-fsrs';
 import { isoDate } from './db.mjs';
+import { SessionRunner } from './session-runner.mjs';
 
 const f = fsrs(generatorParameters({ enable_fuzz: true }));
 
@@ -118,7 +119,7 @@ export function startSession(db, { date = isoDate(), mix = DEFAULT_MIX } = {}) {
   const existing = db.prepare('SELECT * FROM sessions WHERE date=?').get(date);
   if (existing) {
     const items = db.prepare(
-      `SELECT w.*, c.id card_id, q.reason, q.passed_at FROM daily_queue q
+      `SELECT w.*, c.id card_id, q.reason, q.passed_at, q.stage_idx FROM daily_queue q
        JOIN words w ON w.id=q.word_id JOIN cards c ON c.word_id=w.id AND c.direction=w.anchor
        WHERE q.session_id=? ORDER BY q.position`
     ).all(existing.id);
@@ -131,6 +132,33 @@ export function startSession(db, { date = isoDate(), mix = DEFAULT_MIX } = {}) {
   const ins = db.prepare('INSERT INTO daily_queue (session_id,word_id,position,reason) VALUES (?,?,?,?)');
   db.transaction(() => picked.forEach((w, i) => ins.run(sid, w.id, i, w.reason)))();
   return { session: db.prepare('SELECT * FROM sessions WHERE id=?').get(sid), items: picked, resumed: false };
+}
+
+/**
+ * Mở phiên hôm nay và dựng lại đúng trạng thái đang dở.
+ *
+ * Đóng app giữa chừng không được làm mất gì: từ đã pass thì cho qua hết cổng,
+ * từ đang dở thì nhảy tới đúng cổng đã lưu trong daily_queue.stage_idx.
+ */
+export function resumeSession(db, opts = {}) {
+  const r = startSession(db, opts);
+  const items = r.items.map((it) => ({ ...it, stages: JSON.parse(it.stages) }));
+  const runner = new SessionRunner(items);
+  for (const it of items) {
+    if (it.passed_at) { for (const _ of it.stages) runner.answer(it.id, true); continue; }
+    const st = runner.state.get(it.id);
+    if (st && it.stage_idx > 0) st.stageIdx = Math.min(it.stage_idx, st.stages.length - 1);
+  }
+  return { ...r, items, runner };
+}
+
+/**
+ * Ghi lại đang ở cổng thứ mấy.
+ * Không có cái này thì đóng app giữa chừng sẽ mất phần cổng đã qua của từ đang dở.
+ */
+export function saveStageIdx(db, sessionId, wordId, stageIdx) {
+  return db.prepare('UPDATE daily_queue SET stage_idx=? WHERE session_id=? AND word_id=?')
+    .run(stageIdx, sessionId, wordId).changes;
 }
 
 /** Đánh dấu một từ đã pass trong phiên. */

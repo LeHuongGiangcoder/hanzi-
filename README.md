@@ -61,7 +61,7 @@ Tự chạy lúc đăng nhập và nằm im trên menu bar (`汉`). Tới giờ 
 mà hôm nay chưa pass đủ 20 từ thì mở cửa sổ. Laptop ngủ qua giờ hẹn thì `powerMonitor`
 bắt lại lúc mở nắp — không bỏ sót ngày nào.
 
-Cửa sổ nổi ở mức **`floating`**, không có nút đóng.
+Cửa sổ nổi ở mức **`floating`**, và **đóng được bình thường**.
 
 > Không dùng mức `screen-saver`: bảng gợi ý chữ của bộ gõ tiếng Trung nằm ở mức thấp hơn
 > (cỡ pop-up menu), nên cửa sổ sẽ **che mất bảng gợi ý** và không chọn được chữ. `floating`

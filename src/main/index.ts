@@ -1,4 +1,4 @@
-import { app, BrowserWindow, Tray, nativeImage, ipcMain, powerMonitor, dialog } from 'electron';
+import { app, BrowserWindow, Tray, Menu, nativeImage, ipcMain, powerMonitor, dialog } from 'electron';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { randomUUID } from 'node:crypto';
@@ -8,7 +8,7 @@ import { openDb, upsertWords, ensureCards, isoDate, homophonesOf, quarantineWord
 // @ts-ignore
 import { buildCloze, buildChoices } from '../core/stages.mjs';
 // @ts-ignore
-import { startSession, applyReview, markPassed, replaceInQueue } from '../core/scheduler.mjs';
+import { resumeSession, applyReview, markPassed, replaceInQueue, saveStageIdx } from '../core/scheduler.mjs';
 // @ts-ignore
 import { gradeAnswer } from '../core/grading.mjs';
 // @ts-ignore
@@ -61,14 +61,21 @@ function createWindow() {
     // khiến app bị gỡ sau một tuần.
     alwaysOnTop: true,
     fullscreenable: true,
-    closable: false,
+    // Đóng được. Tiến độ đã nằm trong SQLite nên không mất gì — cửa sổ chỉ ẩn
+    // đi, app ở lại trên menu bar và mở lại đúng chỗ đang dở.
+    closable: true,
     titleBarStyle: 'hiddenInset',
     backgroundColor: '#11131a',
     webPreferences: { preload: join(HERE, '../preload/index.mjs'), sandbox: false },
   });
   applyAlwaysOnTop();
   win.setVisibleOnAllWorkspaces(true, { visibleOnFullScreen: true });
-  win.on('close', (e) => { if (!allowQuit) { e.preventDefault(); win?.hide(); } });
+  win.on('close', (e) => {
+    if (allowQuit) return;
+    e.preventDefault();
+    win?.hide();
+    refreshIndicators();
+  });
 
   if (process.env.ELECTRON_RENDERER_URL) win.loadURL(process.env.ELECTRON_RENDERER_URL);
   else win.loadFile(join(HERE, '../renderer/index.html'));
@@ -188,14 +195,37 @@ function tick() {
 
 function ensureRunner() {
   if (runner && session && session.date === isoDate()) return;
-  const r = startSession(db);
+  const r = resumeSession(db);
   session = r.session;
-  runner = new SessionRunner(
-    r.items.map((it: any) => ({ ...it, stages: JSON.parse(it.stages) }))
-  );
-  // Khôi phục tiến độ nếu hôm nay đã học dở: từ đã pass thì cho qua hết các cổng.
-  for (const it of r.items)
-    if (it.passed_at) for (const _ of JSON.parse(it.stages)) runner.answer(it.id, true);
+  runner = r.runner;
+  refreshIndicators();
+}
+
+/**
+ * Chỉ báo luôn nhìn thấy: tiêu đề trên menu bar và badge trên Dock.
+ * Đây là chỗ nhắc "hôm nay còn bao nhiêu từ" mà không cần mở app.
+ */
+function refreshIndicators() {
+  const row = db.prepare('SELECT passed_count, target_count, finished_at FROM sessions WHERE date=?')
+    .get(isoDate());
+  const passed = row?.passed_count ?? 0;
+  const target = row?.target_count ?? 20;
+  const left = Math.max(0, target - passed);
+  const done = !!row?.finished_at || left === 0;
+
+  tray?.setTitle(done ? '汉 ✓' : `汉 ${passed}/${target}`);
+  tray?.setToolTip(done ? 'Xong 20 từ hôm nay' : `Còn ${left} từ hôm nay`);
+  if (process.platform === 'darwin')
+    app.dock?.setBadge(done || !row ? '' : String(left));
+
+  tray?.setContextMenu(Menu.buildFromTemplate([
+    { label: done ? 'Hôm nay đã xong ✓' : `Còn ${left} / ${target} từ`, enabled: false },
+    { type: 'separator' },
+    { label: done ? 'Mở để học thêm' : 'Học tiếp', click: () => createWindow() },
+    { label: 'Ẩn cửa sổ', click: () => win?.hide(), enabled: !!win && !win.isDestroyed() },
+    { type: 'separator' },
+    { label: 'Thoát hẳn', click: () => { allowQuit = true; app.quit(); } },
+  ]));
 }
 
 /** Lựa chọn của cổng đọc hiểu, giữ ở main để đáp án không nằm sẵn trong renderer. */
@@ -287,6 +317,8 @@ function registerIpc() {
 
     const res = runner.answer(wordId, g.correct);
     if (g.correct && res?.justPassed) markPassed(db, session.id, wordId);
+    else saveStageIdx(db, session.id, wordId, runner.state.get(wordId)?.stageIdx ?? 0);
+    refreshIndicators();
 
     const sibs = homophonesOf(db, wordId);
     const typed = g.sameSound ? wordByHanzi(db, g.answer) : null;
@@ -390,9 +422,10 @@ app.whenReady().then(() => {
   registerIpc();
 
   tray = new Tray(nativeImage.createEmpty());
-  tray.setTitle('汉');
-  tray.setToolTip('hanzi-drill');
   tray.on('click', () => createWindow());
+  refreshIndicators();
+  // Giữ chỉ báo đúng cả khi sang ngày mới mà không mở app.
+  setInterval(refreshIndicators, 5 * 60_000);
 
   app.setLoginItemSettings({ openAtLogin: true, openAsHidden: true });
   setInterval(tick, 60_000);
@@ -490,6 +523,22 @@ function runSmoke() {
       "SELECT hanzi, anchor FROM words WHERE pos_vi LIKE '%trợ từ%' AND example_zh <> '' LIMIT 1").get();
     ok('trợ từ vào thẳng cloze, không bị bắt gõ từ nghĩa',
        particle?.anchor === 'cloze', `${particle?.hanzi} → ${particle?.anchor}`);
+
+    // --- đóng cửa sổ + chỉ báo luôn hiện ---
+    const w2 = createWindow();
+    ok('cửa sổ ĐÓNG ĐƯỢC (nút close không bị khoá)', w2.isClosable());
+    w2.close();
+    ok('đóng rồi thì chỉ ẩn, app vẫn sống', !w2.isDestroyed() && !w2.isVisible());
+
+    refreshIndicators();
+    const sess: any = db.prepare('SELECT passed_count, target_count FROM sessions WHERE date=?')
+      .get(isoDate());
+    const left = sess.target_count - sess.passed_count;
+    ok('menu bar hiện tiến độ', tray?.getTitle() === `汉 ${sess.passed_count}/${sess.target_count}`,
+       tray?.getTitle());
+    ok('Dock hiện số từ còn lại',
+       process.platform !== 'darwin' || app.dock?.getBadge() === String(left),
+       `badge=${app.dock?.getBadge()} (còn ${left})`);
 
     const mai: any = wordByHanzi(db, '买');
     const h = pickHint(mai, homophonesOf(db, mai.id));
