@@ -47,11 +47,15 @@ export default function ImeInput({
         lang="zh-CN"
         placeholder={expectedLength ? '　'.repeat(expectedLength) : ''}
         onChange={(e) => setValue(e.target.value)}
-        onCompositionStart={() => { setComposing(true); setNudge(false); }}
+        onCompositionStart={() => {
+          setComposing(true); setNudge(false);
+          (window as any).hanzi?.composing?.(true);
+        }}
         onCompositionEnd={(e) => {
           setComposing(false);
           endedAt.current = Date.now();
           setValue((e.target as HTMLInputElement).value);
+          (window as any).hanzi?.composing?.(false);
         }}
         onPaste={(e) => e.preventDefault()}   // không cho dán đáp án từ chỗ khác
         onKeyDown={(e) => {

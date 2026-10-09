@@ -8,6 +8,7 @@ const api = {
   snooze: () => ipcRenderer.invoke('session:snooze'),
   surrender: (typed: string) => ipcRenderer.invoke('session:surrender', { typed }),
   stats: () => ipcRenderer.invoke('stats:get'),
+  composing: (on: boolean) => ipcRenderer.invoke('window:composing', on),
   getSettings: () => ipcRenderer.invoke('settings:get'),
   setSetting: (key: string, value: string) => ipcRenderer.invoke('settings:set', { key, value }),
 };

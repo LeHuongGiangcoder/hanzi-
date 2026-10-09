@@ -61,7 +61,16 @@ Tự chạy lúc đăng nhập và nằm im trên menu bar (`汉`). Tới giờ 
 mà hôm nay chưa pass đủ 20 từ thì mở cửa sổ. Laptop ngủ qua giờ hẹn thì `powerMonitor`
 bắt lại lúc mở nắp — không bỏ sót ngày nào.
 
-Cửa sổ `alwaysOnTop`, không có nút đóng. Lối thoát: hoãn 10 phút (tối đa 3 lần/ngày),
+Cửa sổ nổi ở mức **`floating`**, không có nút đóng.
+
+> Không dùng mức `screen-saver`: bảng gợi ý chữ của bộ gõ tiếng Trung nằm ở mức thấp hơn
+> (cỡ pop-up menu), nên cửa sổ sẽ **che mất bảng gợi ý** và không chọn được chữ. `floating`
+> vẫn giữ cửa sổ trên các app khác nhưng nằm dưới bảng gợi ý.
+>
+> Nếu trên máy bạn vẫn bị che: bật `lower_while_composing` trong bảng `settings` của DB —
+> app sẽ hạ hẳn cửa sổ xuống trong lúc đang ghép chữ rồi nâng lại khi xong. Tắt hẳn chế độ
+> nổi thì đặt `always_on_top = 0`.
+ Lối thoát: hoãn 10 phút (tối đa 3 lần/ngày),
 hoặc **gõ đúng `我放弃` bằng IME** — đầu hàng cũng phải học. Cố ý dừng ở mức "rất phiền
 nếu bỏ" chứ không khoá cứng máy: ép quá tay thì app bị gỡ sau một tuần.
 

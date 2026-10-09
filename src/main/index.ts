@@ -66,7 +66,7 @@ function createWindow() {
     backgroundColor: '#11131a',
     webPreferences: { preload: join(HERE, '../preload/index.mjs'), sandbox: false },
   });
-  win.setAlwaysOnTop(true, 'screen-saver');
+  applyAlwaysOnTop();
   win.setVisibleOnAllWorkspaces(true, { visibleOnFullScreen: true });
   win.on('close', (e) => { if (!allowQuit) { e.preventDefault(); win?.hide(); } });
 
@@ -147,6 +147,22 @@ function createWindow() {
     });
   }
   return win;
+}
+
+/**
+ * Mức nổi của cửa sổ.
+ *
+ * KHÔNG dùng 'screen-saver' (level 1000): bảng gợi ý chữ của bộ gõ tiếng Trung
+ * nằm ở mức thấp hơn (cỡ pop-up menu, ~101), nên cửa sổ sẽ CHE MẤT bảng gợi ý
+ * và không chọn được chữ.
+ *
+ * 'floating' (level 3) vẫn giữ cửa sổ trên các app khác nhưng nằm dưới bảng gợi
+ * ý — đúng thứ tự cần có.
+ */
+function applyAlwaysOnTop() {
+  if (!win || win.isDestroyed()) return;
+  const on = getSetting(db, 'always_on_top', '1') !== '0';
+  win.setAlwaysOnTop(on, 'floating');
 }
 
 /* ---------------- lịch nhắc ---------------- */
@@ -346,8 +362,23 @@ function registerIpc() {
 
   ipcMain.handle('settings:get', () => ({
     drillTime: getSetting(db, 'drill_time', DRILL_TIME_DEFAULT),
+    alwaysOnTop: getSetting(db, 'always_on_top', '1') !== '0',
   }));
-  ipcMain.handle('settings:set', (_e, { key, value }) => { setSetting(db, key, value); return true; });
+  ipcMain.handle('settings:set', (_e, { key, value }) => {
+    setSetting(db, key, value);
+    if (key === 'always_on_top') applyAlwaysOnTop();
+    return true;
+  });
+
+  // Lưới an toàn: nếu trên máy bạn bảng gợi ý vẫn bị che, hạ hẳn cửa sổ xuống
+  // trong lúc đang ghép chữ rồi nâng lại khi xong.
+  ipcMain.handle('window:composing', (_e, composing: boolean) => {
+    if (!win || win.isDestroyed()) return false;
+    if (getSetting(db, 'lower_while_composing', '0') === '0') return false;
+    if (composing) win.setAlwaysOnTop(false);
+    else applyAlwaysOnTop();
+    return true;
+  });
 }
 
 /* ---------------- vòng đời ---------------- */
