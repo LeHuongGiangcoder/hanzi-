@@ -149,150 +149,150 @@ hanzi,pinyin,hanviet,meaning_vi,hsk,lesson,example_zh,example_vi,note,verified,a
 昨天,zuó tiān,tạc thiên,hôm qua,1,,,,,FALSE,TRUE,danh từ chỉ thời gian,,日,557,zuotian,yesterday,
 坐,zuò,tọa,ngồi; đi (bằng xe/tàu),1,,,,,FALSE,TRUE,động từ,,土,435,zuo,"to sit; to take a seat; to take (a bus, airplane etc)",multi_reading
 做,zuò,tố,"làm, chế tạo",1,,,,,FALSE,TRUE,động từ,,亻,53,zuo,to make; to produce; to write; to compose; to do; to engage in; to hold (a party etc),
-吧,ba,,,2,,,,,FALSE,TRUE,,,口,58,ba,(modal particle indicating suggestion or surmise); ...right?; ...OK?,multi_reading; single_char_multi_tone
-白,bái,,,2,,,,,FALSE,TRUE,,,白,930,bai,white; snowy; pure,multi_reading
-百,bǎi,,,2,,,,,FALSE,TRUE,,,白,2455,bai,hundred; numerous; all kinds of,multi_reading
-帮助,bāng zhù,,,2,,,,,FALSE,TRUE,,幫助,巾,499,bangzhu,assistance; aid; to help; to assist,
-报纸,bào zhǐ,,,2,,,,,FALSE,TRUE,,報紙,扌,2232,baozhi,newspaper; newsprint,
-比,bǐ,,,2,,,,,FALSE,TRUE,,,比,155,bi,to compare; (followed by a noun and adjective) more {adj.} than {noun}; ratio,multi_reading; single_char_multi_tone
-便宜,pián yi,,,2,,,,,FALSE,TRUE,,,亻,2814,pianyi,cheap; inexpensive; small advantages,multi_reading
-别,bié,,,2,,,,,FALSE,TRUE,,別,刂,214,bie,to leave; to part (from); (literary) to differentiate; to distinguish; (bound form) other; another; different,multi_reading; single_char_multi_tone
-唱歌,chàng gē,,,2,,,,,FALSE,TRUE,,,口,2876,changge,to sing a song,
-出,chū,,,2,,,,,FALSE,TRUE,,,凵,85,chu,to go out; to come out; to occur,multi_reading
-穿,chuān,,,2,,,,,FALSE,TRUE,,,穴,430,chuan,to wear; to put on; to dress,
-船,chuán,,,2,,,,,FALSE,TRUE,,,舟,1346,chuan,boat; vessel; ship,multi_reading
-次,cì,,,2,,,,,FALSE,TRUE,,,欠,99,ci,"next in sequence; second; the second (day, time etc)",
-从,cóng,,,2,,,,,FALSE,TRUE,,從,人,70,cong,from; through; via,multi_reading
-错,cuò,,,2,,,,,FALSE,TRUE,,錯,钅,531,cuo,mistake; wrong; bad,multi_reading
-打篮球,dǎ lán qiú,,,2,,,,,FALSE,TRUE,,打籃球,扌,1000000,dalanqiu,to play basketball,
-大家,dà jiā,,,2,,,,,FALSE,TRUE,,,大,189,dajia,everyone; influential family; great expert,
-但是,dàn shì,,,2,,,,,FALSE,TRUE,,,亻,115,danshi,but; however,
-到,dào,,,2,,,,,FALSE,TRUE,,,刂,29,dao,to reach; to arrive; to leave for; to go to; to (a place); until (a time); up to (a point),
-得,dé,,,2,,,,,FALSE,TRUE,,,彳,58,de,to obtain; to get; to gain,multi_reading; single_char_multi_sound
-弟弟,dì di,,,2,,,,,FALSE,TRUE,,,弓,2424,didi,younger brother,
-第一,dì yī,,,2,,,,,FALSE,TRUE,,,⺮,223,diyi,first; number one; primary,
-懂,dǒng,,,2,,,,,FALSE,TRUE,,,忄,669,dong,to understand; to comprehend,
-房间,fáng jiān,,,2,,,,,FALSE,TRUE,,房間,户,1357,fangjian,room,
-非常,fēi cháng,,,2,,,,,FALSE,TRUE,,,非,194,feichang,very; really; unusual; extraordinary,
-服务员,fú wù yuán,,,2,,,,,FALSE,TRUE,,服務員,月,5531,fuwuyuan,waiter; waitress; attendant,
-高,gāo,,,2,,,,,FALSE,TRUE,,,高,290,gao,high; tall; above average,multi_reading
-告诉,gào su,,,2,,,,,FALSE,TRUE,,告訴,口,252,gaosu,to tell; to inform; to let know,ambiguous_tone; multi_reading
-哥哥,gē ge,,,2,,,,,FALSE,TRUE,,,口,1655,gege,older brother,
-给,gěi,,,2,,,,,FALSE,TRUE,,給,纟,46,gei,to; for; for the benefit of,multi_reading; single_char_multi_sound
-公共汽车,gōng gòng qì chē,,,2,,,,,FALSE,TRUE,,公共汽車,八,13591,gonggongqiche,bus,
-公斤,gōng jīn,,,2,,,,,FALSE,TRUE,,,八,4784,gongjin,kilogram (kg),
-公司,gōng sī,,,2,,,,,FALSE,TRUE,,,八,220,gongsi,company; firm; corporation,
-贵,guì,,,2,,,,,FALSE,TRUE,,貴,贝,2239,gui,expensive; noble; precious,
-还,hái,,,2,,,,,FALSE,TRUE,,還,辶,37,hai,still; still in progress; still more,multi_reading; single_char_multi_sound
-孩子,hái zi,,,2,,,,,FALSE,TRUE,,,子,207,haizi,child,
-好吃,hǎo chī,,,2,,,,,FALSE,TRUE,,,女,2484,haochi,tasty; delicious,ambiguous_tone; multi_reading
-号,hào,,,2,,,,,FALSE,TRUE,,號,口,278,hao,ordinal number; day of a month; mark,multi_reading; single_char_multi_tone
-黑,hēi,,,2,,,,,FALSE,TRUE,,,黑,724,hei,black; dark; sinister,multi_reading
-红,hóng,,,2,,,,,FALSE,TRUE,,紅,纟,794,hong,red; popular; revolutionary,multi_reading
-欢迎,huān yíng,,,2,,,,,FALSE,TRUE,,歡迎,欠,796,huanying,to welcome; welcome,
-回答,huí dá,,,2,,,,,FALSE,TRUE,,,囗,1100,huida,to reply; to answer; reply; answer,
-机场,jī chǎng,,,2,,,,,FALSE,TRUE,,機場,木,2308,jichang,airport; airfield; (slang) service provider for Shadowsocks or similar software for circumventing Internet censorship,
-鸡蛋,jī dàn,,,2,,,,,FALSE,TRUE,,雞蛋,鸟,3501,jidan,(chicken) egg; hen's egg,
-件,jiàn,,,2,,,,,FALSE,TRUE,,,亻,292,jian,"item; component; classifier for events, things, clothes etc",
-教室,jiào shì,,,2,,,,,FALSE,TRUE,,,攵,5082,jiaoshi,classroom,
-介绍,jiè shào,,,2,,,,,FALSE,TRUE,,介紹,人,779,jieshao,to introduce (sb to sb); to give a presentation; to present (sb for a job etc),
-姐姐,jiě jie,,,2,,,,,FALSE,TRUE,,,女,1513,jiejie,older sister,
-近,jìn,,,2,,,,,FALSE,TRUE,,,辶,822,jin,near; close to; approximately,
-进,jìn,,,2,,,,,FALSE,TRUE,,進,辶,338,jin,to go forward; to advance; to go in,
-就,jiù,,,2,,,,,FALSE,TRUE,,,尢,15,jiu,(after a suppositional clause) in that case; then; (after a clause of action) as soon as; immediately after; (same as 是) merely; nothing else but; simply; just; precisely; exactly,
-觉得,jué de,,,2,,,,,FALSE,TRUE,,覺得,见,161,juede,to think that ...; to feel that ...; to feel (uncomfortable etc),
-咖啡,kā fēi,,,2,,,,,FALSE,TRUE,,,口,1698,kafei,coffee (loanword),
-开始,kāi shǐ,,,2,,,,,FALSE,TRUE,,開始,廾,132,kaishi,to begin; beginning; to start,
-考试,kǎo shì,,,2,,,,,FALSE,TRUE,,考試,耂,1718,kaoshi,to take an exam; exam,
-可能,kě néng,,,2,,,,,FALSE,TRUE,,,口,127,keneng,might (happen); possible; probable,
-可以,kě yǐ,,,2,,,,,FALSE,TRUE,,,口,58,keyi,can; may; possible,
-课,kè,,,2,,,,,FALSE,TRUE,,課,讠,1517,ke,subject; course; class,
-快,kuài,,,2,,,,,FALSE,TRUE,,,忄,153,kuai,rapid; quick; speed,
-快乐,kuài lè,,,2,,,,,FALSE,TRUE,,快樂,忄,637,kuaile,happy; joyful,
-累,lèi,,,2,,,,,FALSE,TRUE,,,糸,1197,lei,tired; weary; to strain,multi_reading; single_char_multi_tone
-离,lí,,,2,,,,,FALSE,TRUE,,離,禸,912,li,to leave; to part from; to be away from,multi_reading; single_char_multi_sound
-两,liǎng,,,2,,,,,FALSE,TRUE,,兩,一,81,liang,two; both; some,
-路,lù,,,2,,,,,FALSE,TRUE,,,足,409,lu,road; journey; route,multi_reading
-旅游,lǚ yóu,,,2,,,,,FALSE,TRUE,,旅遊,方,2534,luyou,trip; journey; tourism,
-卖,mài,,,2,,,,,FALSE,TRUE,,賣,十,590,mai,to sell; to betray; to spare no effort,
-慢,màn,,,2,,,,,FALSE,TRUE,,,忄,1770,man,slow,
-忙,máng,,,2,,,,,FALSE,TRUE,,,忄,859,mang,busy; hurriedly; to hurry,
-每,měi,,,2,,,,,FALSE,TRUE,,,母,340,mei,each; every,
-妹妹,mèi mei,,,2,,,,,FALSE,TRUE,,,女,2093,meimei,younger sister; young woman,
-门,mén,,,2,,,,,FALSE,TRUE,,門,门,422,men,gate; door; gateway,multi_reading
-男人,nán rén,,,2,,,,,FALSE,TRUE,,,田,415,nanren,a man; a male; men,absent_sourceB
-您,nín,,,2,,,,,FALSE,TRUE,,,心,357,nin,"you (courteous, as opposed to informal 你)",
-牛奶,niú nǎi,,,2,,,,,FALSE,TRUE,,,牛,2986,niunai,cow's milk,
-女人,nǚ rén,,,2,,,,'nǚrén' = người phụ nữ (nghĩa HSK2). Nhánh thanh nhẹ 'nǚ ren' là nghĩa 'vợ' trong khẩu ngữ.,TRUE,TRUE,,,女,383,nuren,woman,override; absent_sourceB; multi_reading
-旁边,páng biān,,,2,,,,,FALSE,TRUE,,旁邊,方,1815,pangbian,side; adjacent place,
-跑步,pǎo bù,,,2,,,,,FALSE,TRUE,,,足,7199,paobu,to run; to jog; (military) to march at the double,
-票,piào,,,2,,,,,FALSE,TRUE,,,示,956,piao,ticket; ballot; banknote,
-妻子,qī zi,,,2,,,,,FALSE,TRUE,,,女,1187,qizi,wife,ambiguous_tone; multi_reading
-起床,qǐ chuáng,,,2,,,,,FALSE,TRUE,,,走,2645,qichuang,to get out of bed; to get up,
-千,qiān,,,2,,,,,FALSE,TRUE,,,十,1728,qian,thousand,multi_reading
-晴,qíng,,,2,,,,,FALSE,TRUE,,,日,9343,qing,clear; fine (weather),
-去年,qù nián,,,2,,,,,FALSE,TRUE,,,厶,933,qunian,last year,
-让,ràng,,,2,,,,,FALSE,TRUE,,讓,讠,54,rang,to yield; to permit; to let sb do sth,
-上班,shàng bān,,,2,,,,,FALSE,TRUE,,,一,1495,shangban,to go to work; to be on duty; to start work,
-身体,shēn tǐ,,,2,,,,,FALSE,TRUE,,身體,身,731,shenti,the body; one's health; in person,
-生病,shēng bìng,,,2,,,,,FALSE,TRUE,,,生,4336,shengbing,to fall ill,
-生日,shēng rì,,,2,,,,,FALSE,TRUE,,,生,1506,shengri,birthday,
-时间,shí jiān,,,2,,,,,FALSE,TRUE,,時間,日,127,shijian,time; period,
-事情,shì qing,,,2,,,,,FALSE,TRUE,,,亅,271,shiqing,affair; matter; thing; business,
-手表,shǒu biǎo,,,2,,,,,FALSE,TRUE,,手錶,手,6179,shoubiao,wristwatch,
-手机,shǒu jī,,,2,,,,,FALSE,TRUE,,手機,手,857,shouji,cell phone; mobile phone,
-送,sòng,,,2,,,,,FALSE,TRUE,,,辶,370,song,to send; to deliver; to transmit; to give (as a present); to see (sb) off,
-所以,suǒ yǐ,,,2,,,,,FALSE,TRUE,,,户,157,suoyi,therefore; as a result; so,
-它,tā,,,2,,,,,FALSE,TRUE,,,宀,114,ta,it,
-踢,tī,,,2,,,,,FALSE,TRUE,,,足,2330,ti,to kick; to play (e.g. soccer); (slang) butch (in a lesbian relationship),absent_sourceB
-题,tí,,,2,,,,,FALSE,TRUE,,題,页,2690,ti,topic; problem for discussion; exam question,multi_reading
-跳舞,tiào wǔ,,,2,,,,,FALSE,TRUE,,,足,3920,tiaowu,to dance,
-外,wài,,,2,,,,,FALSE,TRUE,,,夕,489,wai,outside; in addition; foreign,
-完,wán,,,2,,,,,FALSE,TRUE,,,宀,395,wan,to finish; to be over; whole,
-玩,wán,,,2,,,,,FALSE,TRUE,,,王,415,wan,to play; to have fun; to trifle with,multi_reading
-晚上,wǎn shang,,,2,,,,,FALSE,TRUE,,,日,502,wanshang,evening; night; in the evening,
-为,wèi,,,2,,,,,FALSE,TRUE,,為,丶,58,wei,because of; for; to,multi_reading; single_char_multi_tone
-问,wèn,,,2,,,,,FALSE,TRUE,,問,门,246,wen,to ask; to inquire,
-问题,wèn tí,,,2,,,,,FALSE,TRUE,,問題,门,109,wenti,question; problem; issue,
-希望,xī wàng,,,2,,,,,FALSE,TRUE,,,巾,182,xiwang,to hope; a hope; a wish,
-洗,xǐ,,,2,,,,,FALSE,TRUE,,,氵,1298,xi,to wash; to bathe; to develop (photographs); to shuffle (cards etc),
-西瓜,xī guā,,,2,,,,,FALSE,TRUE,,,西,9098,xigua,watermelon,
-向,xiàng,,,2,,,,,FALSE,TRUE,,,口,165,xiang,towards; to face; to turn towards,multi_reading
-小时,xiǎo shí,,,2,,,,,FALSE,TRUE,,小時,小,389,xiaoshi,hour,
-笑,xiào,,,2,,,,,FALSE,TRUE,,,⺮,382,xiao,to laugh; to smile; to laugh at,multi_reading
-新,xīn,,,2,,,,,FALSE,TRUE,,,斤,150,xin,new; newly; meso- (chemistry),multi_reading
-姓,xìng,,,2,,,,,FALSE,TRUE,,,女,3576,xing,family name; surname; to be surnamed,
-休息,xiū xi,,,2,,,,,FALSE,TRUE,,,亻,1225,xiuxi,rest; to rest,
-雪,xuě,,,2,,,,,FALSE,TRUE,,,雨,1971,xue,snow; (literary) to wipe away (a humiliation etc),multi_reading
-颜色,yán sè,,,2,,,,,FALSE,TRUE,,顏色,页,1880,yanse,color; countenance; appearance,
-眼睛,yǎn jing,,,2,,,,,FALSE,TRUE,,,目,814,yanjing,eye,
-羊肉,yáng ròu,,,2,,,,,FALSE,TRUE,,,羊,11336,yangrou,mutton; goat meat,
-药,yào,,,2,,,,,FALSE,TRUE,,葯,艹,701,yao,leaf of the iris; variant of 药,multi_reading
-要,yào,,,2,,,,,FALSE,TRUE,,,覀,19,yao,to want; to need; to ask for; will; shall; about to; need to; should,multi_reading; single_char_multi_tone
-也,yě,,,2,,,,,FALSE,TRUE,,,乚,23,ye,(adverb) also; both ... and ... (before predicates only); (literary) particle having functions similar to 啊,multi_reading
-一起,yī qǐ,,,2,,,,,FALSE,TRUE,,,一,172,yiqi,in the same place; together; with,
-已经,yǐ jīng,,,2,,,,,FALSE,TRUE,,已經,己,85,yijing,already,
-意思,yì si,,,2,,,,,FALSE,TRUE,,,心,988,yisi,idea; opinion; meaning,
-因为,yīn wèi,,,2,,,,,FALSE,TRUE,,因為,囗,91,yinwei,because; owing to; on account of,
-阴,yīn,,,2,,,,,FALSE,TRUE,,陰,阝,4058,yin,overcast (weather); cloudy; shady,multi_reading
-游泳,yóu yǒng,,,2,,,,,FALSE,TRUE,,,氵,3695,youyong,swimming; to swim,
-右边,yòu bian,,,2,,,,,FALSE,TRUE,,右邊,口,2906,youbian,"right side; right, to the right",
-鱼,yú,,,2,,,,,FALSE,TRUE,,魚,鱼,1189,yu,fish,multi_reading
-元,yuán,,,2,,,,,FALSE,TRUE,,,儿,744,yuan,currency unit (esp. Chinese yuan); first; original,multi_reading
-远,yuǎn,,,2,,,,,FALSE,TRUE,,遠,辶,635,yuan,far; distant; remote,multi_reading; single_char_multi_tone
-运动,yùn dòng,,,2,,,,,FALSE,TRUE,,運動,辶,1138,yundong,to move; to exercise; sports,
-再,zài,,,2,,,,,FALSE,TRUE,,,冂,91,zai,"again; once more; re-; second; another; then (after sth, and not until then)",
-早上,zǎo shang,,,2,,,,,FALSE,TRUE,,,日,1092,zaoshang,early morning,
-张,zhāng,,,2,,,,,FALSE,TRUE,,張,弓,316,zhang,to open up; to spread; sheet of paper,multi_reading
-长,cháng,,,2,,,,,FALSE,TRUE,,長,长,246,chang,length; long; forever,multi_reading; single_char_multi_sound
-丈夫,zhàng fu,,,2,,,,,FALSE,TRUE,,,一,1376,zhangfu,husband,
-找,zhǎo,,,2,,,,,FALSE,TRUE,,,扌,152,zhao,to try to find; to look for; to call on sb,
-着,zhe,,,2,,,,,FALSE,TRUE,,著,目,38,zhe,aspect particle indicating action in progress or ongoing state,conflict_sourceB; multi_reading; single_char_multi_sound
-真,zhēn,,,2,,,,,FALSE,TRUE,,,目,76,zhen,really; truly; indeed,
-正在,zhèng zài,,,2,,,,,FALSE,TRUE,,,止,420,zhengzai,just at (that time); right in (that place); right in the middle of (doing sth),
-知道,zhī dào,,,2,,,,,FALSE,TRUE,,,矢,105,zhidao,to know; to become aware of; also pr. [zhī dao],
-准备,zhǔn bèi,,,2,,,,,FALSE,TRUE,,準備,冫,333,zhunbei,preparation; to prepare; to intend,
-自行车,zì xíng chē,,,2,,,,,FALSE,TRUE,,自行車,自,3400,zixingche,bicycle; bike,
-走,zǒu,,,2,,,,,FALSE,TRUE,,,走,109,zou,to walk; to go; to run,
-最,zuì,,,2,,,,,FALSE,TRUE,,,曰,89,zui,most; the most; -est (superlative suffix),multi_reading
-左边,zuǒ bian,,,2,,,,,FALSE,TRUE,,左邊,工,4584,zuobian,left; the left side; to the left of,
+吧,ba,,"trợ từ đề nghị hoặc phỏng đoán (nhé, đi, chứ)",2,,,,,FALSE,TRUE,trợ từ,,口,58,ba,(modal particle indicating suggestion or surmise); ...right?; ...OK?,multi_reading; single_char_multi_tone
+白,bái,bạch,màu trắng; trắng,2,,,,,FALSE,TRUE,tính từ,,白,930,bai,white; snowy; pure,multi_reading
+百,bǎi,bách,trăm,2,,,,,FALSE,TRUE,số từ,,白,2455,bai,hundred; numerous; all kinds of,multi_reading
+帮助,bāng zhù,bang trợ,giúp đỡ; sự giúp đỡ,2,,,,,FALSE,TRUE,động từ / danh từ,幫助,巾,499,bangzhu,assistance; aid; to help; to assist,
+报纸,bào zhǐ,báo chỉ,"báo, tờ báo",2,,,,,FALSE,TRUE,danh từ,報紙,扌,2232,baozhi,newspaper; newsprint,
+比,bǐ,tỉ,"so, so với",2,,,,,FALSE,TRUE,giới từ / động từ,,比,155,bi,to compare; (followed by a noun and adjective) more {adj.} than {noun}; ratio,multi_reading; single_char_multi_tone
+便宜,pián yi,tiện nghi,rẻ,2,,,,,FALSE,TRUE,tính từ,,亻,2814,pianyi,cheap; inexpensive; small advantages,multi_reading
+别,bié,biệt,"đừng, chớ; khác",2,,,,,FALSE,TRUE,phó từ,別,刂,214,bie,to leave; to part (from); (literary) to differentiate; to distinguish; (bound form) other; another; different,multi_reading; single_char_multi_tone
+唱歌,chàng gē,xướng ca,hát,2,,,,,FALSE,TRUE,động từ,,口,2876,changge,to sing a song,
+出,chū,xuất,"ra, đi ra",2,,,,,FALSE,TRUE,động từ,,凵,85,chu,to go out; to come out; to occur,multi_reading
+穿,chuān,xuyên,"mặc, mang (quần áo, giày)",2,,,,,FALSE,TRUE,động từ,,穴,430,chuan,to wear; to put on; to dress,
+船,chuán,thuyền,"thuyền, tàu thủy",2,,,,,FALSE,TRUE,danh từ,,舟,1346,chuan,boat; vessel; ship,multi_reading
+次,cì,thứ,"lần, lượt",2,,,,,FALSE,TRUE,lượng từ,,欠,99,ci,"next in sequence; second; the second (day, time etc)",
+从,cóng,tùng,"từ (nơi nào, lúc nào)",2,,,,,FALSE,TRUE,giới từ,從,人,70,cong,from; through; via,multi_reading
+错,cuò,thố,"sai, lỗi",2,,,,,FALSE,TRUE,tính từ / danh từ,錯,钅,531,cuo,mistake; wrong; bad,multi_reading
+打篮球,dǎ lán qiú,đả lam cầu,chơi bóng rổ,2,,,,,FALSE,TRUE,động từ,打籃球,扌,1000000,dalanqiu,to play basketball,
+大家,dà jiā,đại gia,mọi người,2,,,,,FALSE,TRUE,đại từ,,大,189,dajia,everyone; influential family; great expert,
+但是,dàn shì,đãn thị,"nhưng, tuy nhiên",2,,,,,FALSE,TRUE,liên từ,,亻,115,danshi,but; however,
+到,dào,đáo,"đến, tới",2,,,,,FALSE,TRUE,động từ,,刂,29,dao,to reach; to arrive; to leave for; to go to; to (a place); until (a time); up to (a point),
+得,dé,đắc,được; trợ từ nối bổ ngữ mức độ (跑得快),2,,,,,FALSE,TRUE,động từ / trợ từ,,彳,58,de,to obtain; to get; to gain,multi_reading; single_char_multi_sound
+弟弟,dì di,đệ đệ,em trai,2,,,,,FALSE,TRUE,danh từ,,弓,2424,didi,younger brother,
+第一,dì yī,đệ nhất,"thứ nhất, đầu tiên",2,,,,,FALSE,TRUE,số từ thứ tự,,⺮,223,diyi,first; number one; primary,
+懂,dǒng,đổng,hiểu,2,,,,,FALSE,TRUE,động từ,,忄,669,dong,to understand; to comprehend,
+房间,fáng jiān,phòng gian,căn phòng,2,,,,,FALSE,TRUE,danh từ,房間,户,1357,fangjian,room,
+非常,fēi cháng,phi thường,"vô cùng, rất",2,,,,,FALSE,TRUE,phó từ,,非,194,feichang,very; really; unusual; extraordinary,
+服务员,fú wù yuán,phục vụ viên,nhân viên phục vụ,2,,,,,FALSE,TRUE,danh từ,服務員,月,5531,fuwuyuan,waiter; waitress; attendant,
+高,gāo,cao,cao,2,,,,,FALSE,TRUE,tính từ,,高,290,gao,high; tall; above average,multi_reading
+告诉,gào su,cáo tố,"nói cho biết, bảo",2,,,,,FALSE,TRUE,động từ,告訴,口,252,gaosu,to tell; to inform; to let know,ambiguous_tone; multi_reading
+哥哥,gē ge,ca ca,anh trai,2,,,,,FALSE,TRUE,danh từ,,口,1655,gege,older brother,
+给,gěi,cấp,"cho, đưa cho; cho (ai làm gì)",2,,,,,FALSE,TRUE,động từ / giới từ,給,纟,46,gei,to; for; for the benefit of,multi_reading; single_char_multi_sound
+公共汽车,gōng gòng qì chē,công cộng khí xa,xe buýt,2,,,,,FALSE,TRUE,danh từ,公共汽車,八,13591,gonggongqiche,bus,
+公斤,gōng jīn,công cân,ki-lô-gam,2,,,,,FALSE,TRUE,lượng từ,,八,4784,gongjin,kilogram (kg),
+公司,gōng sī,công ty,công ty,2,,,,,FALSE,TRUE,danh từ,,八,220,gongsi,company; firm; corporation,
+贵,guì,quý,đắt; quý,2,,,,,FALSE,TRUE,tính từ,貴,贝,2239,gui,expensive; noble; precious,
+还,hái,hoàn,"còn, vẫn còn",2,,,,,FALSE,TRUE,phó từ,還,辶,37,hai,still; still in progress; still more,multi_reading; single_char_multi_sound
+孩子,hái zi,hài tử,đứa trẻ; con,2,,,,,FALSE,TRUE,danh từ,,子,207,haizi,child,
+好吃,hǎo chī,,ngon,2,,,,,FALSE,TRUE,tính từ,,女,2484,haochi,tasty; delicious,ambiguous_tone; multi_reading
+号,hào,hiệu,ngày (trong tháng); số,2,,,,,FALSE,TRUE,danh từ,號,口,278,hao,ordinal number; day of a month; mark,multi_reading; single_char_multi_tone
+黑,hēi,hắc,"màu đen; đen, tối",2,,,,,FALSE,TRUE,tính từ,,黑,724,hei,black; dark; sinister,multi_reading
+红,hóng,hồng,màu đỏ; đỏ,2,,,,,FALSE,TRUE,tính từ,紅,纟,794,hong,red; popular; revolutionary,multi_reading
+欢迎,huān yíng,hoan nghênh,"hoan nghênh, chào mừng",2,,,,,FALSE,TRUE,động từ,歡迎,欠,796,huanying,to welcome; welcome,
+回答,huí dá,hồi đáp,trả lời; câu trả lời,2,,,,,FALSE,TRUE,động từ / danh từ,,囗,1100,huida,to reply; to answer; reply; answer,
+机场,jī chǎng,cơ trường,sân bay,2,,,,,FALSE,TRUE,danh từ,機場,木,2308,jichang,airport; airfield; (slang) service provider for Shadowsocks or similar software for circumventing Internet censorship,
+鸡蛋,jī dàn,kê đản,trứng gà,2,,,,,FALSE,TRUE,danh từ,雞蛋,鸟,3501,jidan,(chicken) egg; hen's egg,
+件,jiàn,kiện,"cái, chiếc (lượng từ cho áo, việc)",2,,,,,FALSE,TRUE,lượng từ,,亻,292,jian,"item; component; classifier for events, things, clothes etc",
+教室,jiào shì,giáo thất,"lớp học, phòng học",2,,,,,FALSE,TRUE,danh từ,,攵,5082,jiaoshi,classroom,
+介绍,jiè shào,giới thiệu,giới thiệu,2,,,,,FALSE,TRUE,động từ,介紹,人,779,jieshao,to introduce (sb to sb); to give a presentation; to present (sb for a job etc),
+姐姐,jiě jie,tỷ tỷ,chị gái,2,,,,,FALSE,TRUE,danh từ,,女,1513,jiejie,older sister,
+近,jìn,cận,gần,2,,,,,FALSE,TRUE,tính từ,,辶,822,jin,near; close to; approximately,
+进,jìn,tiến,"vào, đi vào; tiến lên",2,,,,,FALSE,TRUE,động từ,進,辶,338,jin,to go forward; to advance; to go in,
+就,jiù,tựu,"liền, ngay; thì",2,,,,,FALSE,TRUE,phó từ,,尢,15,jiu,(after a suppositional clause) in that case; then; (after a clause of action) as soon as; immediately after; (same as 是) merely; nothing else but; simply; just; precisely; exactly,
+觉得,jué de,giác đắc,"cảm thấy, thấy rằng",2,,,,,FALSE,TRUE,động từ,覺得,见,161,juede,to think that ...; to feel that ...; to feel (uncomfortable etc),
+咖啡,kā fēi,,cà phê,2,,,,,FALSE,TRUE,danh từ,,口,1698,kafei,coffee (loanword),
+开始,kāi shǐ,khai thủy,bắt đầu,2,,,,,FALSE,TRUE,động từ / danh từ,開始,廾,132,kaishi,to begin; beginning; to start,
+考试,kǎo shì,khảo thí,thi; kỳ thi,2,,,,,FALSE,TRUE,động từ / danh từ,考試,耂,1718,kaoshi,to take an exam; exam,
+可能,kě néng,khả năng,"có thể, có lẽ; khả năng",2,,,,,FALSE,TRUE,phó từ / danh từ,,口,127,keneng,might (happen); possible; probable,
+可以,kě yǐ,khả dĩ,"có thể, được phép",2,,,,,FALSE,TRUE,động từ năng nguyện,,口,58,keyi,can; may; possible,
+课,kè,khóa,bài học; tiết học,2,,,,,FALSE,TRUE,danh từ,課,讠,1517,ke,subject; course; class,
+快,kuài,khoái,nhanh; sắp,2,,,,,FALSE,TRUE,tính từ,,忄,153,kuai,rapid; quick; speed,
+快乐,kuài lè,khoái lạc,"vui vẻ, hạnh phúc",2,,,,,FALSE,TRUE,tính từ,快樂,忄,637,kuaile,happy; joyful,
+累,lèi,lụy,mệt,2,,,,,FALSE,TRUE,tính từ,,糸,1197,lei,tired; weary; to strain,multi_reading; single_char_multi_tone
+离,lí,ly,"cách, rời khỏi",2,,,,,FALSE,TRUE,động từ,離,禸,912,li,to leave; to part from; to be away from,multi_reading; single_char_multi_sound
+两,liǎng,lưỡng,hai (dùng trước lượng từ),2,,,,,FALSE,TRUE,số từ,兩,一,81,liang,two; both; some,
+路,lù,lộ,đường; tuyến (xe),2,,,,,FALSE,TRUE,danh từ,,足,409,lu,road; journey; route,multi_reading
+旅游,lǚ yóu,lữ du,du lịch,2,,,,,FALSE,TRUE,động từ / danh từ,旅遊,方,2534,luyou,trip; journey; tourism,
+卖,mài,mại,bán,2,,,,,FALSE,TRUE,động từ,賣,十,590,mai,to sell; to betray; to spare no effort,
+慢,màn,mạn,chậm,2,,,,,FALSE,TRUE,tính từ,,忄,1770,man,slow,
+忙,máng,mang,"bận, bận rộn",2,,,,,FALSE,TRUE,tính từ,,忄,859,mang,busy; hurriedly; to hurry,
+每,měi,mỗi,"mỗi, mỗi một",2,,,,,FALSE,TRUE,đại từ,,母,340,mei,each; every,
+妹妹,mèi mei,muội muội,em gái,2,,,,,FALSE,TRUE,danh từ,,女,2093,meimei,younger sister; young woman,
+门,mén,môn,"cửa, cổng",2,,,,,FALSE,TRUE,danh từ,門,门,422,men,gate; door; gateway,multi_reading
+男人,nán rén,nam nhân,người đàn ông,2,,,,,FALSE,TRUE,danh từ,,田,415,nanren,a man; a male; men,absent_sourceB
+您,nín,,"ngài, ông/bà (ngôi 2 kính trọng)",2,,,,,FALSE,TRUE,đại từ,,心,357,nin,"you (courteous, as opposed to informal 你)",
+牛奶,niú nǎi,ngưu nãi,sữa bò,2,,,,,FALSE,TRUE,danh từ,,牛,2986,niunai,cow's milk,
+女人,nǚ rén,nữ nhân,người phụ nữ,2,,,,'nǚrén' = người phụ nữ (nghĩa HSK2). Nhánh thanh nhẹ 'nǚ ren' là nghĩa 'vợ' trong khẩu ngữ.,TRUE,TRUE,danh từ,,女,383,nuren,woman,override; absent_sourceB; multi_reading
+旁边,páng biān,bàng biên,bên cạnh,2,,,,,FALSE,TRUE,danh từ chỉ vị trí,旁邊,方,1815,pangbian,side; adjacent place,
+跑步,pǎo bù,bão bộ,chạy bộ,2,,,,,FALSE,TRUE,động từ,,足,7199,paobu,to run; to jog; (military) to march at the double,
+票,piào,phiếu,vé,2,,,,,FALSE,TRUE,danh từ,,示,956,piao,ticket; ballot; banknote,
+妻子,qī zi,thê tử,vợ,2,,,,,FALSE,TRUE,danh từ,,女,1187,qizi,wife,ambiguous_tone; multi_reading
+起床,qǐ chuáng,khởi sàng,"thức dậy, ra khỏi giường",2,,,,,FALSE,TRUE,động từ,,走,2645,qichuang,to get out of bed; to get up,
+千,qiān,thiên,nghìn,2,,,,,FALSE,TRUE,số từ,,十,1728,qian,thousand,multi_reading
+晴,qíng,tình,"nắng, trời quang",2,,,,,FALSE,TRUE,tính từ,,日,9343,qing,clear; fine (weather),
+去年,qù nián,khứ niên,năm ngoái,2,,,,,FALSE,TRUE,danh từ chỉ thời gian,,厶,933,qunian,last year,
+让,ràng,nhượng,"để cho, khiến; nhường",2,,,,,FALSE,TRUE,động từ,讓,讠,54,rang,to yield; to permit; to let sb do sth,
+上班,shàng bān,thượng ban,đi làm,2,,,,,FALSE,TRUE,động từ,,一,1495,shangban,to go to work; to be on duty; to start work,
+身体,shēn tǐ,thân thể,cơ thể; sức khỏe,2,,,,,FALSE,TRUE,danh từ,身體,身,731,shenti,the body; one's health; in person,
+生病,shēng bìng,sinh bệnh,"bị bệnh, ốm",2,,,,,FALSE,TRUE,động từ,,生,4336,shengbing,to fall ill,
+生日,shēng rì,sinh nhật,sinh nhật,2,,,,,FALSE,TRUE,danh từ,,生,1506,shengri,birthday,
+时间,shí jiān,thời gian,thời gian,2,,,,,FALSE,TRUE,danh từ,時間,日,127,shijian,time; period,
+事情,shì qing,sự tình,"việc, chuyện",2,,,,,FALSE,TRUE,danh từ,,亅,271,shiqing,affair; matter; thing; business,
+手表,shǒu biǎo,thủ biểu,đồng hồ đeo tay,2,,,,,FALSE,TRUE,danh từ,手錶,手,6179,shoubiao,wristwatch,
+手机,shǒu jī,thủ cơ,điện thoại di động,2,,,,,FALSE,TRUE,danh từ,手機,手,857,shouji,cell phone; mobile phone,
+送,sòng,tống,"tặng; đưa, tiễn",2,,,,,FALSE,TRUE,động từ,,辶,370,song,to send; to deliver; to transmit; to give (as a present); to see (sb) off,
+所以,suǒ yǐ,sở dĩ,"cho nên, vì vậy",2,,,,,FALSE,TRUE,liên từ,,户,157,suoyi,therefore; as a result; so,
+它,tā,tha,"nó (đồ vật, con vật)",2,,,,,FALSE,TRUE,đại từ,,宀,114,ta,it,
+踢,tī,thích,đá (chân),2,,,,,FALSE,TRUE,động từ,,足,2330,ti,to kick; to play (e.g. soccer); (slang) butch (in a lesbian relationship),absent_sourceB
+题,tí,đề,"câu hỏi, bài tập; đề",2,,,,,FALSE,TRUE,danh từ,題,页,2690,ti,topic; problem for discussion; exam question,multi_reading
+跳舞,tiào wǔ,khiêu vũ,"nhảy múa, khiêu vũ",2,,,,,FALSE,TRUE,động từ,,足,3920,tiaowu,to dance,
+外,wài,ngoại,"ngoài, bên ngoài",2,,,,,FALSE,TRUE,danh từ chỉ vị trí,,夕,489,wai,outside; in addition; foreign,
+完,wán,hoàn,"xong, hết",2,,,,,FALSE,TRUE,động từ,,宀,395,wan,to finish; to be over; whole,
+玩,wán,ngoạn,chơi,2,,,,,FALSE,TRUE,động từ,,王,415,wan,to play; to have fun; to trifle with,multi_reading
+晚上,wǎn shang,vãn thượng,buổi tối,2,,,,,FALSE,TRUE,danh từ chỉ thời gian,,日,502,wanshang,evening; night; in the evening,
+为,wèi,vi,"vì, cho",2,,,,,FALSE,TRUE,giới từ,為,丶,58,wei,because of; for; to,multi_reading; single_char_multi_tone
+问,wèn,vấn,hỏi,2,,,,,FALSE,TRUE,động từ,問,门,246,wen,to ask; to inquire,
+问题,wèn tí,vấn đề,vấn đề; câu hỏi,2,,,,,FALSE,TRUE,danh từ,問題,门,109,wenti,question; problem; issue,
+希望,xī wàng,hy vọng,"hy vọng, mong",2,,,,,FALSE,TRUE,động từ / danh từ,,巾,182,xiwang,to hope; a hope; a wish,
+洗,xǐ,tẩy,"rửa, giặt",2,,,,,FALSE,TRUE,động từ,,氵,1298,xi,to wash; to bathe; to develop (photographs); to shuffle (cards etc),
+西瓜,xī guā,tây qua,quả dưa hấu,2,,,,,FALSE,TRUE,danh từ,,西,9098,xigua,watermelon,
+向,xiàng,hướng,"về phía, hướng về",2,,,,,FALSE,TRUE,giới từ,,口,165,xiang,towards; to face; to turn towards,multi_reading
+小时,xiǎo shí,tiểu thời,"giờ, tiếng (đơn vị thời gian)",2,,,,,FALSE,TRUE,lượng từ,小時,小,389,xiaoshi,hour,
+笑,xiào,tiếu,cười,2,,,,,FALSE,TRUE,động từ,,⺮,382,xiao,to laugh; to smile; to laugh at,multi_reading
+新,xīn,tân,mới,2,,,,,FALSE,TRUE,tính từ,,斤,150,xin,new; newly; meso- (chemistry),multi_reading
+姓,xìng,tính,họ; mang họ là,2,,,,,FALSE,TRUE,danh từ / động từ,,女,3576,xing,family name; surname; to be surnamed,
+休息,xiū xi,hưu tức,"nghỉ, nghỉ ngơi",2,,,,,FALSE,TRUE,động từ,,亻,1225,xiuxi,rest; to rest,
+雪,xuě,tuyết,tuyết,2,,,,,FALSE,TRUE,danh từ,,雨,1971,xue,snow; (literary) to wipe away (a humiliation etc),multi_reading
+颜色,yán sè,nhan sắc,"màu, màu sắc",2,,,,,FALSE,TRUE,danh từ,顏色,页,1880,yanse,color; countenance; appearance,
+眼睛,yǎn jing,nhãn tình,con mắt,2,,,,,FALSE,TRUE,danh từ,,目,814,yanjing,eye,
+羊肉,yáng ròu,dương nhục,"thịt cừu, thịt dê",2,,,,,FALSE,TRUE,danh từ,,羊,11336,yangrou,mutton; goat meat,
+药,yào,dược,thuốc,2,,,,,FALSE,TRUE,danh từ,葯,艹,701,yao,leaf of the iris; variant of 药,multi_reading
+要,yào,yếu,"muốn, cần; sẽ",2,,,,,FALSE,TRUE,động từ / động từ năng nguyện,,覀,19,yao,to want; to need; to ask for; will; shall; about to; need to; should,multi_reading; single_char_multi_tone
+也,yě,,cũng,2,,,,,FALSE,TRUE,phó từ,,乚,23,ye,(adverb) also; both ... and ... (before predicates only); (literary) particle having functions similar to 啊,multi_reading
+一起,yī qǐ,nhất khởi,cùng nhau,2,,,,,FALSE,TRUE,phó từ,,一,172,yiqi,in the same place; together; with,
+已经,yǐ jīng,dĩ kinh,"đã, đã rồi",2,,,,,FALSE,TRUE,phó từ,已經,己,85,yijing,already,
+意思,yì si,ý tứ,"ý nghĩa, ý",2,,,,,FALSE,TRUE,danh từ,,心,988,yisi,idea; opinion; meaning,
+因为,yīn wèi,nhân vị,bởi vì,2,,,,,FALSE,TRUE,liên từ,因為,囗,91,yinwei,because; owing to; on account of,
+阴,yīn,âm,"âm u, có mây (thời tiết)",2,,,,,FALSE,TRUE,tính từ,陰,阝,4058,yin,overcast (weather); cloudy; shady,multi_reading
+游泳,yóu yǒng,du vịnh,"bơi, bơi lội",2,,,,,FALSE,TRUE,động từ,,氵,3695,youyong,swimming; to swim,
+右边,yòu bian,hữu biên,bên phải,2,,,,,FALSE,TRUE,danh từ chỉ vị trí,右邊,口,2906,youbian,"right side; right, to the right",
+鱼,yú,ngư,con cá,2,,,,,FALSE,TRUE,danh từ,魚,鱼,1189,yu,fish,multi_reading
+元,yuán,nguyên,đồng (đơn vị tiền Trung Quốc),2,,,,,FALSE,TRUE,lượng từ,,儿,744,yuan,currency unit (esp. Chinese yuan); first; original,multi_reading
+远,yuǎn,viễn,xa,2,,,,,FALSE,TRUE,tính từ,遠,辶,635,yuan,far; distant; remote,multi_reading; single_char_multi_tone
+运动,yùn dòng,vận động,"vận động, thể thao",2,,,,,FALSE,TRUE,động từ / danh từ,運動,辶,1138,yundong,to move; to exercise; sports,
+再,zài,tái,"lại, nữa (việc chưa xảy ra)",2,,,,,FALSE,TRUE,phó từ,,冂,91,zai,"again; once more; re-; second; another; then (after sth, and not until then)",
+早上,zǎo shang,tảo thượng,buổi sáng sớm,2,,,,,FALSE,TRUE,danh từ chỉ thời gian,,日,1092,zaoshang,early morning,
+张,zhāng,trương,"tờ, tấm, cái (lượng từ cho giấy, bàn)",2,,,,,FALSE,TRUE,lượng từ,張,弓,316,zhang,to open up; to spread; sheet of paper,multi_reading
+长,cháng,trường,dài,2,,,,,FALSE,TRUE,tính từ,長,长,246,chang,length; long; forever,multi_reading; single_char_multi_sound
+丈夫,zhàng fu,trượng phu,chồng,2,,,,,FALSE,TRUE,danh từ,,一,1376,zhangfu,husband,
+找,zhǎo,trảo,tìm,2,,,,,FALSE,TRUE,động từ,,扌,152,zhao,to try to find; to look for; to call on sb,
+着,zhe,,trợ từ chỉ trạng thái đang tiếp diễn,2,,,,,FALSE,TRUE,trợ từ,著,目,38,zhe,aspect particle indicating action in progress or ongoing state,conflict_sourceB; multi_reading; single_char_multi_sound
+真,zhēn,chân,"thật, thật là",2,,,,,FALSE,TRUE,phó từ / tính từ,,目,76,zhen,really; truly; indeed,
+正在,zhèng zài,chính tại,đang (làm gì),2,,,,,FALSE,TRUE,phó từ,,止,420,zhengzai,just at (that time); right in (that place); right in the middle of (doing sth),
+知道,zhī dào,tri đạo,biết,2,,,,,FALSE,TRUE,động từ,,矢,105,zhidao,to know; to become aware of; also pr. [zhī dao],
+准备,zhǔn bèi,chuẩn bị,chuẩn bị,2,,,,,FALSE,TRUE,động từ,準備,冫,333,zhunbei,preparation; to prepare; to intend,
+自行车,zì xíng chē,tự hành xa,xe đạp,2,,,,,FALSE,TRUE,danh từ,自行車,自,3400,zixingche,bicycle; bike,
+走,zǒu,tẩu,"đi, đi bộ; rời đi",2,,,,,FALSE,TRUE,động từ,,走,109,zou,to walk; to go; to run,
+最,zuì,tối,"nhất, nhất là",2,,,,,FALSE,TRUE,phó từ,,曰,89,zui,most; the most; -est (superlative suffix),multi_reading
+左边,zuǒ bian,tả biên,bên trái,2,,,,,FALSE,TRUE,danh từ chỉ vị trí,左邊,工,4584,zuobian,left; the left side; to the left of,

@@ -143,7 +143,7 @@ for (const { lvl, e } of entries) {
     pos_vi: vi[hanzi]?.pos ?? '',
     example_zh: '',
     example_vi: '',
-    note: overrideWhy ?? '',
+    note: overrideWhy || vi[hanzi]?.note || '',
     homophone_key: toneless(chosen),
     needs_review: flags.some((f) =>
       ['ambiguous_tone', 'pp_outside_sourceA', 'conflict_sourceB', 'junk_meaning'].includes(f)

@@ -1,154 +1,5973 @@
 {
   "$note": "Nghĩa tiếng Việt do Claude soạn. hv = âm Hán-Việt, CHỈ điền khi nó thật sự giúp nhớ mặt chữ; để trống ở trợ từ và từ có âm Hán-Việt mờ nghĩa. Bạn sửa thẳng trên Google Sheet, đừng sửa file này.",
-
-  "爱":      { "vi": "yêu, yêu thích", "hv": "ái", "pos": "động từ" },
-  "八":      { "vi": "tám (số 8)", "hv": "bát", "pos": "số từ" },
-  "爸爸":    { "vi": "bố, ba", "hv": "", "pos": "danh từ" },
-  "杯子":    { "vi": "cái cốc, cái ly", "hv": "bôi tử", "pos": "danh từ" },
-  "北京":    { "vi": "Bắc Kinh", "hv": "Bắc Kinh", "pos": "danh từ riêng" },
-  "本":      { "vi": "quyển, cuốn (lượng từ cho sách)", "hv": "bản", "pos": "lượng từ" },
-  "不":      { "vi": "không (phủ định)", "hv": "bất", "pos": "phó từ" },
-  "不客气":  { "vi": "không có gì, đừng khách sáo", "hv": "bất khách khí", "pos": "cụm từ" },
-  "菜":      { "vi": "món ăn; rau", "hv": "thái", "pos": "danh từ" },
-  "茶":      { "vi": "trà, chè", "hv": "trà", "pos": "danh từ" },
-  "吃":      { "vi": "ăn", "hv": "", "pos": "động từ" },
-  "出租车":  { "vi": "xe taxi", "hv": "xuất tô xa", "pos": "danh từ" },
-  "打电话":  { "vi": "gọi điện thoại", "hv": "đả điện thoại", "pos": "động từ" },
-  "大":      { "vi": "to, lớn", "hv": "đại", "pos": "tính từ" },
-  "的":      { "vi": "trợ từ sở hữu / định ngữ (của)", "hv": "", "pos": "trợ từ" },
-  "点":      { "vi": "giờ (chỉ giờ); điểm, chấm", "hv": "điểm", "pos": "lượng từ / danh từ" },
-  "电脑":    { "vi": "máy tính, máy vi tính", "hv": "điện não", "pos": "danh từ" },
-  "电视":    { "vi": "tivi, truyền hình", "hv": "điện thị", "pos": "danh từ" },
-  "电影":    { "vi": "phim, điện ảnh", "hv": "điện ảnh", "pos": "danh từ" },
-  "东西":    { "vi": "đồ, đồ vật, thứ", "hv": "đông tây", "pos": "danh từ" },
-  "都":      { "vi": "đều, tất cả đều", "hv": "đô", "pos": "phó từ" },
-  "读":      { "vi": "đọc", "hv": "độc", "pos": "động từ" },
-  "对不起":  { "vi": "xin lỗi", "hv": "đối bất khởi", "pos": "cụm từ" },
-  "多":      { "vi": "nhiều", "hv": "đa", "pos": "tính từ" },
-  "多少":    { "vi": "bao nhiêu", "hv": "đa thiểu", "pos": "đại từ nghi vấn" },
-  "儿子":    { "vi": "con trai", "hv": "nhi tử", "pos": "danh từ" },
-  "二":      { "vi": "hai (số 2)", "hv": "nhị", "pos": "số từ" },
-  "饭馆":    { "vi": "quán ăn, nhà hàng", "hv": "phạn quán", "pos": "danh từ" },
-  "飞机":    { "vi": "máy bay", "hv": "phi cơ", "pos": "danh từ" },
-  "分钟":    { "vi": "phút", "hv": "phân chung", "pos": "lượng từ" },
-  "高兴":    { "vi": "vui, vui vẻ", "hv": "cao hưng", "pos": "tính từ" },
-  "个":      { "vi": "cái, con, người (lượng từ chung)", "hv": "cá", "pos": "lượng từ" },
-  "工作":    { "vi": "làm việc; công việc", "hv": "công tác", "pos": "động từ / danh từ" },
-  "狗":      { "vi": "con chó", "hv": "cẩu", "pos": "danh từ" },
-  "汉语":    { "vi": "tiếng Hán, tiếng Trung", "hv": "Hán ngữ", "pos": "danh từ" },
-  "好":      { "vi": "tốt, hay, khỏe", "hv": "hảo", "pos": "tính từ" },
-  "喝":      { "vi": "uống", "hv": "", "pos": "động từ" },
-  "和":      { "vi": "và, với", "hv": "hòa", "pos": "liên từ / giới từ" },
-  "很":      { "vi": "rất", "hv": "", "pos": "phó từ" },
-  "后面":    { "vi": "phía sau, đằng sau", "hv": "hậu diện", "pos": "danh từ chỉ vị trí" },
-  "回":      { "vi": "về, trở về", "hv": "hồi", "pos": "động từ" },
-  "会":      { "vi": "biết (làm gì); sẽ", "hv": "hội", "pos": "động từ năng nguyện" },
-  "火车站":  { "vi": "nhà ga xe lửa", "hv": "hỏa xa trạm", "pos": "danh từ" },
-  "几":      { "vi": "mấy, bao nhiêu", "hv": "kỷ", "pos": "đại từ nghi vấn" },
-  "家":      { "vi": "nhà, gia đình", "hv": "gia", "pos": "danh từ" },
-  "叫":      { "vi": "gọi; tên là", "hv": "khiếu", "pos": "động từ" },
-  "今天":    { "vi": "hôm nay", "hv": "kim thiên", "pos": "danh từ chỉ thời gian" },
-  "九":      { "vi": "chín (số 9)", "hv": "cửu", "pos": "số từ" },
-  "开":      { "vi": "mở; lái (xe)", "hv": "khai", "pos": "động từ" },
-  "看":      { "vi": "xem, nhìn", "hv": "khán", "pos": "động từ" },
-  "看见":    { "vi": "nhìn thấy, trông thấy", "hv": "khán kiến", "pos": "động từ" },
-  "块":      { "vi": "đồng (tiền); miếng, cục", "hv": "khối", "pos": "lượng từ" },
-  "来":      { "vi": "đến, tới", "hv": "lai", "pos": "động từ" },
-  "老师":    { "vi": "giáo viên, thầy/cô", "hv": "lão sư", "pos": "danh từ" },
-  "了":      { "vi": "trợ từ chỉ việc đã hoàn thành", "hv": "", "pos": "trợ từ" },
-  "冷":      { "vi": "lạnh", "hv": "lãnh", "pos": "tính từ" },
-  "里":      { "vi": "trong, bên trong", "hv": "lý", "pos": "danh từ chỉ vị trí" },
-  "零":      { "vi": "không (số 0)", "hv": "linh", "pos": "số từ" },
-  "六":      { "vi": "sáu (số 6)", "hv": "lục", "pos": "số từ" },
-  "妈妈":    { "vi": "mẹ, má", "hv": "", "pos": "danh từ" },
-  "吗":      { "vi": "trợ từ tạo câu hỏi có/không", "hv": "", "pos": "trợ từ" },
-  "买":      { "vi": "mua", "hv": "mãi", "pos": "động từ" },
-  "猫":      { "vi": "con mèo", "hv": "miêu", "pos": "danh từ" },
-  "没":      { "vi": "không, chưa (phủ định cho 有 và quá khứ)", "hv": "", "pos": "phó từ" },
-  "没关系":  { "vi": "không sao, không có gì", "hv": "", "pos": "cụm từ" },
-  "米饭":    { "vi": "cơm", "hv": "mễ phạn", "pos": "danh từ" },
-  "名字":    { "vi": "tên", "hv": "danh tự", "pos": "danh từ" },
-  "明天":    { "vi": "ngày mai", "hv": "minh thiên", "pos": "danh từ chỉ thời gian" },
-  "哪":      { "vi": "nào (từ nghi vấn)", "hv": "", "pos": "đại từ nghi vấn" },
-  "那":      { "vi": "kia, đó", "hv": "", "pos": "đại từ chỉ định" },
-  "呢":      { "vi": "trợ từ cuối câu hỏi (còn... thì sao?)", "hv": "", "pos": "trợ từ" },
-  "能":      { "vi": "có thể, có khả năng", "hv": "năng", "pos": "động từ năng nguyện" },
-  "你":      { "vi": "bạn, anh/chị (ngôi 2)", "hv": "nhĩ", "pos": "đại từ" },
-  "年":      { "vi": "năm", "hv": "niên", "pos": "danh từ / lượng từ" },
-  "女儿":    { "vi": "con gái", "hv": "nữ nhi", "pos": "danh từ" },
-  "朋友":    { "vi": "bạn, bạn bè", "hv": "bằng hữu", "pos": "danh từ" },
-  "漂亮":    { "vi": "đẹp, xinh", "hv": "", "pos": "tính từ" },
-  "苹果":    { "vi": "quả táo", "hv": "bình quả", "pos": "danh từ" },
-  "七":      { "vi": "bảy (số 7)", "hv": "thất", "pos": "số từ" },
-  "前面":    { "vi": "phía trước, đằng trước", "hv": "tiền diện", "pos": "danh từ chỉ vị trí" },
-  "钱":      { "vi": "tiền", "hv": "tiền", "pos": "danh từ" },
-  "请":      { "vi": "mời; xin", "hv": "thỉnh", "pos": "động từ" },
-  "去":      { "vi": "đi, đi đến", "hv": "khứ", "pos": "động từ" },
-  "热":      { "vi": "nóng", "hv": "nhiệt", "pos": "tính từ" },
-  "人":      { "vi": "người", "hv": "nhân", "pos": "danh từ" },
-  "认识":    { "vi": "biết, quen (người/chữ)", "hv": "nhận thức", "pos": "động từ" },
-  "日":      { "vi": "ngày; mặt trời", "hv": "nhật", "pos": "danh từ" },
-  "三":      { "vi": "ba (số 3)", "hv": "tam", "pos": "số từ" },
-  "商店":    { "vi": "cửa hàng, tiệm", "hv": "thương điếm", "pos": "danh từ" },
-  "上":      { "vi": "trên, phía trên; lên", "hv": "thượng", "pos": "danh từ chỉ vị trí / động từ" },
-  "上午":    { "vi": "buổi sáng", "hv": "thượng ngọ", "pos": "danh từ chỉ thời gian" },
-  "少":      { "vi": "ít", "hv": "thiểu", "pos": "tính từ" },
-  "什么":    { "vi": "gì, cái gì", "hv": "", "pos": "đại từ nghi vấn" },
-  "十":      { "vi": "mười (số 10)", "hv": "thập", "pos": "số từ" },
-  "时候":    { "vi": "lúc, khi, thời gian", "hv": "thời hậu", "pos": "danh từ" },
-  "是":      { "vi": "là; đúng", "hv": "thị", "pos": "động từ" },
-  "书":      { "vi": "sách", "hv": "thư", "pos": "danh từ" },
-  "谁":      { "vi": "ai", "hv": "thùy", "pos": "đại từ nghi vấn" },
-  "水":      { "vi": "nước", "hv": "thủy", "pos": "danh từ" },
-  "水果":    { "vi": "trái cây, hoa quả", "hv": "thủy quả", "pos": "danh từ" },
-  "睡觉":    { "vi": "ngủ, đi ngủ", "hv": "thụy giác", "pos": "động từ" },
-  "说话":    { "vi": "nói, nói chuyện", "hv": "thuyết thoại", "pos": "động từ" },
-  "四":      { "vi": "bốn (số 4)", "hv": "tứ", "pos": "số từ" },
-  "岁":      { "vi": "tuổi", "hv": "tuế", "pos": "lượng từ" },
-  "他":      { "vi": "anh ấy, nó (nam)", "hv": "tha", "pos": "đại từ" },
-  "她":      { "vi": "cô ấy, chị ấy (nữ)", "hv": "tha", "pos": "đại từ" },
-  "太":      { "vi": "quá, quá mức", "hv": "thái", "pos": "phó từ" },
-  "天气":    { "vi": "thời tiết", "hv": "thiên khí", "pos": "danh từ" },
-  "听":      { "vi": "nghe", "hv": "thính", "pos": "động từ" },
-  "同学":    { "vi": "bạn học, bạn cùng lớp", "hv": "đồng học", "pos": "danh từ" },
-  "喂":      { "vi": "a-lô (khi gọi điện)", "hv": "", "pos": "thán từ" },
-  "我":      { "vi": "tôi, tớ", "hv": "ngã", "pos": "đại từ" },
-  "我们":    { "vi": "chúng tôi, chúng ta", "hv": "ngã môn", "pos": "đại từ" },
-  "五":      { "vi": "năm (số 5)", "hv": "ngũ", "pos": "số từ" },
-  "喜欢":    { "vi": "thích", "hv": "hỉ hoan", "pos": "động từ" },
-  "下":      { "vi": "dưới, phía dưới; xuống", "hv": "hạ", "pos": "danh từ chỉ vị trí / động từ" },
-  "下午":    { "vi": "buổi chiều", "hv": "hạ ngọ", "pos": "danh từ chỉ thời gian" },
-  "下雨":    { "vi": "mưa, trời mưa", "hv": "hạ vũ", "pos": "động từ" },
-  "先生":    { "vi": "ông, ngài; thầy", "hv": "tiên sinh", "pos": "danh từ" },
-  "现在":    { "vi": "hiện tại, bây giờ", "hv": "hiện tại", "pos": "danh từ chỉ thời gian" },
-  "想":      { "vi": "muốn; nghĩ, nhớ", "hv": "tưởng", "pos": "động từ" },
-  "小":      { "vi": "nhỏ, bé", "hv": "tiểu", "pos": "tính từ" },
-  "小姐":    { "vi": "cô, tiểu thư (gọi phụ nữ trẻ)", "hv": "tiểu tỷ", "pos": "danh từ" },
-  "些":      { "vi": "một ít, vài (dùng với 这/那)", "hv": "", "pos": "lượng từ" },
-  "写":      { "vi": "viết", "hv": "tả", "pos": "động từ" },
-  "谢谢":    { "vi": "cảm ơn", "hv": "tạ tạ", "pos": "động từ" },
-  "星期":    { "vi": "tuần; thứ (trong tuần)", "hv": "tinh kỳ", "pos": "danh từ" },
-  "学生":    { "vi": "học sinh, sinh viên", "hv": "học sinh", "pos": "danh từ" },
-  "学习":    { "vi": "học, học tập", "hv": "học tập", "pos": "động từ" },
-  "学校":    { "vi": "trường học", "hv": "học hiệu", "pos": "danh từ" },
-  "一":      { "vi": "một (số 1)", "hv": "nhất", "pos": "số từ" },
-  "衣服":    { "vi": "quần áo", "hv": "y phục", "pos": "danh từ" },
-  "医生":    { "vi": "bác sĩ", "hv": "y sinh", "pos": "danh từ" },
-  "医院":    { "vi": "bệnh viện", "hv": "y viện", "pos": "danh từ" },
-  "椅子":    { "vi": "cái ghế", "hv": "ỷ tử", "pos": "danh từ" },
-  "有":      { "vi": "có", "hv": "hữu", "pos": "động từ" },
-  "月":      { "vi": "tháng; mặt trăng", "hv": "nguyệt", "pos": "danh từ" },
-  "再见":    { "vi": "tạm biệt", "hv": "tái kiến", "pos": "cụm từ" },
-  "在":      { "vi": "ở, tại; đang", "hv": "tại", "pos": "giới từ / động từ" },
-  "怎么":    { "vi": "thế nào, làm sao", "hv": "", "pos": "đại từ nghi vấn" },
-  "怎么样":  { "vi": "thế nào, ra sao", "hv": "", "pos": "đại từ nghi vấn" },
-  "这":      { "vi": "này, đây", "hv": "", "pos": "đại từ chỉ định" },
-  "中国":    { "vi": "Trung Quốc", "hv": "Trung Quốc", "pos": "danh từ riêng" },
-  "中午":    { "vi": "buổi trưa", "hv": "trung ngọ", "pos": "danh từ chỉ thời gian" },
-  "住":      { "vi": "ở, sống, cư trú", "hv": "trú", "pos": "động từ" },
-  "桌子":    { "vi": "cái bàn", "hv": "trác tử", "pos": "danh từ" },
-  "字":      { "vi": "chữ", "hv": "tự", "pos": "danh từ" },
-  "昨天":    { "vi": "hôm qua", "hv": "tạc thiên", "pos": "danh từ chỉ thời gian" },
-  "坐":      { "vi": "ngồi; đi (bằng xe/tàu)", "hv": "tọa", "pos": "động từ" },
-  "做":      { "vi": "làm, chế tạo", "hv": "tố", "pos": "động từ" }
+  "爱": {
+    "vi": "yêu, yêu thích",
+    "hv": "ái",
+    "pos": "động từ"
+  },
+  "八": {
+    "vi": "tám (số 8)",
+    "hv": "bát",
+    "pos": "số từ"
+  },
+  "爸爸": {
+    "vi": "bố, ba",
+    "hv": "",
+    "pos": "danh từ"
+  },
+  "杯子": {
+    "vi": "cái cốc, cái ly",
+    "hv": "bôi tử",
+    "pos": "danh từ"
+  },
+  "北京": {
+    "vi": "Bắc Kinh",
+    "hv": "Bắc Kinh",
+    "pos": "danh từ riêng"
+  },
+  "本": {
+    "vi": "quyển, cuốn (lượng từ cho sách)",
+    "hv": "bản",
+    "pos": "lượng từ"
+  },
+  "不": {
+    "vi": "không (phủ định)",
+    "hv": "bất",
+    "pos": "phó từ"
+  },
+  "不客气": {
+    "vi": "không có gì, đừng khách sáo",
+    "hv": "bất khách khí",
+    "pos": "cụm từ"
+  },
+  "菜": {
+    "vi": "món ăn; rau",
+    "hv": "thái",
+    "pos": "danh từ"
+  },
+  "茶": {
+    "vi": "trà, chè",
+    "hv": "trà",
+    "pos": "danh từ"
+  },
+  "吃": {
+    "vi": "ăn",
+    "hv": "",
+    "pos": "động từ"
+  },
+  "出租车": {
+    "vi": "xe taxi",
+    "hv": "xuất tô xa",
+    "pos": "danh từ"
+  },
+  "打电话": {
+    "vi": "gọi điện thoại",
+    "hv": "đả điện thoại",
+    "pos": "động từ"
+  },
+  "大": {
+    "vi": "to, lớn",
+    "hv": "đại",
+    "pos": "tính từ"
+  },
+  "的": {
+    "vi": "trợ từ sở hữu / định ngữ (của)",
+    "hv": "",
+    "pos": "trợ từ"
+  },
+  "点": {
+    "vi": "giờ (chỉ giờ); điểm, chấm",
+    "hv": "điểm",
+    "pos": "lượng từ / danh từ"
+  },
+  "电脑": {
+    "vi": "máy tính, máy vi tính",
+    "hv": "điện não",
+    "pos": "danh từ"
+  },
+  "电视": {
+    "vi": "tivi, truyền hình",
+    "hv": "điện thị",
+    "pos": "danh từ"
+  },
+  "电影": {
+    "vi": "phim, điện ảnh",
+    "hv": "điện ảnh",
+    "pos": "danh từ"
+  },
+  "东西": {
+    "vi": "đồ, đồ vật, thứ",
+    "hv": "đông tây",
+    "pos": "danh từ"
+  },
+  "都": {
+    "vi": "đều, tất cả đều",
+    "hv": "đô",
+    "pos": "phó từ"
+  },
+  "读": {
+    "vi": "đọc",
+    "hv": "độc",
+    "pos": "động từ"
+  },
+  "对不起": {
+    "vi": "xin lỗi",
+    "hv": "đối bất khởi",
+    "pos": "cụm từ"
+  },
+  "多": {
+    "vi": "nhiều",
+    "hv": "đa",
+    "pos": "tính từ"
+  },
+  "多少": {
+    "vi": "bao nhiêu",
+    "hv": "đa thiểu",
+    "pos": "đại từ nghi vấn"
+  },
+  "儿子": {
+    "vi": "con trai",
+    "hv": "nhi tử",
+    "pos": "danh từ"
+  },
+  "二": {
+    "vi": "hai (số 2)",
+    "hv": "nhị",
+    "pos": "số từ"
+  },
+  "饭馆": {
+    "vi": "quán ăn, nhà hàng",
+    "hv": "phạn quán",
+    "pos": "danh từ"
+  },
+  "飞机": {
+    "vi": "máy bay",
+    "hv": "phi cơ",
+    "pos": "danh từ"
+  },
+  "分钟": {
+    "vi": "phút",
+    "hv": "phân chung",
+    "pos": "lượng từ"
+  },
+  "高兴": {
+    "vi": "vui, vui vẻ",
+    "hv": "cao hưng",
+    "pos": "tính từ"
+  },
+  "个": {
+    "vi": "cái, con, người (lượng từ chung)",
+    "hv": "cá",
+    "pos": "lượng từ"
+  },
+  "工作": {
+    "vi": "làm việc; công việc",
+    "hv": "công tác",
+    "pos": "động từ / danh từ"
+  },
+  "狗": {
+    "vi": "con chó",
+    "hv": "cẩu",
+    "pos": "danh từ"
+  },
+  "汉语": {
+    "vi": "tiếng Hán, tiếng Trung",
+    "hv": "Hán ngữ",
+    "pos": "danh từ"
+  },
+  "好": {
+    "vi": "tốt, hay, khỏe",
+    "hv": "hảo",
+    "pos": "tính từ"
+  },
+  "喝": {
+    "vi": "uống",
+    "hv": "",
+    "pos": "động từ"
+  },
+  "和": {
+    "vi": "và, với",
+    "hv": "hòa",
+    "pos": "liên từ / giới từ"
+  },
+  "很": {
+    "vi": "rất",
+    "hv": "",
+    "pos": "phó từ"
+  },
+  "后面": {
+    "vi": "phía sau, đằng sau",
+    "hv": "hậu diện",
+    "pos": "danh từ chỉ vị trí"
+  },
+  "回": {
+    "vi": "về, trở về",
+    "hv": "hồi",
+    "pos": "động từ"
+  },
+  "会": {
+    "vi": "biết (làm gì); sẽ",
+    "hv": "hội",
+    "pos": "động từ năng nguyện"
+  },
+  "火车站": {
+    "vi": "nhà ga xe lửa",
+    "hv": "hỏa xa trạm",
+    "pos": "danh từ"
+  },
+  "几": {
+    "vi": "mấy, bao nhiêu",
+    "hv": "kỷ",
+    "pos": "đại từ nghi vấn"
+  },
+  "家": {
+    "vi": "nhà, gia đình",
+    "hv": "gia",
+    "pos": "danh từ"
+  },
+  "叫": {
+    "vi": "gọi; tên là",
+    "hv": "khiếu",
+    "pos": "động từ"
+  },
+  "今天": {
+    "vi": "hôm nay",
+    "hv": "kim thiên",
+    "pos": "danh từ chỉ thời gian"
+  },
+  "九": {
+    "vi": "chín (số 9)",
+    "hv": "cửu",
+    "pos": "số từ"
+  },
+  "开": {
+    "vi": "mở; lái (xe)",
+    "hv": "khai",
+    "pos": "động từ"
+  },
+  "看": {
+    "vi": "xem, nhìn",
+    "hv": "khán",
+    "pos": "động từ"
+  },
+  "看见": {
+    "vi": "nhìn thấy, trông thấy",
+    "hv": "khán kiến",
+    "pos": "động từ"
+  },
+  "块": {
+    "vi": "đồng (tiền); miếng, cục",
+    "hv": "khối",
+    "pos": "lượng từ"
+  },
+  "来": {
+    "vi": "đến, tới",
+    "hv": "lai",
+    "pos": "động từ"
+  },
+  "老师": {
+    "vi": "giáo viên, thầy/cô",
+    "hv": "lão sư",
+    "pos": "danh từ"
+  },
+  "了": {
+    "vi": "trợ từ chỉ việc đã hoàn thành",
+    "hv": "",
+    "pos": "trợ từ"
+  },
+  "冷": {
+    "vi": "lạnh",
+    "hv": "lãnh",
+    "pos": "tính từ"
+  },
+  "里": {
+    "vi": "trong, bên trong",
+    "hv": "lý",
+    "pos": "danh từ chỉ vị trí"
+  },
+  "零": {
+    "vi": "không (số 0)",
+    "hv": "linh",
+    "pos": "số từ"
+  },
+  "六": {
+    "vi": "sáu (số 6)",
+    "hv": "lục",
+    "pos": "số từ"
+  },
+  "妈妈": {
+    "vi": "mẹ, má",
+    "hv": "",
+    "pos": "danh từ"
+  },
+  "吗": {
+    "vi": "trợ từ tạo câu hỏi có/không",
+    "hv": "",
+    "pos": "trợ từ"
+  },
+  "买": {
+    "vi": "mua",
+    "hv": "mãi",
+    "pos": "động từ"
+  },
+  "猫": {
+    "vi": "con mèo",
+    "hv": "miêu",
+    "pos": "danh từ"
+  },
+  "没": {
+    "vi": "không, chưa (phủ định cho 有 và quá khứ)",
+    "hv": "",
+    "pos": "phó từ"
+  },
+  "没关系": {
+    "vi": "không sao, không có gì",
+    "hv": "",
+    "pos": "cụm từ"
+  },
+  "米饭": {
+    "vi": "cơm",
+    "hv": "mễ phạn",
+    "pos": "danh từ"
+  },
+  "名字": {
+    "vi": "tên",
+    "hv": "danh tự",
+    "pos": "danh từ"
+  },
+  "明天": {
+    "vi": "ngày mai",
+    "hv": "minh thiên",
+    "pos": "danh từ chỉ thời gian"
+  },
+  "哪": {
+    "vi": "nào (từ nghi vấn)",
+    "hv": "",
+    "pos": "đại từ nghi vấn"
+  },
+  "那": {
+    "vi": "kia, đó",
+    "hv": "",
+    "pos": "đại từ chỉ định"
+  },
+  "呢": {
+    "vi": "trợ từ cuối câu hỏi (còn... thì sao?)",
+    "hv": "",
+    "pos": "trợ từ"
+  },
+  "能": {
+    "vi": "có thể, có khả năng",
+    "hv": "năng",
+    "pos": "động từ năng nguyện"
+  },
+  "你": {
+    "vi": "bạn, anh/chị (ngôi 2)",
+    "hv": "nhĩ",
+    "pos": "đại từ"
+  },
+  "年": {
+    "vi": "năm",
+    "hv": "niên",
+    "pos": "danh từ / lượng từ"
+  },
+  "女儿": {
+    "vi": "con gái",
+    "hv": "nữ nhi",
+    "pos": "danh từ"
+  },
+  "朋友": {
+    "vi": "bạn, bạn bè",
+    "hv": "bằng hữu",
+    "pos": "danh từ"
+  },
+  "漂亮": {
+    "vi": "đẹp, xinh",
+    "hv": "",
+    "pos": "tính từ"
+  },
+  "苹果": {
+    "vi": "quả táo",
+    "hv": "bình quả",
+    "pos": "danh từ"
+  },
+  "七": {
+    "vi": "bảy (số 7)",
+    "hv": "thất",
+    "pos": "số từ"
+  },
+  "前面": {
+    "vi": "phía trước, đằng trước",
+    "hv": "tiền diện",
+    "pos": "danh từ chỉ vị trí"
+  },
+  "钱": {
+    "vi": "tiền",
+    "hv": "tiền",
+    "pos": "danh từ"
+  },
+  "请": {
+    "vi": "mời; xin",
+    "hv": "thỉnh",
+    "pos": "động từ"
+  },
+  "去": {
+    "vi": "đi, đi đến",
+    "hv": "khứ",
+    "pos": "động từ"
+  },
+  "热": {
+    "vi": "nóng",
+    "hv": "nhiệt",
+    "pos": "tính từ"
+  },
+  "人": {
+    "vi": "người",
+    "hv": "nhân",
+    "pos": "danh từ"
+  },
+  "认识": {
+    "vi": "biết, quen (người/chữ)",
+    "hv": "nhận thức",
+    "pos": "động từ"
+  },
+  "日": {
+    "vi": "ngày; mặt trời",
+    "hv": "nhật",
+    "pos": "danh từ"
+  },
+  "三": {
+    "vi": "ba (số 3)",
+    "hv": "tam",
+    "pos": "số từ"
+  },
+  "商店": {
+    "vi": "cửa hàng, tiệm",
+    "hv": "thương điếm",
+    "pos": "danh từ"
+  },
+  "上": {
+    "vi": "trên, phía trên; lên",
+    "hv": "thượng",
+    "pos": "danh từ chỉ vị trí / động từ"
+  },
+  "上午": {
+    "vi": "buổi sáng",
+    "hv": "thượng ngọ",
+    "pos": "danh từ chỉ thời gian"
+  },
+  "少": {
+    "vi": "ít",
+    "hv": "thiểu",
+    "pos": "tính từ"
+  },
+  "什么": {
+    "vi": "gì, cái gì",
+    "hv": "",
+    "pos": "đại từ nghi vấn"
+  },
+  "十": {
+    "vi": "mười (số 10)",
+    "hv": "thập",
+    "pos": "số từ"
+  },
+  "时候": {
+    "vi": "lúc, khi, thời gian",
+    "hv": "thời hậu",
+    "pos": "danh từ"
+  },
+  "是": {
+    "vi": "là; đúng",
+    "hv": "thị",
+    "pos": "động từ"
+  },
+  "书": {
+    "vi": "sách",
+    "hv": "thư",
+    "pos": "danh từ"
+  },
+  "谁": {
+    "vi": "ai",
+    "hv": "thùy",
+    "pos": "đại từ nghi vấn"
+  },
+  "水": {
+    "vi": "nước",
+    "hv": "thủy",
+    "pos": "danh từ"
+  },
+  "水果": {
+    "vi": "trái cây, hoa quả",
+    "hv": "thủy quả",
+    "pos": "danh từ"
+  },
+  "睡觉": {
+    "vi": "ngủ, đi ngủ",
+    "hv": "thụy giác",
+    "pos": "động từ"
+  },
+  "说话": {
+    "vi": "nói, nói chuyện",
+    "hv": "thuyết thoại",
+    "pos": "động từ"
+  },
+  "四": {
+    "vi": "bốn (số 4)",
+    "hv": "tứ",
+    "pos": "số từ"
+  },
+  "岁": {
+    "vi": "tuổi",
+    "hv": "tuế",
+    "pos": "lượng từ"
+  },
+  "他": {
+    "vi": "anh ấy, nó (nam)",
+    "hv": "tha",
+    "pos": "đại từ"
+  },
+  "她": {
+    "vi": "cô ấy, chị ấy (nữ)",
+    "hv": "tha",
+    "pos": "đại từ"
+  },
+  "太": {
+    "vi": "quá, quá mức",
+    "hv": "thái",
+    "pos": "phó từ"
+  },
+  "天气": {
+    "vi": "thời tiết",
+    "hv": "thiên khí",
+    "pos": "danh từ"
+  },
+  "听": {
+    "vi": "nghe",
+    "hv": "thính",
+    "pos": "động từ"
+  },
+  "同学": {
+    "vi": "bạn học, bạn cùng lớp",
+    "hv": "đồng học",
+    "pos": "danh từ"
+  },
+  "喂": {
+    "vi": "a-lô (khi gọi điện)",
+    "hv": "",
+    "pos": "thán từ"
+  },
+  "我": {
+    "vi": "tôi, tớ",
+    "hv": "ngã",
+    "pos": "đại từ"
+  },
+  "我们": {
+    "vi": "chúng tôi, chúng ta",
+    "hv": "ngã môn",
+    "pos": "đại từ"
+  },
+  "五": {
+    "vi": "năm (số 5)",
+    "hv": "ngũ",
+    "pos": "số từ"
+  },
+  "喜欢": {
+    "vi": "thích",
+    "hv": "hỉ hoan",
+    "pos": "động từ"
+  },
+  "下": {
+    "vi": "dưới, phía dưới; xuống",
+    "hv": "hạ",
+    "pos": "danh từ chỉ vị trí / động từ"
+  },
+  "下午": {
+    "vi": "buổi chiều",
+    "hv": "hạ ngọ",
+    "pos": "danh từ chỉ thời gian"
+  },
+  "下雨": {
+    "vi": "mưa, trời mưa",
+    "hv": "hạ vũ",
+    "pos": "động từ"
+  },
+  "先生": {
+    "vi": "ông, ngài; thầy",
+    "hv": "tiên sinh",
+    "pos": "danh từ"
+  },
+  "现在": {
+    "vi": "hiện tại, bây giờ",
+    "hv": "hiện tại",
+    "pos": "danh từ chỉ thời gian"
+  },
+  "想": {
+    "vi": "muốn; nghĩ, nhớ",
+    "hv": "tưởng",
+    "pos": "động từ"
+  },
+  "小": {
+    "vi": "nhỏ, bé",
+    "hv": "tiểu",
+    "pos": "tính từ"
+  },
+  "小姐": {
+    "vi": "cô, tiểu thư (gọi phụ nữ trẻ)",
+    "hv": "tiểu tỷ",
+    "pos": "danh từ"
+  },
+  "些": {
+    "vi": "một ít, vài (dùng với 这/那)",
+    "hv": "",
+    "pos": "lượng từ"
+  },
+  "写": {
+    "vi": "viết",
+    "hv": "tả",
+    "pos": "động từ"
+  },
+  "谢谢": {
+    "vi": "cảm ơn",
+    "hv": "tạ tạ",
+    "pos": "động từ"
+  },
+  "星期": {
+    "vi": "tuần; thứ (trong tuần)",
+    "hv": "tinh kỳ",
+    "pos": "danh từ"
+  },
+  "学生": {
+    "vi": "học sinh, sinh viên",
+    "hv": "học sinh",
+    "pos": "danh từ"
+  },
+  "学习": {
+    "vi": "học, học tập",
+    "hv": "học tập",
+    "pos": "động từ"
+  },
+  "学校": {
+    "vi": "trường học",
+    "hv": "học hiệu",
+    "pos": "danh từ"
+  },
+  "一": {
+    "vi": "một (số 1)",
+    "hv": "nhất",
+    "pos": "số từ"
+  },
+  "衣服": {
+    "vi": "quần áo",
+    "hv": "y phục",
+    "pos": "danh từ"
+  },
+  "医生": {
+    "vi": "bác sĩ",
+    "hv": "y sinh",
+    "pos": "danh từ"
+  },
+  "医院": {
+    "vi": "bệnh viện",
+    "hv": "y viện",
+    "pos": "danh từ"
+  },
+  "椅子": {
+    "vi": "cái ghế",
+    "hv": "ỷ tử",
+    "pos": "danh từ"
+  },
+  "有": {
+    "vi": "có",
+    "hv": "hữu",
+    "pos": "động từ"
+  },
+  "月": {
+    "vi": "tháng; mặt trăng",
+    "hv": "nguyệt",
+    "pos": "danh từ"
+  },
+  "再见": {
+    "vi": "tạm biệt",
+    "hv": "tái kiến",
+    "pos": "cụm từ"
+  },
+  "在": {
+    "vi": "ở, tại; đang",
+    "hv": "tại",
+    "pos": "giới từ / động từ"
+  },
+  "怎么": {
+    "vi": "thế nào, làm sao",
+    "hv": "",
+    "pos": "đại từ nghi vấn"
+  },
+  "怎么样": {
+    "vi": "thế nào, ra sao",
+    "hv": "",
+    "pos": "đại từ nghi vấn"
+  },
+  "这": {
+    "vi": "này, đây",
+    "hv": "",
+    "pos": "đại từ chỉ định"
+  },
+  "中国": {
+    "vi": "Trung Quốc",
+    "hv": "Trung Quốc",
+    "pos": "danh từ riêng"
+  },
+  "中午": {
+    "vi": "buổi trưa",
+    "hv": "trung ngọ",
+    "pos": "danh từ chỉ thời gian"
+  },
+  "住": {
+    "vi": "ở, sống, cư trú",
+    "hv": "trú",
+    "pos": "động từ"
+  },
+  "桌子": {
+    "vi": "cái bàn",
+    "hv": "trác tử",
+    "pos": "danh từ"
+  },
+  "字": {
+    "vi": "chữ",
+    "hv": "tự",
+    "pos": "danh từ"
+  },
+  "昨天": {
+    "vi": "hôm qua",
+    "hv": "tạc thiên",
+    "pos": "danh từ chỉ thời gian"
+  },
+  "坐": {
+    "vi": "ngồi; đi (bằng xe/tàu)",
+    "hv": "tọa",
+    "pos": "động từ"
+  },
+  "做": {
+    "vi": "làm, chế tạo",
+    "hv": "tố",
+    "pos": "động từ"
+  },
+  "吧": {
+    "vi": "trợ từ đề nghị hoặc phỏng đoán (nhé, đi, chứ)",
+    "hv": "",
+    "pos": "trợ từ"
+  },
+  "白": {
+    "vi": "màu trắng; trắng",
+    "hv": "bạch",
+    "pos": "tính từ"
+  },
+  "百": {
+    "vi": "trăm",
+    "hv": "bách",
+    "pos": "số từ"
+  },
+  "帮助": {
+    "vi": "giúp đỡ; sự giúp đỡ",
+    "hv": "bang trợ",
+    "pos": "động từ / danh từ"
+  },
+  "报纸": {
+    "vi": "báo, tờ báo",
+    "hv": "báo chỉ",
+    "pos": "danh từ"
+  },
+  "比": {
+    "vi": "so, so với",
+    "hv": "tỉ",
+    "pos": "giới từ / động từ"
+  },
+  "便宜": {
+    "vi": "rẻ",
+    "hv": "tiện nghi",
+    "pos": "tính từ"
+  },
+  "别": {
+    "vi": "đừng, chớ; khác",
+    "hv": "biệt",
+    "pos": "phó từ"
+  },
+  "唱歌": {
+    "vi": "hát",
+    "hv": "xướng ca",
+    "pos": "động từ"
+  },
+  "出": {
+    "vi": "ra, đi ra",
+    "hv": "xuất",
+    "pos": "động từ"
+  },
+  "穿": {
+    "vi": "mặc, mang (quần áo, giày)",
+    "hv": "xuyên",
+    "pos": "động từ"
+  },
+  "船": {
+    "vi": "thuyền, tàu thủy",
+    "hv": "thuyền",
+    "pos": "danh từ"
+  },
+  "次": {
+    "vi": "lần, lượt",
+    "hv": "thứ",
+    "pos": "lượng từ"
+  },
+  "从": {
+    "vi": "từ (nơi nào, lúc nào)",
+    "hv": "tùng",
+    "pos": "giới từ"
+  },
+  "错": {
+    "vi": "sai, lỗi",
+    "hv": "thố",
+    "pos": "tính từ / danh từ"
+  },
+  "打篮球": {
+    "vi": "chơi bóng rổ",
+    "hv": "đả lam cầu",
+    "pos": "động từ"
+  },
+  "大家": {
+    "vi": "mọi người",
+    "hv": "đại gia",
+    "pos": "đại từ"
+  },
+  "但是": {
+    "vi": "nhưng, tuy nhiên",
+    "hv": "đãn thị",
+    "pos": "liên từ"
+  },
+  "到": {
+    "vi": "đến, tới",
+    "hv": "đáo",
+    "pos": "động từ"
+  },
+  "得": {
+    "vi": "được; trợ từ nối bổ ngữ mức độ (跑得快)",
+    "hv": "đắc",
+    "pos": "động từ / trợ từ"
+  },
+  "弟弟": {
+    "vi": "em trai",
+    "hv": "đệ đệ",
+    "pos": "danh từ"
+  },
+  "第一": {
+    "vi": "thứ nhất, đầu tiên",
+    "hv": "đệ nhất",
+    "pos": "số từ thứ tự"
+  },
+  "懂": {
+    "vi": "hiểu",
+    "hv": "đổng",
+    "pos": "động từ"
+  },
+  "房间": {
+    "vi": "căn phòng",
+    "hv": "phòng gian",
+    "pos": "danh từ"
+  },
+  "非常": {
+    "vi": "vô cùng, rất",
+    "hv": "phi thường",
+    "pos": "phó từ"
+  },
+  "服务员": {
+    "vi": "nhân viên phục vụ",
+    "hv": "phục vụ viên",
+    "pos": "danh từ"
+  },
+  "高": {
+    "vi": "cao",
+    "hv": "cao",
+    "pos": "tính từ"
+  },
+  "告诉": {
+    "vi": "nói cho biết, bảo",
+    "hv": "cáo tố",
+    "pos": "động từ"
+  },
+  "哥哥": {
+    "vi": "anh trai",
+    "hv": "ca ca",
+    "pos": "danh từ"
+  },
+  "给": {
+    "vi": "cho, đưa cho; cho (ai làm gì)",
+    "hv": "cấp",
+    "pos": "động từ / giới từ"
+  },
+  "公共汽车": {
+    "vi": "xe buýt",
+    "hv": "công cộng khí xa",
+    "pos": "danh từ"
+  },
+  "公斤": {
+    "vi": "ki-lô-gam",
+    "hv": "công cân",
+    "pos": "lượng từ"
+  },
+  "公司": {
+    "vi": "công ty",
+    "hv": "công ty",
+    "pos": "danh từ"
+  },
+  "贵": {
+    "vi": "đắt; quý",
+    "hv": "quý",
+    "pos": "tính từ"
+  },
+  "还": {
+    "vi": "còn, vẫn còn",
+    "hv": "hoàn",
+    "pos": "phó từ"
+  },
+  "孩子": {
+    "vi": "đứa trẻ; con",
+    "hv": "hài tử",
+    "pos": "danh từ"
+  },
+  "好吃": {
+    "vi": "ngon",
+    "hv": "",
+    "pos": "tính từ"
+  },
+  "号": {
+    "vi": "ngày (trong tháng); số",
+    "hv": "hiệu",
+    "pos": "danh từ"
+  },
+  "黑": {
+    "vi": "màu đen; đen, tối",
+    "hv": "hắc",
+    "pos": "tính từ"
+  },
+  "红": {
+    "vi": "màu đỏ; đỏ",
+    "hv": "hồng",
+    "pos": "tính từ"
+  },
+  "欢迎": {
+    "vi": "hoan nghênh, chào mừng",
+    "hv": "hoan nghênh",
+    "pos": "động từ"
+  },
+  "回答": {
+    "vi": "trả lời; câu trả lời",
+    "hv": "hồi đáp",
+    "pos": "động từ / danh từ"
+  },
+  "机场": {
+    "vi": "sân bay",
+    "hv": "cơ trường",
+    "pos": "danh từ"
+  },
+  "鸡蛋": {
+    "vi": "trứng gà",
+    "hv": "kê đản",
+    "pos": "danh từ"
+  },
+  "件": {
+    "vi": "cái, chiếc (lượng từ cho áo, việc)",
+    "hv": "kiện",
+    "pos": "lượng từ"
+  },
+  "教室": {
+    "vi": "lớp học, phòng học",
+    "hv": "giáo thất",
+    "pos": "danh từ"
+  },
+  "介绍": {
+    "vi": "giới thiệu",
+    "hv": "giới thiệu",
+    "pos": "động từ"
+  },
+  "姐姐": {
+    "vi": "chị gái",
+    "hv": "tỷ tỷ",
+    "pos": "danh từ"
+  },
+  "近": {
+    "vi": "gần",
+    "hv": "cận",
+    "pos": "tính từ"
+  },
+  "进": {
+    "vi": "vào, đi vào; tiến lên",
+    "hv": "tiến",
+    "pos": "động từ"
+  },
+  "就": {
+    "vi": "liền, ngay; thì",
+    "hv": "tựu",
+    "pos": "phó từ"
+  },
+  "觉得": {
+    "vi": "cảm thấy, thấy rằng",
+    "hv": "giác đắc",
+    "pos": "động từ"
+  },
+  "咖啡": {
+    "vi": "cà phê",
+    "hv": "",
+    "pos": "danh từ"
+  },
+  "开始": {
+    "vi": "bắt đầu",
+    "hv": "khai thủy",
+    "pos": "động từ / danh từ"
+  },
+  "考试": {
+    "vi": "thi; kỳ thi",
+    "hv": "khảo thí",
+    "pos": "động từ / danh từ"
+  },
+  "可能": {
+    "vi": "có thể, có lẽ; khả năng",
+    "hv": "khả năng",
+    "pos": "phó từ / danh từ"
+  },
+  "可以": {
+    "vi": "có thể, được phép",
+    "hv": "khả dĩ",
+    "pos": "động từ năng nguyện"
+  },
+  "课": {
+    "vi": "bài học; tiết học",
+    "hv": "khóa",
+    "pos": "danh từ"
+  },
+  "快": {
+    "vi": "nhanh; sắp",
+    "hv": "khoái",
+    "pos": "tính từ"
+  },
+  "快乐": {
+    "vi": "vui vẻ, hạnh phúc",
+    "hv": "khoái lạc",
+    "pos": "tính từ"
+  },
+  "累": {
+    "vi": "mệt",
+    "hv": "lụy",
+    "pos": "tính từ"
+  },
+  "离": {
+    "vi": "cách, rời khỏi",
+    "hv": "ly",
+    "pos": "động từ"
+  },
+  "两": {
+    "vi": "hai (dùng trước lượng từ)",
+    "hv": "lưỡng",
+    "pos": "số từ"
+  },
+  "路": {
+    "vi": "đường; tuyến (xe)",
+    "hv": "lộ",
+    "pos": "danh từ"
+  },
+  "旅游": {
+    "vi": "du lịch",
+    "hv": "lữ du",
+    "pos": "động từ / danh từ"
+  },
+  "卖": {
+    "vi": "bán",
+    "hv": "mại",
+    "pos": "động từ"
+  },
+  "慢": {
+    "vi": "chậm",
+    "hv": "mạn",
+    "pos": "tính từ"
+  },
+  "忙": {
+    "vi": "bận, bận rộn",
+    "hv": "mang",
+    "pos": "tính từ"
+  },
+  "每": {
+    "vi": "mỗi, mỗi một",
+    "hv": "mỗi",
+    "pos": "đại từ"
+  },
+  "妹妹": {
+    "vi": "em gái",
+    "hv": "muội muội",
+    "pos": "danh từ"
+  },
+  "门": {
+    "vi": "cửa, cổng",
+    "hv": "môn",
+    "pos": "danh từ"
+  },
+  "男人": {
+    "vi": "người đàn ông",
+    "hv": "nam nhân",
+    "pos": "danh từ"
+  },
+  "您": {
+    "vi": "ngài, ông/bà (ngôi 2 kính trọng)",
+    "hv": "",
+    "pos": "đại từ"
+  },
+  "牛奶": {
+    "vi": "sữa bò",
+    "hv": "ngưu nãi",
+    "pos": "danh từ"
+  },
+  "女人": {
+    "vi": "người phụ nữ",
+    "hv": "nữ nhân",
+    "pos": "danh từ"
+  },
+  "旁边": {
+    "vi": "bên cạnh",
+    "hv": "bàng biên",
+    "pos": "danh từ chỉ vị trí"
+  },
+  "跑步": {
+    "vi": "chạy bộ",
+    "hv": "bão bộ",
+    "pos": "động từ"
+  },
+  "票": {
+    "vi": "vé",
+    "hv": "phiếu",
+    "pos": "danh từ"
+  },
+  "妻子": {
+    "vi": "vợ",
+    "hv": "thê tử",
+    "pos": "danh từ"
+  },
+  "起床": {
+    "vi": "thức dậy, ra khỏi giường",
+    "hv": "khởi sàng",
+    "pos": "động từ"
+  },
+  "千": {
+    "vi": "nghìn",
+    "hv": "thiên",
+    "pos": "số từ"
+  },
+  "晴": {
+    "vi": "nắng, trời quang",
+    "hv": "tình",
+    "pos": "tính từ"
+  },
+  "去年": {
+    "vi": "năm ngoái",
+    "hv": "khứ niên",
+    "pos": "danh từ chỉ thời gian"
+  },
+  "让": {
+    "vi": "để cho, khiến; nhường",
+    "hv": "nhượng",
+    "pos": "động từ"
+  },
+  "上班": {
+    "vi": "đi làm",
+    "hv": "thượng ban",
+    "pos": "động từ"
+  },
+  "身体": {
+    "vi": "cơ thể; sức khỏe",
+    "hv": "thân thể",
+    "pos": "danh từ"
+  },
+  "生病": {
+    "vi": "bị bệnh, ốm",
+    "hv": "sinh bệnh",
+    "pos": "động từ"
+  },
+  "生日": {
+    "vi": "sinh nhật",
+    "hv": "sinh nhật",
+    "pos": "danh từ"
+  },
+  "时间": {
+    "vi": "thời gian",
+    "hv": "thời gian",
+    "pos": "danh từ"
+  },
+  "事情": {
+    "vi": "việc, chuyện",
+    "hv": "sự tình",
+    "pos": "danh từ"
+  },
+  "手表": {
+    "vi": "đồng hồ đeo tay",
+    "hv": "thủ biểu",
+    "pos": "danh từ"
+  },
+  "手机": {
+    "vi": "điện thoại di động",
+    "hv": "thủ cơ",
+    "pos": "danh từ"
+  },
+  "送": {
+    "vi": "tặng; đưa, tiễn",
+    "hv": "tống",
+    "pos": "động từ"
+  },
+  "所以": {
+    "vi": "cho nên, vì vậy",
+    "hv": "sở dĩ",
+    "pos": "liên từ"
+  },
+  "它": {
+    "vi": "nó (đồ vật, con vật)",
+    "hv": "tha",
+    "pos": "đại từ"
+  },
+  "踢": {
+    "vi": "đá (chân)",
+    "hv": "thích",
+    "pos": "động từ"
+  },
+  "题": {
+    "vi": "câu hỏi, bài tập; đề",
+    "hv": "đề",
+    "pos": "danh từ"
+  },
+  "跳舞": {
+    "vi": "nhảy múa, khiêu vũ",
+    "hv": "khiêu vũ",
+    "pos": "động từ"
+  },
+  "外": {
+    "vi": "ngoài, bên ngoài",
+    "hv": "ngoại",
+    "pos": "danh từ chỉ vị trí"
+  },
+  "完": {
+    "vi": "xong, hết",
+    "hv": "hoàn",
+    "pos": "động từ"
+  },
+  "玩": {
+    "vi": "chơi",
+    "hv": "ngoạn",
+    "pos": "động từ"
+  },
+  "晚上": {
+    "vi": "buổi tối",
+    "hv": "vãn thượng",
+    "pos": "danh từ chỉ thời gian"
+  },
+  "为": {
+    "vi": "vì, cho",
+    "hv": "vi",
+    "pos": "giới từ"
+  },
+  "问": {
+    "vi": "hỏi",
+    "hv": "vấn",
+    "pos": "động từ"
+  },
+  "问题": {
+    "vi": "vấn đề; câu hỏi",
+    "hv": "vấn đề",
+    "pos": "danh từ"
+  },
+  "希望": {
+    "vi": "hy vọng, mong",
+    "hv": "hy vọng",
+    "pos": "động từ / danh từ"
+  },
+  "洗": {
+    "vi": "rửa, giặt",
+    "hv": "tẩy",
+    "pos": "động từ"
+  },
+  "西瓜": {
+    "vi": "quả dưa hấu",
+    "hv": "tây qua",
+    "pos": "danh từ"
+  },
+  "向": {
+    "vi": "về phía, hướng về",
+    "hv": "hướng",
+    "pos": "giới từ"
+  },
+  "小时": {
+    "vi": "giờ, tiếng (đơn vị thời gian)",
+    "hv": "tiểu thời",
+    "pos": "lượng từ"
+  },
+  "笑": {
+    "vi": "cười",
+    "hv": "tiếu",
+    "pos": "động từ"
+  },
+  "新": {
+    "vi": "mới",
+    "hv": "tân",
+    "pos": "tính từ"
+  },
+  "姓": {
+    "vi": "họ; mang họ là",
+    "hv": "tính",
+    "pos": "danh từ / động từ"
+  },
+  "休息": {
+    "vi": "nghỉ, nghỉ ngơi",
+    "hv": "hưu tức",
+    "pos": "động từ"
+  },
+  "雪": {
+    "vi": "tuyết",
+    "hv": "tuyết",
+    "pos": "danh từ"
+  },
+  "颜色": {
+    "vi": "màu, màu sắc",
+    "hv": "nhan sắc",
+    "pos": "danh từ"
+  },
+  "眼睛": {
+    "vi": "con mắt",
+    "hv": "nhãn tình",
+    "pos": "danh từ"
+  },
+  "羊肉": {
+    "vi": "thịt cừu, thịt dê",
+    "hv": "dương nhục",
+    "pos": "danh từ"
+  },
+  "药": {
+    "vi": "thuốc",
+    "hv": "dược",
+    "pos": "danh từ"
+  },
+  "要": {
+    "vi": "muốn, cần; sẽ",
+    "hv": "yếu",
+    "pos": "động từ / động từ năng nguyện"
+  },
+  "也": {
+    "vi": "cũng",
+    "hv": "",
+    "pos": "phó từ"
+  },
+  "一起": {
+    "vi": "cùng nhau",
+    "hv": "nhất khởi",
+    "pos": "phó từ"
+  },
+  "已经": {
+    "vi": "đã, đã rồi",
+    "hv": "dĩ kinh",
+    "pos": "phó từ"
+  },
+  "意思": {
+    "vi": "ý nghĩa, ý",
+    "hv": "ý tứ",
+    "pos": "danh từ"
+  },
+  "因为": {
+    "vi": "bởi vì",
+    "hv": "nhân vị",
+    "pos": "liên từ"
+  },
+  "阴": {
+    "vi": "âm u, có mây (thời tiết)",
+    "hv": "âm",
+    "pos": "tính từ"
+  },
+  "游泳": {
+    "vi": "bơi, bơi lội",
+    "hv": "du vịnh",
+    "pos": "động từ"
+  },
+  "右边": {
+    "vi": "bên phải",
+    "hv": "hữu biên",
+    "pos": "danh từ chỉ vị trí"
+  },
+  "鱼": {
+    "vi": "con cá",
+    "hv": "ngư",
+    "pos": "danh từ"
+  },
+  "元": {
+    "vi": "đồng (đơn vị tiền Trung Quốc)",
+    "hv": "nguyên",
+    "pos": "lượng từ"
+  },
+  "远": {
+    "vi": "xa",
+    "hv": "viễn",
+    "pos": "tính từ"
+  },
+  "运动": {
+    "vi": "vận động, thể thao",
+    "hv": "vận động",
+    "pos": "động từ / danh từ"
+  },
+  "再": {
+    "vi": "lại, nữa (việc chưa xảy ra)",
+    "hv": "tái",
+    "pos": "phó từ"
+  },
+  "早上": {
+    "vi": "buổi sáng sớm",
+    "hv": "tảo thượng",
+    "pos": "danh từ chỉ thời gian"
+  },
+  "张": {
+    "vi": "tờ, tấm, cái (lượng từ cho giấy, bàn)",
+    "hv": "trương",
+    "pos": "lượng từ"
+  },
+  "长": {
+    "vi": "dài",
+    "hv": "trường",
+    "pos": "tính từ"
+  },
+  "丈夫": {
+    "vi": "chồng",
+    "hv": "trượng phu",
+    "pos": "danh từ"
+  },
+  "找": {
+    "vi": "tìm",
+    "hv": "trảo",
+    "pos": "động từ"
+  },
+  "着": {
+    "vi": "trợ từ chỉ trạng thái đang tiếp diễn",
+    "hv": "",
+    "pos": "trợ từ"
+  },
+  "真": {
+    "vi": "thật, thật là",
+    "hv": "chân",
+    "pos": "phó từ / tính từ"
+  },
+  "正在": {
+    "vi": "đang (làm gì)",
+    "hv": "chính tại",
+    "pos": "phó từ"
+  },
+  "知道": {
+    "vi": "biết",
+    "hv": "tri đạo",
+    "pos": "động từ"
+  },
+  "准备": {
+    "vi": "chuẩn bị",
+    "hv": "chuẩn bị",
+    "pos": "động từ"
+  },
+  "自行车": {
+    "vi": "xe đạp",
+    "hv": "tự hành xa",
+    "pos": "danh từ"
+  },
+  "走": {
+    "vi": "đi, đi bộ; rời đi",
+    "hv": "tẩu",
+    "pos": "động từ"
+  },
+  "最": {
+    "vi": "nhất, nhất là",
+    "hv": "tối",
+    "pos": "phó từ"
+  },
+  "左边": {
+    "vi": "bên trái",
+    "hv": "tả biên",
+    "pos": "danh từ chỉ vị trí"
+  },
+  "阿姨": {
+    "vi": "dì, cô (em gái mẹ); cô giúp việc",
+    "hv": "a di",
+    "pos": "danh từ"
+  },
+  "啊": {
+    "vi": "trợ từ cuối câu biểu cảm (à, ạ, ơi)",
+    "hv": "",
+    "pos": "trợ từ"
+  },
+  "矮": {
+    "vi": "thấp, lùn",
+    "hv": "",
+    "pos": "tính từ"
+  },
+  "爱好": {
+    "vi": "sở thích; yêu thích",
+    "hv": "ái hảo",
+    "pos": "danh từ / động từ"
+  },
+  "安静": {
+    "vi": "yên tĩnh",
+    "hv": "an tĩnh",
+    "pos": "tính từ"
+  },
+  "把": {
+    "vi": "giới từ đưa tân ngữ lên trước động từ; cái (lượng từ cho ghế, dao)",
+    "hv": "bả",
+    "pos": "giới từ / lượng từ"
+  },
+  "班": {
+    "vi": "lớp, ban; chuyến (xe, bay)",
+    "hv": "ban",
+    "pos": "danh từ"
+  },
+  "搬": {
+    "vi": "chuyển, dọn (nhà, đồ)",
+    "hv": "ban",
+    "pos": "động từ"
+  },
+  "办法": {
+    "vi": "cách, biện pháp",
+    "hv": "bạn pháp",
+    "pos": "danh từ"
+  },
+  "办公室": {
+    "vi": "văn phòng",
+    "hv": "bạn công thất",
+    "pos": "danh từ"
+  },
+  "半": {
+    "vi": "nửa, một nửa",
+    "hv": "bán",
+    "pos": "số từ"
+  },
+  "帮忙": {
+    "vi": "giúp một tay, giúp đỡ",
+    "hv": "bang mang",
+    "pos": "động từ"
+  },
+  "包": {
+    "vi": "cái túi, cặp; bọc, gói",
+    "hv": "bao",
+    "pos": "danh từ / động từ"
+  },
+  "饱": {
+    "vi": "no",
+    "hv": "bão",
+    "pos": "tính từ"
+  },
+  "北方": {
+    "vi": "phương Bắc, miền Bắc",
+    "hv": "bắc phương",
+    "pos": "danh từ"
+  },
+  "被": {
+    "vi": "bị (dấu hiệu câu bị động); cái chăn",
+    "hv": "bị",
+    "pos": "giới từ / danh từ"
+  },
+  "鼻子": {
+    "vi": "cái mũi",
+    "hv": "tỵ tử",
+    "pos": "danh từ"
+  },
+  "比较": {
+    "vi": "so sánh; khá, tương đối",
+    "hv": "tỉ giảo",
+    "pos": "động từ / phó từ"
+  },
+  "比赛": {
+    "vi": "thi đấu; cuộc thi",
+    "hv": "tỉ tái",
+    "pos": "động từ / danh từ"
+  },
+  "必须": {
+    "vi": "bắt buộc phải, nhất định phải",
+    "hv": "tất tu",
+    "pos": "phó từ"
+  },
+  "变化": {
+    "vi": "biến đổi; sự thay đổi",
+    "hv": "biến hóa",
+    "pos": "động từ / danh từ"
+  },
+  "表示": {
+    "vi": "biểu thị, bày tỏ",
+    "hv": "biểu thị",
+    "pos": "động từ"
+  },
+  "表演": {
+    "vi": "biểu diễn; buổi diễn",
+    "hv": "biểu diễn",
+    "pos": "động từ / danh từ"
+  },
+  "别人": {
+    "vi": "người khác",
+    "hv": "biệt nhân",
+    "pos": "đại từ"
+  },
+  "宾馆": {
+    "vi": "khách sạn, nhà khách",
+    "hv": "bân quán",
+    "pos": "danh từ"
+  },
+  "冰箱": {
+    "vi": "tủ lạnh",
+    "hv": "băng tương",
+    "pos": "danh từ"
+  },
+  "才": {
+    "vi": "mới (chỉ muộn hoặc ít); vừa mới",
+    "hv": "tài",
+    "pos": "phó từ"
+  },
+  "菜单": {
+    "vi": "thực đơn, menu",
+    "hv": "thái đơn",
+    "pos": "danh từ"
+  },
+  "参加": {
+    "vi": "tham gia",
+    "hv": "tham gia",
+    "pos": "động từ"
+  },
+  "草": {
+    "vi": "cỏ",
+    "hv": "thảo",
+    "pos": "danh từ"
+  },
+  "层": {
+    "vi": "tầng, lớp",
+    "hv": "tằng",
+    "pos": "lượng từ"
+  },
+  "差": {
+    "vi": "kém, tệ; thiếu, chênh",
+    "hv": "sai",
+    "pos": "tính từ / động từ"
+  },
+  "超市": {
+    "vi": "siêu thị",
+    "hv": "siêu thị",
+    "pos": "danh từ"
+  },
+  "衬衫": {
+    "vi": "áo sơ mi",
+    "hv": "sấn sam",
+    "pos": "danh từ"
+  },
+  "成绩": {
+    "vi": "thành tích, kết quả (học tập)",
+    "hv": "thành tích",
+    "pos": "danh từ"
+  },
+  "城市": {
+    "vi": "thành phố",
+    "hv": "thành thị",
+    "pos": "danh từ"
+  },
+  "迟到": {
+    "vi": "đến muộn, trễ",
+    "hv": "trì đáo",
+    "pos": "động từ"
+  },
+  "出现": {
+    "vi": "xuất hiện",
+    "hv": "xuất hiện",
+    "pos": "động từ"
+  },
+  "除了": {
+    "vi": "ngoài... ra",
+    "hv": "trừ liễu",
+    "pos": "giới từ"
+  },
+  "厨房": {
+    "vi": "nhà bếp",
+    "hv": "trù phòng",
+    "pos": "danh từ"
+  },
+  "春": {
+    "vi": "mùa xuân",
+    "hv": "xuân",
+    "pos": "danh từ"
+  },
+  "词语": {
+    "vi": "từ ngữ, từ vựng",
+    "hv": "từ ngữ",
+    "pos": "danh từ"
+  },
+  "聪明": {
+    "vi": "thông minh",
+    "hv": "thông minh",
+    "pos": "tính từ"
+  },
+  "打扫": {
+    "vi": "dọn dẹp, quét",
+    "hv": "đả tảo",
+    "pos": "động từ"
+  },
+  "打算": {
+    "vi": "dự định, tính toán",
+    "hv": "đả toán",
+    "pos": "động từ"
+  },
+  "带": {
+    "vi": "mang, đem theo; dẫn; cái dây/vành",
+    "hv": "đới",
+    "pos": "động từ / danh từ"
+  },
+  "担心": {
+    "vi": "lo, lo lắng",
+    "hv": "đam tâm",
+    "pos": "động từ"
+  },
+  "蛋糕": {
+    "vi": "bánh ga-tô, bánh bông lan",
+    "hv": "đản cao",
+    "pos": "danh từ"
+  },
+  "当然": {
+    "vi": "đương nhiên, tất nhiên",
+    "hv": "đương nhiên",
+    "pos": "phó từ"
+  },
+  "地": {
+    "vi": "đất, mặt đất",
+    "hv": "địa",
+    "pos": "danh từ"
+  },
+  "地方": {
+    "vi": "nơi, địa điểm",
+    "hv": "địa phương",
+    "pos": "danh từ"
+  },
+  "地铁": {
+    "vi": "tàu điện ngầm",
+    "hv": "địa thiết",
+    "pos": "danh từ"
+  },
+  "地图": {
+    "vi": "bản đồ",
+    "hv": "địa đồ",
+    "pos": "danh từ"
+  },
+  "灯": {
+    "vi": "cái đèn",
+    "hv": "đăng",
+    "pos": "danh từ"
+  },
+  "低": {
+    "vi": "thấp",
+    "hv": "đê",
+    "pos": "tính từ"
+  },
+  "电梯": {
+    "vi": "thang máy",
+    "hv": "điện thê",
+    "pos": "danh từ"
+  },
+  "电子": {
+    "vi": "điện tử",
+    "hv": "điện tử",
+    "pos": "tính từ / danh từ"
+  },
+  "东": {
+    "vi": "phía đông",
+    "hv": "đông",
+    "pos": "danh từ"
+  },
+  "冬": {
+    "vi": "mùa đông",
+    "hv": "đông",
+    "pos": "danh từ"
+  },
+  "动物": {
+    "vi": "động vật, con vật",
+    "hv": "động vật",
+    "pos": "danh từ"
+  },
+  "短": {
+    "vi": "ngắn",
+    "hv": "đoản",
+    "pos": "tính từ"
+  },
+  "段": {
+    "vi": "đoạn, khúc",
+    "hv": "đoạn",
+    "pos": "lượng từ"
+  },
+  "锻炼": {
+    "vi": "rèn luyện, tập luyện",
+    "hv": "đoán luyện",
+    "pos": "động từ"
+  },
+  "多么": {
+    "vi": "biết bao, thật là",
+    "hv": "đa ma",
+    "pos": "phó từ"
+  },
+  "饿": {
+    "vi": "đói",
+    "hv": "ngạ",
+    "pos": "tính từ"
+  },
+  "而且": {
+    "vi": "hơn nữa, mà còn",
+    "hv": "nhi thả",
+    "pos": "liên từ"
+  },
+  "耳朵": {
+    "vi": "cái tai",
+    "hv": "nhĩ đóa",
+    "pos": "danh từ"
+  },
+  "发烧": {
+    "vi": "sốt, bị sốt",
+    "hv": "phát thiêu",
+    "pos": "động từ"
+  },
+  "发现": {
+    "vi": "phát hiện, nhận ra",
+    "hv": "phát hiện",
+    "pos": "động từ"
+  },
+  "方便": {
+    "vi": "tiện, thuận tiện",
+    "hv": "phương tiện",
+    "pos": "tính từ"
+  },
+  "放": {
+    "vi": "đặt, để; thả",
+    "hv": "phóng",
+    "pos": "động từ"
+  },
+  "放心": {
+    "vi": "yên tâm",
+    "hv": "phóng tâm",
+    "pos": "động từ"
+  },
+  "分": {
+    "vi": "phút; điểm; chia",
+    "hv": "phân",
+    "pos": "lượng từ / động từ"
+  },
+  "附近": {
+    "vi": "gần đây, vùng phụ cận",
+    "hv": "phụ cận",
+    "pos": "danh từ"
+  },
+  "复习": {
+    "vi": "ôn tập, ôn lại",
+    "hv": "phục tập",
+    "pos": "động từ"
+  },
+  "敢": {
+    "vi": "dám",
+    "hv": "cảm",
+    "pos": "động từ"
+  },
+  "感冒": {
+    "vi": "cảm, bị cảm",
+    "hv": "cảm mạo",
+    "pos": "động từ / danh từ"
+  },
+  "干净": {
+    "vi": "sạch, sạch sẽ",
+    "hv": "can tịnh",
+    "pos": "tính từ"
+  },
+  "刚才": {
+    "vi": "vừa rồi, vừa mới",
+    "hv": "cương tài",
+    "pos": "danh từ chỉ thời gian"
+  },
+  "根据": {
+    "vi": "căn cứ vào, dựa theo",
+    "hv": "căn cứ",
+    "pos": "giới từ"
+  },
+  "跟": {
+    "vi": "với, cùng; theo",
+    "hv": "cân",
+    "pos": "giới từ / động từ"
+  },
+  "更": {
+    "vi": "càng, hơn",
+    "hv": "cánh",
+    "pos": "phó từ"
+  },
+  "公园": {
+    "vi": "công viên",
+    "hv": "công viên",
+    "pos": "danh từ"
+  },
+  "故事": {
+    "vi": "câu chuyện",
+    "hv": "cố sự",
+    "pos": "danh từ"
+  },
+  "刮": {
+    "vi": "thổi (gió); cạo",
+    "hv": "quát",
+    "pos": "động từ"
+  },
+  "关": {
+    "vi": "đóng, tắt",
+    "hv": "quan",
+    "pos": "động từ"
+  },
+  "关系": {
+    "vi": "quan hệ, mối liên quan",
+    "hv": "quan hệ",
+    "pos": "danh từ"
+  },
+  "关心": {
+    "vi": "quan tâm",
+    "hv": "quan tâm",
+    "pos": "động từ"
+  },
+  "关于": {
+    "vi": "về, liên quan đến",
+    "hv": "quan vu",
+    "pos": "giới từ"
+  },
+  "国家": {
+    "vi": "quốc gia, nhà nước",
+    "hv": "quốc gia",
+    "pos": "danh từ"
+  },
+  "果汁": {
+    "vi": "nước ép trái cây",
+    "hv": "quả trấp",
+    "pos": "danh từ"
+  },
+  "过去": {
+    "vi": "quá khứ, trước đây; đi qua",
+    "hv": "quá khứ",
+    "pos": "danh từ / động từ"
+  },
+  "还是": {
+    "vi": "hay là (trong câu hỏi lựa chọn); vẫn",
+    "hv": "hoàn thị",
+    "pos": "liên từ / phó từ"
+  },
+  "害怕": {
+    "vi": "sợ, lo sợ",
+    "hv": "hại phạ",
+    "pos": "động từ"
+  },
+  "河": {
+    "vi": "con sông",
+    "hv": "hà",
+    "pos": "danh từ"
+  },
+  "黑板": {
+    "vi": "bảng đen",
+    "hv": "hắc bản",
+    "pos": "danh từ"
+  },
+  "护照": {
+    "vi": "hộ chiếu",
+    "hv": "hộ chiếu",
+    "pos": "danh từ"
+  },
+  "花": {
+    "vi": "hoa; tiêu (tiền)",
+    "hv": "hoa",
+    "pos": "danh từ / động từ"
+  },
+  "花园": {
+    "vi": "vườn hoa",
+    "hv": "hoa viên",
+    "pos": "danh từ"
+  },
+  "画": {
+    "vi": "vẽ; bức tranh",
+    "hv": "họa",
+    "pos": "động từ / danh từ"
+  },
+  "坏": {
+    "vi": "hỏng, xấu, tệ",
+    "hv": "hoại",
+    "pos": "tính từ"
+  },
+  "环境": {
+    "vi": "môi trường, hoàn cảnh",
+    "hv": "hoàn cảnh",
+    "pos": "danh từ"
+  },
+  "换": {
+    "vi": "đổi, thay",
+    "hv": "hoán",
+    "pos": "động từ"
+  },
+  "黄": {
+    "vi": "màu vàng",
+    "hv": "hoàng",
+    "pos": "tính từ"
+  },
+  "会议": {
+    "vi": "cuộc họp, hội nghị",
+    "hv": "hội nghị",
+    "pos": "danh từ"
+  },
+  "或者": {
+    "vi": "hoặc, hay là",
+    "hv": "hoặc giả",
+    "pos": "liên từ"
+  },
+  "机会": {
+    "vi": "cơ hội",
+    "hv": "cơ hội",
+    "pos": "danh từ"
+  },
+  "极": {
+    "vi": "vô cùng, cực (đặt sau tính từ)",
+    "hv": "cực",
+    "pos": "phó từ"
+  },
+  "几乎": {
+    "vi": "hầu như, gần như",
+    "hv": "kỷ hồ",
+    "pos": "phó từ"
+  },
+  "记得": {
+    "vi": "nhớ, còn nhớ",
+    "hv": "ký đắc",
+    "pos": "động từ"
+  },
+  "季节": {
+    "vi": "mùa, thời vụ",
+    "hv": "quý tiết",
+    "pos": "danh từ"
+  },
+  "检查": {
+    "vi": "kiểm tra",
+    "hv": "kiểm tra",
+    "pos": "động từ"
+  },
+  "简单": {
+    "vi": "đơn giản",
+    "hv": "giản đơn",
+    "pos": "tính từ"
+  },
+  "见面": {
+    "vi": "gặp mặt",
+    "hv": "kiến diện",
+    "pos": "động từ"
+  },
+  "健康": {
+    "vi": "sức khỏe; khỏe mạnh",
+    "hv": "kiện khang",
+    "pos": "danh từ / tính từ"
+  },
+  "讲": {
+    "vi": "nói, giảng, kể",
+    "hv": "giảng",
+    "pos": "động từ"
+  },
+  "角": {
+    "vi": "góc; hào (đơn vị tiền)",
+    "hv": "giác",
+    "pos": "danh từ"
+  },
+  "脚": {
+    "vi": "bàn chân",
+    "hv": "cước",
+    "pos": "danh từ"
+  },
+  "教": {
+    "vi": "dạy",
+    "hv": "giáo",
+    "pos": "động từ"
+  },
+  "接": {
+    "vi": "nhận; đón; nghe (điện thoại)",
+    "hv": "tiếp",
+    "pos": "động từ"
+  },
+  "街道": {
+    "vi": "đường phố",
+    "hv": "nhai đạo",
+    "pos": "danh từ"
+  },
+  "节目": {
+    "vi": "chương trình, tiết mục",
+    "hv": "tiết mục",
+    "pos": "danh từ"
+  },
+  "节日": {
+    "vi": "ngày lễ, ngày tết",
+    "hv": "tiết nhật",
+    "pos": "danh từ"
+  },
+  "结婚": {
+    "vi": "kết hôn, cưới",
+    "hv": "kết hôn",
+    "pos": "động từ"
+  },
+  "结束": {
+    "vi": "kết thúc",
+    "hv": "kết thúc",
+    "pos": "động từ"
+  },
+  "解决": {
+    "vi": "giải quyết",
+    "hv": "giải quyết",
+    "pos": "động từ"
+  },
+  "借": {
+    "vi": "vay; cho vay, mượn",
+    "hv": "tá",
+    "pos": "động từ"
+  },
+  "经常": {
+    "vi": "thường xuyên",
+    "hv": "kinh thường",
+    "pos": "phó từ"
+  },
+  "经过": {
+    "vi": "đi qua; trải qua",
+    "hv": "kinh quá",
+    "pos": "động từ / giới từ"
+  },
+  "经理": {
+    "vi": "giám đốc, quản lý",
+    "hv": "kinh lý",
+    "pos": "danh từ"
+  },
+  "久": {
+    "vi": "lâu",
+    "hv": "cửu",
+    "pos": "tính từ"
+  },
+  "旧": {
+    "vi": "cũ",
+    "hv": "cựu",
+    "pos": "tính từ"
+  },
+  "举行": {
+    "vi": "tổ chức, cử hành",
+    "hv": "cử hành",
+    "pos": "động từ"
+  },
+  "句子": {
+    "vi": "câu (trong văn)",
+    "hv": "cú tử",
+    "pos": "danh từ"
+  },
+  "决定": {
+    "vi": "quyết định",
+    "hv": "quyết định",
+    "pos": "động từ / danh từ"
+  },
+  "可爱": {
+    "vi": "đáng yêu",
+    "hv": "khả ái",
+    "pos": "tính từ"
+  },
+  "渴": {
+    "vi": "khát",
+    "hv": "khát",
+    "pos": "tính từ"
+  },
+  "刻": {
+    "vi": "mười lăm phút (一刻); khắc, chạm",
+    "hv": "khắc",
+    "pos": "lượng từ / động từ"
+  },
+  "客人": {
+    "vi": "khách",
+    "hv": "khách nhân",
+    "pos": "danh từ"
+  },
+  "空调": {
+    "vi": "máy điều hòa",
+    "hv": "không điều",
+    "pos": "danh từ"
+  },
+  "口": {
+    "vi": "miệng; người (lượng từ cho nhân khẩu)",
+    "hv": "khẩu",
+    "pos": "danh từ / lượng từ"
+  },
+  "哭": {
+    "vi": "khóc",
+    "hv": "khốc",
+    "pos": "động từ"
+  },
+  "裤子": {
+    "vi": "cái quần",
+    "hv": "khố tử",
+    "pos": "danh từ"
+  },
+  "筷子": {
+    "vi": "đôi đũa",
+    "hv": "khoái tử",
+    "pos": "danh từ"
+  },
+  "蓝": {
+    "vi": "màu xanh lam",
+    "hv": "lam",
+    "pos": "tính từ"
+  },
+  "老": {
+    "vi": "già, cũ",
+    "hv": "lão",
+    "pos": "tính từ"
+  },
+  "了解": {
+    "vi": "hiểu rõ, tìm hiểu",
+    "hv": "liễu giải",
+    "pos": "động từ"
+  },
+  "离开": {
+    "vi": "rời khỏi",
+    "hv": "ly khai",
+    "pos": "động từ"
+  },
+  "礼物": {
+    "vi": "món quà",
+    "hv": "lễ vật",
+    "pos": "danh từ"
+  },
+  "历史": {
+    "vi": "lịch sử",
+    "hv": "lịch sử",
+    "pos": "danh từ"
+  },
+  "脸": {
+    "vi": "mặt",
+    "hv": "kiểm",
+    "pos": "danh từ"
+  },
+  "练习": {
+    "vi": "luyện tập; bài tập",
+    "hv": "luyện tập",
+    "pos": "động từ / danh từ"
+  },
+  "辆": {
+    "vi": "chiếc (lượng từ cho xe)",
+    "hv": "lượng",
+    "pos": "lượng từ"
+  },
+  "邻居": {
+    "vi": "người láng giềng",
+    "hv": "lân cư",
+    "pos": "danh từ"
+  },
+  "楼": {
+    "vi": "tầng; tòa nhà",
+    "hv": "lâu",
+    "pos": "danh từ"
+  },
+  "绿": {
+    "vi": "màu xanh lục",
+    "hv": "lục",
+    "pos": "tính từ"
+  },
+  "马": {
+    "vi": "con ngựa",
+    "hv": "mã",
+    "pos": "danh từ"
+  },
+  "马上": {
+    "vi": "ngay lập tức",
+    "hv": "mã thượng",
+    "pos": "phó từ"
+  },
+  "满意": {
+    "vi": "hài lòng, vừa ý",
+    "hv": "mãn ý",
+    "pos": "tính từ"
+  },
+  "帽子": {
+    "vi": "cái mũ",
+    "hv": "mạo tử",
+    "pos": "danh từ"
+  },
+  "米": {
+    "vi": "mét; gạo",
+    "hv": "mễ",
+    "pos": "lượng từ / danh từ"
+  },
+  "面包": {
+    "vi": "bánh mì",
+    "hv": "diện bao",
+    "pos": "danh từ"
+  },
+  "面条": {
+    "vi": "mì, sợi mì",
+    "hv": "diện điều",
+    "pos": "danh từ"
+  },
+  "明白": {
+    "vi": "hiểu, rõ ràng",
+    "hv": "minh bạch",
+    "pos": "động từ / tính từ"
+  },
+  "拿": {
+    "vi": "cầm, lấy",
+    "hv": "nã",
+    "pos": "động từ"
+  },
+  "奶奶": {
+    "vi": "bà nội",
+    "hv": "nãi nãi",
+    "pos": "danh từ"
+  },
+  "南": {
+    "vi": "phía nam",
+    "hv": "nam",
+    "pos": "danh từ"
+  },
+  "难": {
+    "vi": "khó",
+    "hv": "nan",
+    "pos": "tính từ"
+  },
+  "难过": {
+    "vi": "buồn, khó chịu",
+    "hv": "nan quá",
+    "pos": "tính từ"
+  },
+  "年级": {
+    "vi": "khối lớp (lớp mấy)",
+    "hv": "niên cấp",
+    "pos": "danh từ"
+  },
+  "年轻": {
+    "vi": "trẻ, tuổi còn trẻ",
+    "hv": "niên khinh",
+    "pos": "tính từ"
+  },
+  "鸟": {
+    "vi": "con chim",
+    "hv": "điểu",
+    "pos": "danh từ"
+  },
+  "努力": {
+    "vi": "nỗ lực, cố gắng",
+    "hv": "nỗ lực",
+    "pos": "động từ / tính từ"
+  },
+  "爬山": {
+    "vi": "leo núi",
+    "hv": "ba san",
+    "pos": "động từ"
+  },
+  "盘子": {
+    "vi": "cái đĩa",
+    "hv": "bàn tử",
+    "pos": "danh từ"
+  },
+  "胖": {
+    "vi": "béo, mập",
+    "hv": "bàng",
+    "pos": "tính từ"
+  },
+  "啤酒": {
+    "vi": "bia",
+    "hv": "bì tửu",
+    "pos": "danh từ"
+  },
+  "葡萄": {
+    "vi": "quả nho",
+    "hv": "bồ đào",
+    "pos": "danh từ"
+  },
+  "普通话": {
+    "vi": "tiếng phổ thông (Trung Quốc)",
+    "hv": "phổ thông thoại",
+    "pos": "danh từ"
+  },
+  "其实": {
+    "vi": "thực ra, thật ra",
+    "hv": "kỳ thực",
+    "pos": "phó từ"
+  },
+  "其他": {
+    "vi": "khác, những cái khác",
+    "hv": "kỳ tha",
+    "pos": "đại từ"
+  },
+  "奇怪": {
+    "vi": "lạ, kỳ quái",
+    "hv": "kỳ quái",
+    "pos": "tính từ"
+  },
+  "骑": {
+    "vi": "cưỡi, đi (xe đạp, ngựa)",
+    "hv": "kỵ",
+    "pos": "động từ"
+  },
+  "铅笔": {
+    "vi": "bút chì",
+    "hv": "duyên bút",
+    "pos": "danh từ"
+  },
+  "清楚": {
+    "vi": "rõ, rõ ràng",
+    "hv": "thanh sở",
+    "pos": "tính từ"
+  },
+  "秋": {
+    "vi": "mùa thu",
+    "hv": "thu",
+    "pos": "danh từ"
+  },
+  "裙子": {
+    "vi": "cái váy",
+    "hv": "quần tử",
+    "pos": "danh từ"
+  },
+  "然后": {
+    "vi": "sau đó, rồi thì",
+    "hv": "nhiên hậu",
+    "pos": "liên từ"
+  },
+  "热情": {
+    "vi": "nhiệt tình, nhiệt tâm",
+    "hv": "nhiệt tình",
+    "pos": "tính từ"
+  },
+  "认为": {
+    "vi": "cho rằng, nhận định",
+    "hv": "nhận vi",
+    "pos": "động từ"
+  },
+  "认真": {
+    "vi": "nghiêm túc, chăm chú",
+    "hv": "nhận chân",
+    "pos": "tính từ"
+  },
+  "容易": {
+    "vi": "dễ, dễ dàng",
+    "hv": "dung dị",
+    "pos": "tính từ"
+  },
+  "如果": {
+    "vi": "nếu, nếu như",
+    "hv": "như quả",
+    "pos": "liên từ"
+  },
+  "伞": {
+    "vi": "cái ô, cái dù",
+    "hv": "tán",
+    "pos": "danh từ"
+  },
+  "上网": {
+    "vi": "lên mạng, truy cập internet",
+    "hv": "thượng võng",
+    "pos": "động từ"
+  },
+  "生气": {
+    "vi": "tức giận",
+    "hv": "sinh khí",
+    "pos": "động từ"
+  },
+  "声音": {
+    "vi": "âm thanh, tiếng",
+    "hv": "thanh âm",
+    "pos": "danh từ"
+  },
+  "使": {
+    "vi": "khiến, làm cho",
+    "hv": "sử",
+    "pos": "động từ"
+  },
+  "世界": {
+    "vi": "thế giới",
+    "hv": "thế giới",
+    "pos": "danh từ"
+  },
+  "瘦": {
+    "vi": "gầy",
+    "hv": "sấu",
+    "pos": "tính từ"
+  },
+  "叔叔": {
+    "vi": "chú (em trai bố)",
+    "hv": "thúc thúc",
+    "pos": "danh từ"
+  },
+  "舒服": {
+    "vi": "dễ chịu, thoải mái",
+    "hv": "thư phục",
+    "pos": "tính từ"
+  },
+  "树": {
+    "vi": "cây",
+    "hv": "thụ",
+    "pos": "danh từ"
+  },
+  "数学": {
+    "vi": "toán học",
+    "hv": "số học",
+    "pos": "danh từ"
+  },
+  "刷": {
+    "vi": "chải, cọ, đánh (răng)",
+    "hv": "loát",
+    "pos": "động từ"
+  },
+  "双": {
+    "vi": "đôi, cặp",
+    "hv": "song",
+    "pos": "lượng từ"
+  },
+  "水平": {
+    "vi": "trình độ, mức",
+    "hv": "thủy bình",
+    "pos": "danh từ"
+  },
+  "司机": {
+    "vi": "tài xế",
+    "hv": "ty cơ",
+    "pos": "danh từ"
+  },
+  "虽然": {
+    "vi": "tuy, mặc dù",
+    "hv": "tuy nhiên",
+    "pos": "liên từ"
+  },
+  "太阳": {
+    "vi": "mặt trời",
+    "hv": "thái dương",
+    "pos": "danh từ"
+  },
+  "糖": {
+    "vi": "đường; kẹo",
+    "hv": "đường",
+    "pos": "danh từ"
+  },
+  "特别": {
+    "vi": "đặc biệt; rất",
+    "hv": "đặc biệt",
+    "pos": "tính từ / phó từ"
+  },
+  "疼": {
+    "vi": "đau",
+    "hv": "",
+    "pos": "tính từ"
+  },
+  "提高": {
+    "vi": "nâng cao, cải thiện",
+    "hv": "đề cao",
+    "pos": "động từ"
+  },
+  "体育": {
+    "vi": "thể dục, thể thao",
+    "hv": "thể dục",
+    "pos": "danh từ"
+  },
+  "甜": {
+    "vi": "ngọt",
+    "hv": "điềm",
+    "pos": "tính từ"
+  },
+  "条": {
+    "vi": "cái, con (lượng từ cho vật dài: quần, cá, đường)",
+    "hv": "điều",
+    "pos": "lượng từ"
+  },
+  "同事": {
+    "vi": "đồng nghiệp",
+    "hv": "đồng sự",
+    "pos": "danh từ"
+  },
+  "同意": {
+    "vi": "đồng ý",
+    "hv": "đồng ý",
+    "pos": "động từ"
+  },
+  "头发": {
+    "vi": "tóc",
+    "hv": "đầu phát",
+    "pos": "danh từ"
+  },
+  "突然": {
+    "vi": "bỗng nhiên, đột ngột",
+    "hv": "đột nhiên",
+    "pos": "phó từ / tính từ"
+  },
+  "图书馆": {
+    "vi": "thư viện",
+    "hv": "đồ thư quán",
+    "pos": "danh từ"
+  },
+  "腿": {
+    "vi": "cái chân",
+    "hv": "thối",
+    "pos": "danh từ"
+  },
+  "完成": {
+    "vi": "hoàn thành",
+    "hv": "hoàn thành",
+    "pos": "động từ"
+  },
+  "碗": {
+    "vi": "cái bát",
+    "hv": "oản",
+    "pos": "danh từ"
+  },
+  "万": {
+    "vi": "vạn, mười nghìn",
+    "hv": "vạn",
+    "pos": "số từ"
+  },
+  "忘记": {
+    "vi": "quên",
+    "hv": "vong ký",
+    "pos": "động từ"
+  },
+  "为了": {
+    "vi": "để, nhằm",
+    "hv": "vị liễu",
+    "pos": "giới từ"
+  },
+  "为什么": {
+    "vi": "tại sao, vì sao",
+    "hv": "",
+    "pos": "đại từ nghi vấn"
+  },
+  "位": {
+    "vi": "vị (lượng từ kính trọng cho người)",
+    "hv": "vị",
+    "pos": "lượng từ"
+  },
+  "文化": {
+    "vi": "văn hóa",
+    "hv": "văn hóa",
+    "pos": "danh từ"
+  },
+  "习惯": {
+    "vi": "thói quen; quen với",
+    "hv": "tập quán",
+    "pos": "danh từ / động từ"
+  },
+  "洗手间": {
+    "vi": "nhà vệ sinh",
+    "hv": "tẩy thủ gian",
+    "pos": "danh từ"
+  },
+  "洗澡": {
+    "vi": "tắm",
+    "hv": "tẩy tảo",
+    "pos": "động từ"
+  },
+  "西": {
+    "vi": "phía tây",
+    "hv": "tây",
+    "pos": "danh từ"
+  },
+  "夏": {
+    "vi": "mùa hè",
+    "hv": "hạ",
+    "pos": "danh từ"
+  },
+  "先": {
+    "vi": "trước, trước tiên",
+    "hv": "tiên",
+    "pos": "phó từ"
+  },
+  "相同": {
+    "vi": "giống nhau, như nhau",
+    "hv": "tương đồng",
+    "pos": "tính từ"
+  },
+  "相信": {
+    "vi": "tin, tin tưởng",
+    "hv": "tương tín",
+    "pos": "động từ"
+  },
+  "香蕉": {
+    "vi": "quả chuối",
+    "hv": "hương tiêu",
+    "pos": "danh từ"
+  },
+  "像": {
+    "vi": "giống, giống như",
+    "hv": "tượng",
+    "pos": "động từ"
+  },
+  "小心": {
+    "vi": "cẩn thận",
+    "hv": "tiểu tâm",
+    "pos": "động từ / tính từ"
+  },
+  "校长": {
+    "vi": "hiệu trưởng",
+    "hv": "hiệu trưởng",
+    "pos": "danh từ"
+  },
+  "鞋": {
+    "vi": "đôi giày",
+    "hv": "hài",
+    "pos": "danh từ"
+  },
+  "新闻": {
+    "vi": "tin tức, bản tin",
+    "hv": "tân văn",
+    "pos": "danh từ"
+  },
+  "新鲜": {
+    "vi": "tươi, mới mẻ",
+    "hv": "tân tiên",
+    "pos": "tính từ"
+  },
+  "信": {
+    "vi": "lá thư; tin",
+    "hv": "tín",
+    "pos": "danh từ"
+  },
+  "行李箱": {
+    "vi": "vali hành lý",
+    "hv": "hành lý tương",
+    "pos": "danh từ"
+  },
+  "兴趣": {
+    "vi": "hứng thú, sự quan tâm",
+    "hv": "hứng thú",
+    "pos": "danh từ"
+  },
+  "熊猫": {
+    "vi": "gấu trúc",
+    "hv": "hùng miêu",
+    "pos": "danh từ"
+  },
+  "需要": {
+    "vi": "cần, cần phải; nhu cầu",
+    "hv": "nhu yếu",
+    "pos": "động từ / danh từ"
+  },
+  "选择": {
+    "vi": "chọn, lựa chọn",
+    "hv": "tuyển chọn",
+    "pos": "động từ"
+  },
+  "眼镜": {
+    "vi": "cái kính (mắt)",
+    "hv": "nhãn kính",
+    "pos": "danh từ"
+  },
+  "要求": {
+    "vi": "yêu cầu",
+    "hv": "yêu cầu",
+    "pos": "động từ / danh từ"
+  },
+  "爷爷": {
+    "vi": "ông nội",
+    "hv": "gia gia",
+    "pos": "danh từ"
+  },
+  "一般": {
+    "vi": "bình thường, thông thường",
+    "hv": "nhất bàn",
+    "pos": "tính từ"
+  },
+  "一边": {
+    "vi": "một bên; vừa... vừa...",
+    "hv": "nhất biên",
+    "pos": "danh từ / phó từ"
+  },
+  "一定": {
+    "vi": "nhất định, chắc chắn",
+    "hv": "nhất định",
+    "pos": "phó từ"
+  },
+  "一共": {
+    "vi": "tổng cộng",
+    "hv": "nhất cộng",
+    "pos": "phó từ"
+  },
+  "一会儿": {
+    "vi": "một lát, một chút",
+    "hv": "nhất hội nhi",
+    "pos": "danh từ chỉ thời gian"
+  },
+  "一样": {
+    "vi": "giống nhau, như nhau",
+    "hv": "nhất dạng",
+    "pos": "tính từ"
+  },
+  "一直": {
+    "vi": "luôn, liên tục; thẳng",
+    "hv": "nhất trực",
+    "pos": "phó từ"
+  },
+  "以后": {
+    "vi": "sau này, về sau",
+    "hv": "dĩ hậu",
+    "pos": "danh từ chỉ thời gian"
+  },
+  "以前": {
+    "vi": "trước đây, trước kia",
+    "hv": "dĩ tiền",
+    "pos": "danh từ chỉ thời gian"
+  },
+  "以为": {
+    "vi": "tưởng rằng (mà thực tế không phải)",
+    "hv": "dĩ vi",
+    "pos": "động từ"
+  },
+  "音乐": {
+    "vi": "âm nhạc",
+    "hv": "âm nhạc",
+    "pos": "danh từ"
+  },
+  "银行": {
+    "vi": "ngân hàng",
+    "hv": "ngân hàng",
+    "pos": "danh từ"
+  },
+  "应该": {
+    "vi": "nên, phải",
+    "hv": "ứng cai",
+    "pos": "động từ năng nguyện"
+  },
+  "影响": {
+    "vi": "ảnh hưởng",
+    "hv": "ảnh hưởng",
+    "pos": "động từ / danh từ"
+  },
+  "用": {
+    "vi": "dùng, sử dụng",
+    "hv": "dụng",
+    "pos": "động từ"
+  },
+  "游戏": {
+    "vi": "trò chơi, game",
+    "hv": "du hý",
+    "pos": "danh từ"
+  },
+  "有名": {
+    "vi": "nổi tiếng",
+    "hv": "hữu danh",
+    "pos": "tính từ"
+  },
+  "又": {
+    "vi": "lại (việc đã xảy ra rồi)",
+    "hv": "hựu",
+    "pos": "phó từ"
+  },
+  "遇到": {
+    "vi": "gặp phải, bắt gặp",
+    "hv": "ngộ đáo",
+    "pos": "động từ"
+  },
+  "愿意": {
+    "vi": "bằng lòng, sẵn lòng",
+    "hv": "nguyện ý",
+    "pos": "động từ"
+  },
+  "月亮": {
+    "vi": "mặt trăng",
+    "hv": "nguyệt lượng",
+    "pos": "danh từ"
+  },
+  "越": {
+    "vi": "càng (越...越... càng... càng...)",
+    "hv": "việt",
+    "pos": "phó từ"
+  },
+  "云": {
+    "vi": "mây",
+    "hv": "vân",
+    "pos": "danh từ"
+  },
+  "站": {
+    "vi": "đứng; nhà ga, trạm",
+    "hv": "trạm",
+    "pos": "động từ / danh từ"
+  },
+  "照顾": {
+    "vi": "chăm sóc, trông",
+    "hv": "chiếu cố",
+    "pos": "động từ"
+  },
+  "照片": {
+    "vi": "bức ảnh",
+    "hv": "chiếu phiến",
+    "pos": "danh từ"
+  },
+  "照相机": {
+    "vi": "máy ảnh",
+    "hv": "chiếu tương cơ",
+    "pos": "danh từ"
+  },
+  "着急": {
+    "vi": "sốt ruột, lo lắng",
+    "hv": "trứ cấp",
+    "pos": "tính từ"
+  },
+  "只": {
+    "vi": "chỉ, chỉ có",
+    "hv": "chỉ",
+    "pos": "phó từ"
+  },
+  "中间": {
+    "vi": "ở giữa, trung gian",
+    "hv": "trung gian",
+    "pos": "danh từ chỉ vị trí"
+  },
+  "终于": {
+    "vi": "cuối cùng (thì)",
+    "hv": "chung ư",
+    "pos": "phó từ"
+  },
+  "种": {
+    "vi": "loại, giống (lượng từ)",
+    "hv": "chủng",
+    "pos": "lượng từ"
+  },
+  "重要": {
+    "vi": "quan trọng",
+    "hv": "trọng yếu",
+    "pos": "tính từ"
+  },
+  "周末": {
+    "vi": "cuối tuần",
+    "hv": "chu mạt",
+    "pos": "danh từ chỉ thời gian"
+  },
+  "主要": {
+    "vi": "chủ yếu, chính",
+    "hv": "chủ yếu",
+    "pos": "tính từ"
+  },
+  "注意": {
+    "vi": "chú ý",
+    "hv": "chú ý",
+    "pos": "động từ"
+  },
+  "祝": {
+    "vi": "chúc",
+    "hv": "chúc",
+    "pos": "động từ"
+  },
+  "字典": {
+    "vi": "từ điển (tra chữ)",
+    "hv": "tự điển",
+    "pos": "danh từ"
+  },
+  "自己": {
+    "vi": "tự mình, bản thân",
+    "hv": "tự kỷ",
+    "pos": "đại từ"
+  },
+  "总是": {
+    "vi": "luôn luôn",
+    "hv": "tổng thị",
+    "pos": "phó từ"
+  },
+  "最近": {
+    "vi": "gần đây, dạo này",
+    "hv": "tối cận",
+    "pos": "danh từ chỉ thời gian"
+  },
+  "作业": {
+    "vi": "bài tập về nhà",
+    "hv": "tác nghiệp",
+    "pos": "danh từ"
+  },
+  "作用": {
+    "vi": "tác dụng, vai trò",
+    "hv": "tác dụng",
+    "pos": "danh từ"
+  },
+  "爱情": {
+    "vi": "tình yêu (nam nữ)",
+    "hv": "ái tình",
+    "pos": "danh từ"
+  },
+  "安排": {
+    "vi": "sắp xếp, bố trí",
+    "hv": "an bài",
+    "pos": "động từ"
+  },
+  "安全": {
+    "vi": "an toàn",
+    "hv": "an toàn",
+    "pos": "tính từ / danh từ"
+  },
+  "按时": {
+    "vi": "đúng giờ, đúng hạn",
+    "hv": "án thời",
+    "pos": "phó từ"
+  },
+  "按照": {
+    "vi": "theo, dựa theo",
+    "hv": "án chiếu",
+    "pos": "giới từ"
+  },
+  "暗": {
+    "vi": "tối, u tối",
+    "hv": "ám",
+    "pos": "tính từ"
+  },
+  "包括": {
+    "vi": "bao gồm",
+    "hv": "bao quát",
+    "pos": "động từ"
+  },
+  "保护": {
+    "vi": "bảo vệ",
+    "hv": "bảo hộ",
+    "pos": "động từ"
+  },
+  "保证": {
+    "vi": "bảo đảm, cam kết",
+    "hv": "bảo chứng",
+    "pos": "động từ / danh từ"
+  },
+  "报道": {
+    "vi": "đưa tin; bài báo",
+    "hv": "báo đạo",
+    "pos": "động từ / danh từ"
+  },
+  "报名": {
+    "vi": "đăng ký, báo danh",
+    "hv": "báo danh",
+    "pos": "động từ"
+  },
+  "抱": {
+    "vi": "bế, ôm",
+    "hv": "bão",
+    "pos": "động từ"
+  },
+  "抱歉": {
+    "vi": "xin lỗi, thấy tiếc",
+    "hv": "bão khiếm",
+    "pos": "động từ / tính từ"
+  },
+  "倍": {
+    "vi": "lần, gấp (đôi, ba)",
+    "hv": "bội",
+    "pos": "lượng từ"
+  },
+  "本来": {
+    "vi": "vốn, ban đầu",
+    "hv": "bản lai",
+    "pos": "phó từ"
+  },
+  "笨": {
+    "vi": "ngốc, chậm hiểu",
+    "hv": "",
+    "pos": "tính từ"
+  },
+  "笔记本": {
+    "vi": "sổ tay; máy tính xách tay",
+    "hv": "bút ký bản",
+    "pos": "danh từ"
+  },
+  "毕业": {
+    "vi": "tốt nghiệp",
+    "hv": "tất nghiệp",
+    "pos": "động từ"
+  },
+  "遍": {
+    "vi": "lượt, lần (đọc/xem hết một lượt)",
+    "hv": "biến",
+    "pos": "lượng từ"
+  },
+  "标准": {
+    "vi": "tiêu chuẩn; chuẩn",
+    "hv": "tiêu chuẩn",
+    "pos": "danh từ / tính từ"
+  },
+  "表达": {
+    "vi": "biểu đạt, diễn đạt",
+    "hv": "biểu đạt",
+    "pos": "động từ"
+  },
+  "表格": {
+    "vi": "bảng biểu, mẫu đơn",
+    "hv": "biểu cách",
+    "pos": "danh từ"
+  },
+  "表扬": {
+    "vi": "biểu dương, khen",
+    "hv": "biểu dương",
+    "pos": "động từ"
+  },
+  "饼干": {
+    "vi": "bánh quy",
+    "hv": "bính can",
+    "pos": "danh từ"
+  },
+  "并且": {
+    "vi": "hơn nữa, đồng thời",
+    "hv": "tịnh thả",
+    "pos": "liên từ"
+  },
+  "博士": {
+    "vi": "tiến sĩ",
+    "hv": "bác sĩ",
+    "pos": "danh từ",
+    "note": "BẪY HÁN-VIỆT: âm là 'bác sĩ' nhưng nghĩa là TIẾN SĨ. Bác sĩ chữa bệnh là 医生/大夫."
+  },
+  "不但": {
+    "vi": "không chỉ (mà còn)",
+    "hv": "bất đãn",
+    "pos": "liên từ"
+  },
+  "不得不": {
+    "vi": "không thể không, buộc phải",
+    "hv": "bất đắc bất",
+    "pos": "phó từ"
+  },
+  "不管": {
+    "vi": "bất kể, cho dù",
+    "hv": "bất quản",
+    "pos": "liên từ"
+  },
+  "不过": {
+    "vi": "nhưng, có điều",
+    "hv": "bất quá",
+    "pos": "liên từ"
+  },
+  "不仅": {
+    "vi": "không chỉ",
+    "hv": "bất cận",
+    "pos": "liên từ"
+  },
+  "部分": {
+    "vi": "bộ phận, phần",
+    "hv": "bộ phận",
+    "pos": "danh từ"
+  },
+  "擦": {
+    "vi": "lau, chà",
+    "hv": "sát",
+    "pos": "động từ"
+  },
+  "猜": {
+    "vi": "đoán",
+    "hv": "",
+    "pos": "động từ"
+  },
+  "材料": {
+    "vi": "vật liệu; tài liệu",
+    "hv": "tài liệu",
+    "pos": "danh từ"
+  },
+  "参观": {
+    "vi": "tham quan",
+    "hv": "tham quan",
+    "pos": "động từ"
+  },
+  "差不多": {
+    "vi": "gần như, xấp xỉ",
+    "hv": "sai bất đa",
+    "pos": "phó từ / tính từ"
+  },
+  "尝": {
+    "vi": "nếm, thử",
+    "hv": "thường",
+    "pos": "động từ"
+  },
+  "场": {
+    "vi": "buổi, trận (lượng từ cho phim, bóng)",
+    "hv": "trường",
+    "pos": "lượng từ"
+  },
+  "超过": {
+    "vi": "vượt quá, hơn",
+    "hv": "siêu quá",
+    "pos": "động từ"
+  },
+  "吵": {
+    "vi": "ồn; cãi nhau",
+    "hv": "sảo",
+    "pos": "tính từ / động từ"
+  },
+  "成功": {
+    "vi": "thành công",
+    "hv": "thành công",
+    "pos": "động từ / danh từ"
+  },
+  "成熟": {
+    "vi": "chín; chín chắn, trưởng thành",
+    "hv": "thành thục",
+    "pos": "tính từ"
+  },
+  "成为": {
+    "vi": "trở thành",
+    "hv": "thành vi",
+    "pos": "động từ"
+  },
+  "诚实": {
+    "vi": "thật thà, trung thực",
+    "hv": "thành thực",
+    "pos": "tính từ"
+  },
+  "乘坐": {
+    "vi": "đi (bằng xe, tàu, máy bay)",
+    "hv": "thừa tọa",
+    "pos": "động từ"
+  },
+  "吃惊": {
+    "vi": "giật mình, ngạc nhiên",
+    "hv": "",
+    "pos": "động từ"
+  },
+  "抽烟": {
+    "vi": "hút thuốc",
+    "hv": "trừu yên",
+    "pos": "động từ"
+  },
+  "出差": {
+    "vi": "đi công tác",
+    "hv": "xuất sai",
+    "pos": "động từ"
+  },
+  "出发": {
+    "vi": "xuất phát, khởi hành",
+    "hv": "xuất phát",
+    "pos": "động từ"
+  },
+  "出生": {
+    "vi": "sinh ra, ra đời",
+    "hv": "xuất sinh",
+    "pos": "động từ"
+  },
+  "传真": {
+    "vi": "fax",
+    "hv": "truyền chân",
+    "pos": "danh từ"
+  },
+  "窗户": {
+    "vi": "cửa sổ",
+    "hv": "song hộ",
+    "pos": "danh từ"
+  },
+  "词典": {
+    "vi": "từ điển (tra từ)",
+    "hv": "từ điển",
+    "pos": "danh từ"
+  },
+  "从来": {
+    "vi": "từ trước đến nay (thường dùng với 不/没)",
+    "hv": "tùng lai",
+    "pos": "phó từ"
+  },
+  "粗心": {
+    "vi": "cẩu thả, không cẩn thận",
+    "hv": "thô tâm",
+    "pos": "tính từ"
+  },
+  "答案": {
+    "vi": "đáp án, câu trả lời",
+    "hv": "đáp án",
+    "pos": "danh từ"
+  },
+  "打扮": {
+    "vi": "trang điểm, chưng mặc",
+    "hv": "đả bán",
+    "pos": "động từ"
+  },
+  "打扰": {
+    "vi": "làm phiền, quấy rầy",
+    "hv": "đả nhiễu",
+    "pos": "động từ"
+  },
+  "打印": {
+    "vi": "in (ra giấy)",
+    "hv": "đả ấn",
+    "pos": "động từ"
+  },
+  "打折": {
+    "vi": "giảm giá",
+    "hv": "đả chiết",
+    "pos": "động từ"
+  },
+  "打针": {
+    "vi": "tiêm, chích",
+    "hv": "đả châm",
+    "pos": "động từ"
+  },
+  "大夫": {
+    "vi": "bác sĩ",
+    "hv": "đại phu",
+    "pos": "danh từ"
+  },
+  "大概": {
+    "vi": "đại khái, chắc là",
+    "hv": "đại khái",
+    "pos": "phó từ"
+  },
+  "大使馆": {
+    "vi": "đại sứ quán",
+    "hv": "đại sứ quán",
+    "pos": "danh từ"
+  },
+  "大约": {
+    "vi": "khoảng, chừng",
+    "hv": "đại ước",
+    "pos": "phó từ"
+  },
+  "代表": {
+    "vi": "đại biểu; đại diện cho",
+    "hv": "đại biểu",
+    "pos": "danh từ / động từ"
+  },
+  "代替": {
+    "vi": "thay thế",
+    "hv": "đại thế",
+    "pos": "động từ"
+  },
+  "戴": {
+    "vi": "đeo, mang (kính, mũ, găng)",
+    "hv": "đái",
+    "pos": "động từ"
+  },
+  "弹": {
+    "vi": "chơi (đàn), gảy",
+    "hv": "đàn",
+    "pos": "động từ"
+  },
+  "当": {
+    "vi": "làm, đảm nhiệm; khi, lúc",
+    "hv": "đương",
+    "pos": "động từ / giới từ"
+  },
+  "当地": {
+    "vi": "địa phương, bản địa",
+    "hv": "đương địa",
+    "pos": "tính từ"
+  },
+  "当时": {
+    "vi": "lúc đó, khi ấy",
+    "hv": "đương thời",
+    "pos": "danh từ chỉ thời gian"
+  },
+  "刀": {
+    "vi": "con dao",
+    "hv": "đao",
+    "pos": "danh từ"
+  },
+  "导游": {
+    "vi": "hướng dẫn viên du lịch",
+    "hv": "đạo du",
+    "pos": "danh từ"
+  },
+  "到处": {
+    "vi": "khắp nơi",
+    "hv": "đáo xứ",
+    "pos": "phó từ"
+  },
+  "到底": {
+    "vi": "rốt cuộc, cuối cùng",
+    "hv": "đáo đê",
+    "pos": "phó từ"
+  },
+  "道歉": {
+    "vi": "xin lỗi, tạ lỗi",
+    "hv": "đạo khiếm",
+    "pos": "động từ"
+  },
+  "地球": {
+    "vi": "địa cầu, Trái Đất",
+    "hv": "địa cầu",
+    "pos": "danh từ"
+  },
+  "地址": {
+    "vi": "địa chỉ",
+    "hv": "địa chỉ",
+    "pos": "danh từ"
+  },
+  "得意": {
+    "vi": "đắc ý, tự đắc",
+    "hv": "đắc ý",
+    "pos": "tính từ"
+  },
+  "等": {
+    "vi": "đợi, chờ; vân vân (等等)",
+    "hv": "đẳng",
+    "pos": "động từ"
+  },
+  "底": {
+    "vi": "đáy, dưới cùng; cuối (tháng, năm)",
+    "hv": "đê",
+    "pos": "danh từ"
+  },
+  "调查": {
+    "vi": "điều tra, khảo sát",
+    "hv": "điều tra",
+    "pos": "động từ / danh từ"
+  },
+  "掉": {
+    "vi": "rơi, rụng; mất",
+    "hv": "điệu",
+    "pos": "động từ"
+  },
+  "丢": {
+    "vi": "mất; bỏ, ném",
+    "hv": "",
+    "pos": "động từ"
+  },
+  "动作": {
+    "vi": "động tác, hành động",
+    "hv": "động tác",
+    "pos": "danh từ"
+  },
+  "堵车": {
+    "vi": "tắc đường",
+    "hv": "đổ xa",
+    "pos": "động từ"
+  },
+  "肚子": {
+    "vi": "cái bụng",
+    "hv": "đỗ tử",
+    "pos": "danh từ"
+  },
+  "断": {
+    "vi": "đứt, gãy; ngắt",
+    "hv": "đoạn",
+    "pos": "động từ"
+  },
+  "对": {
+    "vi": "đúng; đối với, với",
+    "hv": "đối",
+    "pos": "tính từ / giới từ"
+  },
+  "对话": {
+    "vi": "đối thoại, hội thoại",
+    "hv": "đối thoại",
+    "pos": "danh từ / động từ"
+  },
+  "对面": {
+    "vi": "đối diện, phía trước mặt",
+    "hv": "đối diện",
+    "pos": "danh từ chỉ vị trí"
+  },
+  "顿": {
+    "vi": "bữa (lượng từ cho bữa ăn)",
+    "hv": "đốn",
+    "pos": "lượng từ"
+  },
+  "朵": {
+    "vi": "đóa, bông (lượng từ cho hoa, mây)",
+    "hv": "đóa",
+    "pos": "lượng từ"
+  },
+  "儿童": {
+    "vi": "trẻ em, nhi đồng",
+    "hv": "nhi đồng",
+    "pos": "danh từ"
+  },
+  "而": {
+    "vi": "mà, còn (nối hai ý trái nhau)",
+    "hv": "nhi",
+    "pos": "liên từ"
+  },
+  "发": {
+    "vi": "gửi, phát ra",
+    "hv": "phát",
+    "pos": "động từ"
+  },
+  "发生": {
+    "vi": "xảy ra, phát sinh",
+    "hv": "phát sinh",
+    "pos": "động từ"
+  },
+  "发展": {
+    "vi": "phát triển",
+    "hv": "phát triển",
+    "pos": "động từ / danh từ"
+  },
+  "法律": {
+    "vi": "pháp luật",
+    "hv": "pháp luật",
+    "pos": "danh từ"
+  },
+  "翻译": {
+    "vi": "dịch; phiên dịch viên",
+    "hv": "phiên dịch",
+    "pos": "động từ / danh từ"
+  },
+  "烦恼": {
+    "vi": "phiền não, lo phiền",
+    "hv": "phiền não",
+    "pos": "tính từ / danh từ"
+  },
+  "反对": {
+    "vi": "phản đối",
+    "hv": "phản đối",
+    "pos": "động từ"
+  },
+  "反映": {
+    "vi": "phản ánh",
+    "hv": "phản ánh",
+    "pos": "động từ"
+  },
+  "范围": {
+    "vi": "phạm vi",
+    "hv": "phạm vi",
+    "pos": "danh từ"
+  },
+  "方法": {
+    "vi": "phương pháp, cách",
+    "hv": "phương pháp",
+    "pos": "danh từ"
+  },
+  "方面": {
+    "vi": "phương diện, mặt",
+    "hv": "phương diện",
+    "pos": "danh từ"
+  },
+  "方向": {
+    "vi": "phương hướng",
+    "hv": "phương hướng",
+    "pos": "danh từ"
+  },
+  "访问": {
+    "vi": "thăm, đến thăm",
+    "hv": "phỏng vấn",
+    "pos": "động từ",
+    "note": "BẪY HÁN-VIỆT: âm là 'phỏng vấn' nhưng nghĩa là THĂM VIẾNG. Phỏng vấn (hỏi tin) là 采访."
+  },
+  "放弃": {
+    "vi": "từ bỏ, bỏ cuộc",
+    "hv": "phóng khí",
+    "pos": "động từ"
+  },
+  "放暑假": {
+    "vi": "nghỉ hè",
+    "hv": "phóng thử giá",
+    "pos": "động từ"
+  },
+  "分之": {
+    "vi": "phần (三分之一 = một phần ba)",
+    "hv": "phân chi",
+    "pos": "cấu trúc phân số"
+  },
+  "份": {
+    "vi": "phần, bản (lượng từ cho báo, quà, tài liệu)",
+    "hv": "phần",
+    "pos": "lượng từ"
+  },
+  "丰富": {
+    "vi": "phong phú, dồi dào",
+    "hv": "phong phú",
+    "pos": "tính từ"
+  },
+  "风景": {
+    "vi": "phong cảnh",
+    "hv": "phong cảnh",
+    "pos": "danh từ"
+  },
+  "否则": {
+    "vi": "nếu không thì",
+    "hv": "phủ tắc",
+    "pos": "liên từ"
+  },
+  "符合": {
+    "vi": "phù hợp, khớp với",
+    "hv": "phù hợp",
+    "pos": "động từ"
+  },
+  "父亲": {
+    "vi": "cha, phụ thân",
+    "hv": "phụ thân",
+    "pos": "danh từ"
+  },
+  "负责": {
+    "vi": "phụ trách, chịu trách nhiệm",
+    "hv": "phụ trách",
+    "pos": "động từ"
+  },
+  "复印": {
+    "vi": "photocopy, sao chụp",
+    "hv": "phục ấn",
+    "pos": "động từ"
+  },
+  "复杂": {
+    "vi": "phức tạp",
+    "hv": "phức tạp",
+    "pos": "tính từ"
+  },
+  "富": {
+    "vi": "giàu",
+    "hv": "phú",
+    "pos": "tính từ"
+  },
+  "改变": {
+    "vi": "thay đổi, biến đổi",
+    "hv": "cải biến",
+    "pos": "động từ"
+  },
+  "感动": {
+    "vi": "cảm động, xúc động",
+    "hv": "cảm động",
+    "pos": "động từ / tính từ"
+  },
+  "感觉": {
+    "vi": "cảm giác; cảm thấy",
+    "hv": "cảm giác",
+    "pos": "danh từ / động từ"
+  },
+  "感情": {
+    "vi": "tình cảm",
+    "hv": "cảm tình",
+    "pos": "danh từ"
+  },
+  "感谢": {
+    "vi": "cảm ơn, cảm tạ",
+    "hv": "cảm tạ",
+    "pos": "động từ"
+  },
+  "干": {
+    "vi": "làm, công tác",
+    "hv": "cán",
+    "pos": "động từ"
+  },
+  "干杯": {
+    "vi": "cạn ly, nâng cốc",
+    "hv": "can bôi",
+    "pos": "động từ"
+  },
+  "干燥": {
+    "vi": "khô, hanh khô",
+    "hv": "can táo",
+    "pos": "tính từ"
+  },
+  "刚刚": {
+    "vi": "vừa mới, vừa xong",
+    "hv": "cương cương",
+    "pos": "phó từ"
+  },
+  "高级": {
+    "vi": "cao cấp",
+    "hv": "cao cấp",
+    "pos": "tính từ"
+  },
+  "个子": {
+    "vi": "tầm người, chiều cao",
+    "hv": "cá tử",
+    "pos": "danh từ"
+  },
+  "各": {
+    "vi": "các, mỗi",
+    "hv": "các",
+    "pos": "đại từ"
+  },
+  "工具": {
+    "vi": "công cụ, dụng cụ",
+    "hv": "công cụ",
+    "pos": "danh từ"
+  },
+  "工资": {
+    "vi": "tiền lương",
+    "hv": "công tư",
+    "pos": "danh từ"
+  },
+  "公里": {
+    "vi": "ki-lô-mét",
+    "hv": "công lý",
+    "pos": "lượng từ"
+  },
+  "共同": {
+    "vi": "cùng, chung",
+    "hv": "cộng đồng",
+    "pos": "tính từ / phó từ"
+  },
+  "购物": {
+    "vi": "mua sắm",
+    "hv": "cấu vật",
+    "pos": "động từ"
+  },
+  "够": {
+    "vi": "đủ",
+    "hv": "cấu",
+    "pos": "động từ / tính từ"
+  },
+  "估计": {
+    "vi": "ước tính, phỏng đoán",
+    "hv": "cô kế",
+    "pos": "động từ"
+  },
+  "孤单": {
+    "vi": "cô đơn, lẻ loi",
+    "hv": "cô đơn",
+    "pos": "tính từ"
+  },
+  "鼓励": {
+    "vi": "cổ vũ, động viên",
+    "hv": "cổ lệ",
+    "pos": "động từ"
+  },
+  "鼓掌": {
+    "vi": "vỗ tay",
+    "hv": "cổ chưởng",
+    "pos": "động từ"
+  },
+  "故意": {
+    "vi": "cố ý, có chủ ý",
+    "hv": "cố ý",
+    "pos": "phó từ"
+  },
+  "顾客": {
+    "vi": "khách hàng",
+    "hv": "cố khách",
+    "pos": "danh từ"
+  },
+  "挂": {
+    "vi": "treo; cúp (máy)",
+    "hv": "quải",
+    "pos": "động từ"
+  },
+  "关键": {
+    "vi": "then chốt, mấu chốt",
+    "hv": "quan kiện",
+    "pos": "danh từ / tính từ"
+  },
+  "观众": {
+    "vi": "khán giả",
+    "hv": "quan chúng",
+    "pos": "danh từ"
+  },
+  "管理": {
+    "vi": "quản lý",
+    "hv": "quản lý",
+    "pos": "động từ"
+  },
+  "光": {
+    "vi": "ánh sáng; sáng",
+    "hv": "quang",
+    "pos": "danh từ / tính từ"
+  },
+  "广播": {
+    "vi": "phát thanh, truyền thanh",
+    "hv": "quảng bá",
+    "pos": "động từ / danh từ"
+  },
+  "广告": {
+    "vi": "quảng cáo",
+    "hv": "quảng cáo",
+    "pos": "danh từ"
+  },
+  "逛": {
+    "vi": "đi dạo, đi ngắm (phố, chợ)",
+    "hv": "",
+    "pos": "động từ"
+  },
+  "规定": {
+    "vi": "quy định",
+    "hv": "quy định",
+    "pos": "động từ / danh từ"
+  },
+  "国际": {
+    "vi": "quốc tế",
+    "hv": "quốc tế",
+    "pos": "tính từ"
+  },
+  "果然": {
+    "vi": "quả nhiên, đúng là",
+    "hv": "quả nhiên",
+    "pos": "phó từ"
+  },
+  "过": {
+    "vi": "qua, vượt; trợ từ chỉ từng trải (去过)",
+    "hv": "quá",
+    "pos": "động từ / trợ từ"
+  },
+  "过程": {
+    "vi": "quá trình",
+    "hv": "quá trình",
+    "pos": "danh từ"
+  },
+  "咳嗽": {
+    "vi": "ho",
+    "hv": "",
+    "pos": "động từ"
+  },
+  "海洋": {
+    "vi": "biển cả, hải dương",
+    "hv": "hải dương",
+    "pos": "danh từ"
+  },
+  "害羞": {
+    "vi": "nhút nhát, mắc cỡ",
+    "hv": "hại tu",
+    "pos": "tính từ"
+  },
+  "寒假": {
+    "vi": "nghỉ đông",
+    "hv": "hàn giá",
+    "pos": "danh từ"
+  },
+  "汗": {
+    "vi": "mồ hôi",
+    "hv": "hãn",
+    "pos": "danh từ"
+  },
+  "航班": {
+    "vi": "chuyến bay",
+    "hv": "hàng ban",
+    "pos": "danh từ"
+  },
+  "好处": {
+    "vi": "lợi ích, chỗ tốt",
+    "hv": "hảo xử",
+    "pos": "danh từ"
+  },
+  "好像": {
+    "vi": "hình như, giống như",
+    "hv": "hảo tượng",
+    "pos": "phó từ"
+  },
+  "号码": {
+    "vi": "số (điện thoại, phòng)",
+    "hv": "hiệu mã",
+    "pos": "danh từ"
+  },
+  "合格": {
+    "vi": "đạt chuẩn, đủ tiêu chuẩn",
+    "hv": "hợp cách",
+    "pos": "tính từ"
+  },
+  "合适": {
+    "vi": "hợp, thích hợp",
+    "hv": "hợp thích",
+    "pos": "tính từ"
+  },
+  "盒子": {
+    "vi": "cái hộp",
+    "hv": "hợp tử",
+    "pos": "danh từ"
+  },
+  "猴子": {
+    "vi": "con khỉ",
+    "hv": "hầu tử",
+    "pos": "danh từ"
+  },
+  "后悔": {
+    "vi": "hối hận",
+    "hv": "hậu hối",
+    "pos": "động từ"
+  },
+  "后来": {
+    "vi": "sau đó, về sau",
+    "hv": "hậu lai",
+    "pos": "danh từ chỉ thời gian"
+  },
+  "厚": {
+    "vi": "dày",
+    "hv": "hậu",
+    "pos": "tính từ"
+  },
+  "忽然": {
+    "vi": "bỗng nhiên",
+    "hv": "hốt nhiên",
+    "pos": "phó từ"
+  },
+  "互相": {
+    "vi": "lẫn nhau, qua lại",
+    "hv": "hỗ tương",
+    "pos": "phó từ"
+  },
+  "护士": {
+    "vi": "điều dưỡng, hộ lý",
+    "hv": "hộ sĩ",
+    "pos": "danh từ"
+  },
+  "怀疑": {
+    "vi": "hoài nghi, nghi ngờ",
+    "hv": "hoài nghi",
+    "pos": "động từ"
+  },
+  "回忆": {
+    "vi": "hồi tưởng; kỷ niệm",
+    "hv": "hồi ức",
+    "pos": "động từ / danh từ"
+  },
+  "活动": {
+    "vi": "hoạt động",
+    "hv": "hoạt động",
+    "pos": "danh từ / động từ"
+  },
+  "活泼": {
+    "vi": "hoạt bát, hoạt náo",
+    "hv": "hoạt bát",
+    "pos": "tính từ"
+  },
+  "火": {
+    "vi": "lửa",
+    "hv": "hỏa",
+    "pos": "danh từ"
+  },
+  "获得": {
+    "vi": "giành được, đạt được",
+    "hv": "hoạch đắc",
+    "pos": "động từ"
+  },
+  "积极": {
+    "vi": "tích cực",
+    "hv": "tích cực",
+    "pos": "tính từ"
+  },
+  "积累": {
+    "vi": "tích lũy",
+    "hv": "tích lũy",
+    "pos": "động từ"
+  },
+  "基础": {
+    "vi": "cơ sở, nền tảng",
+    "hv": "cơ sở",
+    "pos": "danh từ"
+  },
+  "激动": {
+    "vi": "xúc động, kích động",
+    "hv": "kích động",
+    "pos": "tính từ / động từ"
+  },
+  "及时": {
+    "vi": "kịp thời",
+    "hv": "cập thời",
+    "pos": "tính từ / phó từ"
+  },
+  "即使": {
+    "vi": "cho dù, dù rằng",
+    "hv": "tức sử",
+    "pos": "liên từ"
+  },
+  "极其": {
+    "vi": "cực kỳ, vô cùng",
+    "hv": "cực kỳ",
+    "pos": "phó từ"
+  },
+  "集合": {
+    "vi": "tập hợp, tụ tập",
+    "hv": "tập hợp",
+    "pos": "động từ"
+  },
+  "计划": {
+    "vi": "kế hoạch; lên kế hoạch",
+    "hv": "kế hoạch",
+    "pos": "danh từ / động từ"
+  },
+  "记者": {
+    "vi": "nhà báo, phóng viên",
+    "hv": "ký giả",
+    "pos": "danh từ"
+  },
+  "技术": {
+    "vi": "kỹ thuật",
+    "hv": "kỹ thuật",
+    "pos": "danh từ"
+  },
+  "既然": {
+    "vi": "đã... thì (既然...就...)",
+    "hv": "ký nhiên",
+    "pos": "liên từ"
+  },
+  "继续": {
+    "vi": "tiếp tục",
+    "hv": "kế tục",
+    "pos": "động từ"
+  },
+  "寄": {
+    "vi": "gửi (thư, hàng)",
+    "hv": "ký",
+    "pos": "động từ"
+  },
+  "加班": {
+    "vi": "làm thêm giờ",
+    "hv": "gia ban",
+    "pos": "động từ"
+  },
+  "加油站": {
+    "vi": "trạm xăng",
+    "hv": "gia du trạm",
+    "pos": "danh từ"
+  },
+  "家具": {
+    "vi": "đồ nội thất",
+    "hv": "gia cụ",
+    "pos": "danh từ"
+  },
+  "假": {
+    "vi": "giả, không thật",
+    "hv": "giả",
+    "pos": "tính từ"
+  },
+  "价格": {
+    "vi": "giá, giá cả",
+    "hv": "giá cách",
+    "pos": "danh từ"
+  },
+  "坚持": {
+    "vi": "kiên trì, giữ vững",
+    "hv": "kiên trì",
+    "pos": "động từ"
+  },
+  "减肥": {
+    "vi": "giảm cân",
+    "hv": "giảm phì",
+    "pos": "động từ"
+  },
+  "减少": {
+    "vi": "giảm, giảm bớt",
+    "hv": "giảm thiểu",
+    "pos": "động từ"
+  },
+  "将来": {
+    "vi": "tương lai",
+    "hv": "tương lai",
+    "pos": "danh từ chỉ thời gian"
+  },
+  "奖金": {
+    "vi": "tiền thưởng",
+    "hv": "thưởng kim",
+    "pos": "danh từ"
+  },
+  "降低": {
+    "vi": "hạ xuống, giảm xuống",
+    "hv": "giáng đê",
+    "pos": "động từ"
+  },
+  "交": {
+    "vi": "giao, nộp",
+    "hv": "giao",
+    "pos": "động từ"
+  },
+  "交流": {
+    "vi": "giao lưu, trao đổi",
+    "hv": "giao lưu",
+    "pos": "động từ"
+  },
+  "交通": {
+    "vi": "giao thông",
+    "hv": "giao thông",
+    "pos": "danh từ"
+  },
+  "骄傲": {
+    "vi": "tự hào; kiêu ngạo",
+    "hv": "kiêu ngạo",
+    "pos": "tính từ"
+  },
+  "饺子": {
+    "vi": "bánh chẻo, sủi cảo",
+    "hv": "giáo tử",
+    "pos": "danh từ"
+  },
+  "教授": {
+    "vi": "giáo sư",
+    "hv": "giáo thụ",
+    "pos": "danh từ"
+  },
+  "教育": {
+    "vi": "giáo dục",
+    "hv": "giáo dục",
+    "pos": "danh từ / động từ"
+  },
+  "接受": {
+    "vi": "tiếp nhận, chấp nhận",
+    "hv": "tiếp thụ",
+    "pos": "động từ"
+  },
+  "节约": {
+    "vi": "tiết kiệm",
+    "hv": "tiết ước",
+    "pos": "động từ"
+  },
+  "结果": {
+    "vi": "kết quả",
+    "hv": "kết quả",
+    "pos": "danh từ"
+  },
+  "解释": {
+    "vi": "giải thích",
+    "hv": "giải thích",
+    "pos": "động từ"
+  },
+  "尽管": {
+    "vi": "mặc dù, cứ việc",
+    "hv": "tận quản",
+    "pos": "liên từ"
+  },
+  "紧张": {
+    "vi": "căng thẳng, lo lắng",
+    "hv": "khẩn trương",
+    "pos": "tính từ"
+  },
+  "进行": {
+    "vi": "tiến hành",
+    "hv": "tiến hành",
+    "pos": "động từ"
+  },
+  "禁止": {
+    "vi": "cấm, nghiêm cấm",
+    "hv": "cấm chỉ",
+    "pos": "động từ"
+  },
+  "京剧": {
+    "vi": "Kinh kịch",
+    "hv": "Kinh kịch",
+    "pos": "danh từ"
+  },
+  "经济": {
+    "vi": "kinh tế",
+    "hv": "kinh tế",
+    "pos": "danh từ / tính từ"
+  },
+  "经历": {
+    "vi": "từng trải qua; sự trải nghiệm",
+    "hv": "kinh lịch",
+    "pos": "động từ / danh từ"
+  },
+  "经验": {
+    "vi": "kinh nghiệm",
+    "hv": "kinh nghiệm",
+    "pos": "danh từ"
+  },
+  "精彩": {
+    "vi": "đặc sắc, xuất sắc",
+    "hv": "tinh thái",
+    "pos": "tính từ"
+  },
+  "精神": {
+    "vi": "tinh thần, sức sống",
+    "hv": "tinh thần",
+    "pos": "danh từ"
+  },
+  "警察": {
+    "vi": "cảnh sát",
+    "hv": "cảnh sát",
+    "pos": "danh từ"
+  },
+  "竞争": {
+    "vi": "cạnh tranh",
+    "hv": "cạnh tranh",
+    "pos": "động từ / danh từ"
+  },
+  "竟然": {
+    "vi": "không ngờ, lại (tỏ ý bất ngờ)",
+    "hv": "cánh nhiên",
+    "pos": "phó từ"
+  },
+  "镜子": {
+    "vi": "cái gương",
+    "hv": "kính tử",
+    "pos": "danh từ"
+  },
+  "究竟": {
+    "vi": "rốt cuộc, cuối cùng",
+    "hv": "cứu cánh",
+    "pos": "phó từ"
+  },
+  "举办": {
+    "vi": "tổ chức (sự kiện)",
+    "hv": "cử bạn",
+    "pos": "động từ"
+  },
+  "拒绝": {
+    "vi": "từ chối, cự tuyệt",
+    "hv": "cự tuyệt",
+    "pos": "động từ"
+  },
+  "距离": {
+    "vi": "khoảng cách, cự ly",
+    "hv": "cự ly",
+    "pos": "danh từ"
+  },
+  "开玩笑": {
+    "vi": "nói đùa, trêu",
+    "hv": "khai ngoạn tiếu",
+    "pos": "động từ"
+  },
+  "看法": {
+    "vi": "cách nhìn, quan điểm",
+    "hv": "khán pháp",
+    "pos": "danh từ"
+  },
+  "考虑": {
+    "vi": "cân nhắc, suy xét",
+    "hv": "khảo lự",
+    "pos": "động từ"
+  },
+  "科学": {
+    "vi": "khoa học",
+    "hv": "khoa học",
+    "pos": "danh từ / tính từ"
+  },
+  "棵": {
+    "vi": "cây (lượng từ cho cây cối)",
+    "hv": "khoa",
+    "pos": "lượng từ"
+  },
+  "可怜": {
+    "vi": "đáng thương",
+    "hv": "khả liên",
+    "pos": "tính từ"
+  },
+  "可是": {
+    "vi": "nhưng",
+    "hv": "khả thị",
+    "pos": "liên từ"
+  },
+  "可惜": {
+    "vi": "đáng tiếc",
+    "hv": "khả tích",
+    "pos": "tính từ"
+  },
+  "肯定": {
+    "vi": "chắc chắn; khẳng định",
+    "hv": "khẳng định",
+    "pos": "phó từ / động từ"
+  },
+  "空气": {
+    "vi": "không khí",
+    "hv": "không khí",
+    "pos": "danh từ"
+  },
+  "恐怕": {
+    "vi": "e rằng, sợ rằng",
+    "hv": "khủng phạ",
+    "pos": "phó từ"
+  },
+  "苦": {
+    "vi": "đắng; khổ",
+    "hv": "khổ",
+    "pos": "tính từ"
+  },
+  "宽": {
+    "vi": "rộng",
+    "hv": "khoan",
+    "pos": "tính từ"
+  },
+  "困": {
+    "vi": "buồn ngủ; khốn khó",
+    "hv": "khốn",
+    "pos": "tính từ"
+  },
+  "困难": {
+    "vi": "khó khăn",
+    "hv": "khốn nan",
+    "pos": "tính từ / danh từ"
+  },
+  "扩大": {
+    "vi": "mở rộng",
+    "hv": "khuếch đại",
+    "pos": "động từ"
+  },
+  "垃圾桶": {
+    "vi": "thùng rác",
+    "hv": "lạp cấp thống",
+    "pos": "danh từ"
+  },
+  "拉": {
+    "vi": "kéo; chơi (đàn kéo)",
+    "hv": "lạp",
+    "pos": "động từ"
+  },
+  "辣": {
+    "vi": "cay",
+    "hv": "lạt",
+    "pos": "tính từ"
+  },
+  "来不及": {
+    "vi": "không kịp",
+    "hv": "lai bất cập",
+    "pos": "động từ"
+  },
+  "来得及": {
+    "vi": "kịp, còn kịp",
+    "hv": "lai đắc cập",
+    "pos": "động từ"
+  },
+  "懒": {
+    "vi": "lười",
+    "hv": "lãn",
+    "pos": "tính từ"
+  },
+  "浪费": {
+    "vi": "lãng phí",
+    "hv": "lãng phí",
+    "pos": "động từ"
+  },
+  "浪漫": {
+    "vi": "lãng mạn",
+    "hv": "lãng mạn",
+    "pos": "tính từ"
+  },
+  "老虎": {
+    "vi": "con hổ",
+    "hv": "lão hổ",
+    "pos": "danh từ"
+  },
+  "冷静": {
+    "vi": "bình tĩnh",
+    "hv": "lãnh tĩnh",
+    "pos": "tính từ"
+  },
+  "礼貌": {
+    "vi": "lễ phép, phép tắc",
+    "hv": "lễ mạo",
+    "pos": "danh từ / tính từ"
+  },
+  "理发": {
+    "vi": "cắt tóc",
+    "hv": "lý phát",
+    "pos": "động từ"
+  },
+  "理解": {
+    "vi": "hiểu, lý giải",
+    "hv": "lý giải",
+    "pos": "động từ"
+  },
+  "理想": {
+    "vi": "lý tưởng",
+    "hv": "lý tưởng",
+    "pos": "danh từ / tính từ"
+  },
+  "力气": {
+    "vi": "sức, sức lực",
+    "hv": "lực khí",
+    "pos": "danh từ"
+  },
+  "厉害": {
+    "vi": "ghê, dữ; giỏi",
+    "hv": "lệ hại",
+    "pos": "tính từ"
+  },
+  "例如": {
+    "vi": "ví dụ như",
+    "hv": "lệ như",
+    "pos": "động từ"
+  },
+  "俩": {
+    "vi": "hai (người), cả hai",
+    "hv": "lưỡng",
+    "pos": "số từ"
+  },
+  "连": {
+    "vi": "ngay cả, liền",
+    "hv": "liên",
+    "pos": "giới từ / động từ"
+  },
+  "联系": {
+    "vi": "liên hệ, liên lạc",
+    "hv": "liên hệ",
+    "pos": "động từ / danh từ"
+  },
+  "凉快": {
+    "vi": "mát, mát mẻ",
+    "hv": "lương khoái",
+    "pos": "tính từ"
+  },
+  "亮": {
+    "vi": "sáng",
+    "hv": "lượng",
+    "pos": "tính từ"
+  },
+  "聊天": {
+    "vi": "tán gẫu, trò chuyện",
+    "hv": "liêu thiên",
+    "pos": "động từ"
+  },
+  "另外": {
+    "vi": "ngoài ra, cái khác",
+    "hv": "lánh ngoại",
+    "pos": "liên từ / tính từ"
+  },
+  "流泪": {
+    "vi": "rơi nước mắt",
+    "hv": "lưu lệ",
+    "pos": "động từ"
+  },
+  "流利": {
+    "vi": "lưu loát, trôi chảy",
+    "hv": "lưu lợi",
+    "pos": "tính từ"
+  },
+  "流行": {
+    "vi": "thịnh hành, phổ biến",
+    "hv": "lưu hành",
+    "pos": "động từ / tính từ"
+  },
+  "留": {
+    "vi": "để lại, lưu lại",
+    "hv": "lưu",
+    "pos": "động từ"
+  },
+  "留学": {
+    "vi": "du học",
+    "hv": "lưu học",
+    "pos": "động từ"
+  },
+  "律师": {
+    "vi": "luật sư",
+    "hv": "luật sư",
+    "pos": "danh từ"
+  },
+  "乱": {
+    "vi": "loạn, bừa bộn; tùy tiện",
+    "hv": "loạn",
+    "pos": "tính từ / phó từ"
+  },
+  "麻烦": {
+    "vi": "rắc rối, phiền hà; làm phiền",
+    "hv": "ma phiền",
+    "pos": "tính từ / động từ"
+  },
+  "马虎": {
+    "vi": "cẩu thả, lơ là",
+    "hv": "mã hổ",
+    "pos": "tính từ"
+  },
+  "满": {
+    "vi": "đầy, kín",
+    "hv": "mãn",
+    "pos": "tính từ"
+  },
+  "毛巾": {
+    "vi": "khăn mặt",
+    "hv": "mao cân",
+    "pos": "danh từ"
+  },
+  "美丽": {
+    "vi": "xinh đẹp, mỹ lệ",
+    "hv": "mỹ lệ",
+    "pos": "tính từ"
+  },
+  "梦": {
+    "vi": "giấc mơ; mơ",
+    "hv": "mộng",
+    "pos": "danh từ / động từ"
+  },
+  "密码": {
+    "vi": "mật khẩu, mã",
+    "hv": "mật mã",
+    "pos": "danh từ"
+  },
+  "免费": {
+    "vi": "miễn phí",
+    "hv": "miễn phí",
+    "pos": "tính từ"
+  },
+  "民族": {
+    "vi": "dân tộc",
+    "hv": "dân tộc",
+    "pos": "danh từ"
+  },
+  "母亲": {
+    "vi": "mẹ, mẫu thân",
+    "hv": "mẫu thân",
+    "pos": "danh từ"
+  },
+  "目的": {
+    "vi": "mục đích",
+    "hv": "mục đích",
+    "pos": "danh từ"
+  },
+  "耐心": {
+    "vi": "kiên nhẫn, nhẫn nại",
+    "hv": "nại tâm",
+    "pos": "tính từ / danh từ"
+  },
+  "难道": {
+    "vi": "lẽ nào, chẳng lẽ",
+    "hv": "nan đạo",
+    "pos": "phó từ"
+  },
+  "难受": {
+    "vi": "khó chịu, khổ tâm",
+    "hv": "nan thụ",
+    "pos": "tính từ"
+  },
+  "内": {
+    "vi": "trong, bên trong",
+    "hv": "nội",
+    "pos": "danh từ chỉ vị trí"
+  },
+  "内容": {
+    "vi": "nội dung",
+    "hv": "nội dung",
+    "pos": "danh từ"
+  },
+  "能力": {
+    "vi": "năng lực, khả năng",
+    "hv": "năng lực",
+    "pos": "danh từ"
+  },
+  "年龄": {
+    "vi": "tuổi, độ tuổi",
+    "hv": "niên lệnh",
+    "pos": "danh từ"
+  },
+  "农村": {
+    "vi": "nông thôn",
+    "hv": "nông thôn",
+    "pos": "danh từ"
+  },
+  "弄": {
+    "vi": "làm, xoay xở",
+    "hv": "lộng",
+    "pos": "động từ"
+  },
+  "暖和": {
+    "vi": "ấm, ấm áp",
+    "hv": "noãn hòa",
+    "pos": "tính từ"
+  },
+  "偶尔": {
+    "vi": "thỉnh thoảng, đôi khi",
+    "hv": "ngẫu nhĩ",
+    "pos": "phó từ"
+  },
+  "排列": {
+    "vi": "xếp, sắp theo thứ tự",
+    "hv": "bài liệt",
+    "pos": "động từ"
+  },
+  "判断": {
+    "vi": "phán đoán, nhận định",
+    "hv": "phán đoán",
+    "pos": "động từ"
+  },
+  "陪": {
+    "vi": "đi cùng, tháp tùng",
+    "hv": "bồi",
+    "pos": "động từ"
+  },
+  "批评": {
+    "vi": "phê bình, chỉ trích",
+    "hv": "phê bình",
+    "pos": "động từ"
+  },
+  "皮肤": {
+    "vi": "da",
+    "hv": "bì phu",
+    "pos": "danh từ"
+  },
+  "脾气": {
+    "vi": "tính nết, tính khí",
+    "hv": "tỳ khí",
+    "pos": "danh từ"
+  },
+  "篇": {
+    "vi": "bài (lượng từ cho bài viết)",
+    "hv": "thiên",
+    "pos": "lượng từ"
+  },
+  "骗": {
+    "vi": "lừa, gạt",
+    "hv": "phiến",
+    "pos": "động từ"
+  },
+  "乒乓球": {
+    "vi": "bóng bàn",
+    "hv": "",
+    "pos": "danh từ"
+  },
+  "平时": {
+    "vi": "bình thường, ngày thường",
+    "hv": "bình thời",
+    "pos": "danh từ chỉ thời gian"
+  },
+  "瓶子": {
+    "vi": "cái lọ, cái chai",
+    "hv": "bình tử",
+    "pos": "danh từ"
+  },
+  "破": {
+    "vi": "vỡ, hỏng, rách",
+    "hv": "phá",
+    "pos": "tính từ / động từ"
+  },
+  "普遍": {
+    "vi": "phổ biến",
+    "hv": "phổ biến",
+    "pos": "tính từ"
+  },
+  "其次": {
+    "vi": "thứ hai, kế đến",
+    "hv": "kỳ thứ",
+    "pos": "đại từ"
+  },
+  "其中": {
+    "vi": "trong đó",
+    "hv": "kỳ trung",
+    "pos": "danh từ"
+  },
+  "起飞": {
+    "vi": "cất cánh",
+    "hv": "khởi phi",
+    "pos": "động từ"
+  },
+  "起来": {
+    "vi": "đứng lên, dậy; bắt đầu (bổ ngữ xu hướng)",
+    "hv": "khởi lai",
+    "pos": "động từ"
+  },
+  "气候": {
+    "vi": "khí hậu",
+    "hv": "khí hậu",
+    "pos": "danh từ"
+  },
+  "千万": {
+    "vi": "nhất định phải, chớ có (nhắc nhở)",
+    "hv": "thiên vạn",
+    "pos": "phó từ"
+  },
+  "签证": {
+    "vi": "thị thực, visa",
+    "hv": "thiêm chứng",
+    "pos": "danh từ"
+  },
+  "墙": {
+    "vi": "tường, vách",
+    "hv": "tường",
+    "pos": "danh từ"
+  },
+  "敲": {
+    "vi": "gõ, đập",
+    "hv": "khao",
+    "pos": "động từ"
+  },
+  "桥": {
+    "vi": "cây cầu",
+    "hv": "kiều",
+    "pos": "danh từ"
+  },
+  "巧克力": {
+    "vi": "sô-cô-la",
+    "hv": "",
+    "pos": "danh từ"
+  },
+  "亲戚": {
+    "vi": "họ hàng, thân thích",
+    "hv": "thân thích",
+    "pos": "danh từ"
+  },
+  "轻": {
+    "vi": "nhẹ",
+    "hv": "khinh",
+    "pos": "tính từ"
+  },
+  "轻松": {
+    "vi": "thoải mái, nhẹ nhõm",
+    "hv": "khinh tùng",
+    "pos": "tính từ"
+  },
+  "情况": {
+    "vi": "tình hình, tình huống",
+    "hv": "tình huống",
+    "pos": "danh từ"
+  },
+  "请假": {
+    "vi": "xin phép nghỉ",
+    "hv": "thỉnh giá",
+    "pos": "động từ"
+  },
+  "请客": {
+    "vi": "mời khách, khao",
+    "hv": "thỉnh khách",
+    "pos": "động từ"
+  },
+  "穷": {
+    "vi": "nghèo",
+    "hv": "cùng",
+    "pos": "tính từ"
+  },
+  "区别": {
+    "vi": "khác biệt; phân biệt",
+    "hv": "khu biệt",
+    "pos": "danh từ / động từ"
+  },
+  "取": {
+    "vi": "lấy, rút (tiền, hàng)",
+    "hv": "thủ",
+    "pos": "động từ"
+  },
+  "全部": {
+    "vi": "toàn bộ, tất cả",
+    "hv": "toàn bộ",
+    "pos": "danh từ / tính từ"
+  },
+  "缺点": {
+    "vi": "khuyết điểm, nhược điểm",
+    "hv": "khuyết điểm",
+    "pos": "danh từ"
+  },
+  "缺少": {
+    "vi": "thiếu, khuyết",
+    "hv": "khuyết thiểu",
+    "pos": "động từ"
+  },
+  "却": {
+    "vi": "nhưng lại, mà lại",
+    "hv": "khước",
+    "pos": "phó từ"
+  },
+  "确实": {
+    "vi": "xác thực, quả thật",
+    "hv": "xác thực",
+    "pos": "phó từ / tính từ"
+  },
+  "群": {
+    "vi": "đàn, nhóm (lượng từ)",
+    "hv": "quần",
+    "pos": "lượng từ"
+  },
+  "然而": {
+    "vi": "tuy nhiên, thế nhưng",
+    "hv": "nhiên nhi",
+    "pos": "liên từ"
+  },
+  "热闹": {
+    "vi": "náo nhiệt, nhộn nhịp",
+    "hv": "nhiệt náo",
+    "pos": "tính từ"
+  },
+  "人民币": {
+    "vi": "Nhân dân tệ",
+    "hv": "nhân dân tệ",
+    "pos": "danh từ"
+  },
+  "任何": {
+    "vi": "bất kỳ, bất cứ",
+    "hv": "nhậm hà",
+    "pos": "đại từ"
+  },
+  "任务": {
+    "vi": "nhiệm vụ",
+    "hv": "nhiệm vụ",
+    "pos": "danh từ"
+  },
+  "扔": {
+    "vi": "ném, quăng, bỏ đi",
+    "hv": "",
+    "pos": "động từ"
+  },
+  "仍然": {
+    "vi": "vẫn, vẫn còn",
+    "hv": "nhưng nhiên",
+    "pos": "phó từ"
+  },
+  "日记": {
+    "vi": "nhật ký",
+    "hv": "nhật ký",
+    "pos": "danh từ"
+  },
+  "入口": {
+    "vi": "cửa vào, lối vào",
+    "hv": "nhập khẩu",
+    "pos": "danh từ",
+    "note": "BẪY HÁN-VIỆT: âm là 'nhập khẩu' nhưng nghĩa là LỐI VÀO. Nhập khẩu hàng hóa là 进口."
+  },
+  "软": {
+    "vi": "mềm",
+    "hv": "nhuyễn",
+    "pos": "tính từ"
+  },
+  "散步": {
+    "vi": "đi bộ, dạo bộ",
+    "hv": "tán bộ",
+    "pos": "động từ"
+  },
+  "森林": {
+    "vi": "rừng",
+    "hv": "sâm lâm",
+    "pos": "danh từ"
+  },
+  "沙发": {
+    "vi": "ghế sofa",
+    "hv": "",
+    "pos": "danh từ"
+  },
+  "伤心": {
+    "vi": "đau lòng, thương tâm",
+    "hv": "thương tâm",
+    "pos": "tính từ"
+  },
+  "商量": {
+    "vi": "thương lượng, bàn bạc",
+    "hv": "thương lượng",
+    "pos": "động từ"
+  },
+  "稍微": {
+    "vi": "hơi, một chút",
+    "hv": "sảo vi",
+    "pos": "phó từ"
+  },
+  "社会": {
+    "vi": "xã hội",
+    "hv": "xã hội",
+    "pos": "danh từ"
+  },
+  "申请": {
+    "vi": "xin, đăng ký (học bổng, visa)",
+    "hv": "thân thỉnh",
+    "pos": "động từ"
+  },
+  "深": {
+    "vi": "sâu; đậm",
+    "hv": "thâm",
+    "pos": "tính từ"
+  },
+  "甚至": {
+    "vi": "thậm chí",
+    "hv": "thậm chí",
+    "pos": "liên từ"
+  },
+  "生活": {
+    "vi": "sinh hoạt, đời sống; sống",
+    "hv": "sinh hoạt",
+    "pos": "danh từ / động từ"
+  },
+  "生命": {
+    "vi": "sinh mệnh, sự sống",
+    "hv": "sinh mệnh",
+    "pos": "danh từ"
+  },
+  "省": {
+    "vi": "tỉnh (đơn vị hành chính); tiết kiệm",
+    "hv": "tỉnh",
+    "pos": "danh từ / động từ"
+  },
+  "剩": {
+    "vi": "còn lại, dư",
+    "hv": "thặng",
+    "pos": "động từ"
+  },
+  "失败": {
+    "vi": "thất bại",
+    "hv": "thất bại",
+    "pos": "động từ / danh từ"
+  },
+  "失望": {
+    "vi": "thất vọng",
+    "hv": "thất vọng",
+    "pos": "tính từ / động từ"
+  },
+  "师傅": {
+    "vi": "sư phụ; bác (gọi tài xế, thợ)",
+    "hv": "sư phụ",
+    "pos": "danh từ"
+  },
+  "狮子": {
+    "vi": "con sư tử",
+    "hv": "sư tử",
+    "pos": "danh từ"
+  },
+  "湿润": {
+    "vi": "ẩm, ẩm ướt",
+    "hv": "thấp nhuận",
+    "pos": "tính từ"
+  },
+  "十分": {
+    "vi": "rất, hết sức",
+    "hv": "thập phân",
+    "pos": "phó từ"
+  },
+  "实际": {
+    "vi": "thực tế",
+    "hv": "thực tế",
+    "pos": "danh từ / tính từ"
+  },
+  "实在": {
+    "vi": "thật là, quả thực",
+    "hv": "thực tại",
+    "pos": "phó từ"
+  },
+  "食品": {
+    "vi": "thực phẩm",
+    "hv": "thực phẩm",
+    "pos": "danh từ"
+  },
+  "使用": {
+    "vi": "sử dụng",
+    "hv": "sử dụng",
+    "pos": "động từ"
+  },
+  "世纪": {
+    "vi": "thế kỷ",
+    "hv": "thế kỷ",
+    "pos": "danh từ"
+  },
+  "市场": {
+    "vi": "thị trường; chợ",
+    "hv": "thị trường",
+    "pos": "danh từ"
+  },
+  "试": {
+    "vi": "thử",
+    "hv": "thí",
+    "pos": "động từ"
+  },
+  "适合": {
+    "vi": "thích hợp, phù hợp",
+    "hv": "thích hợp",
+    "pos": "động từ"
+  },
+  "适应": {
+    "vi": "thích ứng, thích nghi",
+    "hv": "thích ứng",
+    "pos": "động từ"
+  },
+  "收": {
+    "vi": "nhận, thu",
+    "hv": "thu",
+    "pos": "động từ"
+  },
+  "收入": {
+    "vi": "thu nhập",
+    "hv": "thu nhập",
+    "pos": "danh từ"
+  },
+  "收拾": {
+    "vi": "dọn dẹp, thu xếp",
+    "hv": "thu thập",
+    "pos": "động từ"
+  },
+  "首都": {
+    "vi": "thủ đô",
+    "hv": "thủ đô",
+    "pos": "danh từ"
+  },
+  "首先": {
+    "vi": "trước hết, đầu tiên",
+    "hv": "thủ tiên",
+    "pos": "phó từ"
+  },
+  "受不了": {
+    "vi": "không chịu được",
+    "hv": "thụ bất liễu",
+    "pos": "động từ"
+  },
+  "受到": {
+    "vi": "được, bị (nhận được tác động)",
+    "hv": "thụ đáo",
+    "pos": "động từ"
+  },
+  "售货员": {
+    "vi": "nhân viên bán hàng",
+    "hv": "thụ hóa viên",
+    "pos": "danh từ"
+  },
+  "输": {
+    "vi": "thua",
+    "hv": "thâu",
+    "pos": "động từ"
+  },
+  "熟悉": {
+    "vi": "quen, thông thạo",
+    "hv": "thục tất",
+    "pos": "động từ / tính từ"
+  },
+  "数量": {
+    "vi": "số lượng",
+    "hv": "số lượng",
+    "pos": "danh từ"
+  },
+  "数字": {
+    "vi": "số, chữ số",
+    "hv": "số tự",
+    "pos": "danh từ"
+  },
+  "帅": {
+    "vi": "đẹp trai, bảnh",
+    "hv": "suý",
+    "pos": "tính từ"
+  },
+  "顺便": {
+    "vi": "nhân tiện, luôn thể",
+    "hv": "thuận tiện",
+    "pos": "phó từ"
+  },
+  "顺利": {
+    "vi": "thuận lợi, suôn sẻ",
+    "hv": "thuận lợi",
+    "pos": "tính từ"
+  },
+  "顺序": {
+    "vi": "thứ tự, trình tự",
+    "hv": "thuận tự",
+    "pos": "danh từ"
+  },
+  "说明": {
+    "vi": "thuyết minh, giải thích",
+    "hv": "thuyết minh",
+    "pos": "động từ / danh từ"
+  },
+  "硕士": {
+    "vi": "thạc sĩ",
+    "hv": "thạc sĩ",
+    "pos": "danh từ"
+  },
+  "死": {
+    "vi": "chết",
+    "hv": "tử",
+    "pos": "động từ"
+  },
+  "速度": {
+    "vi": "tốc độ",
+    "hv": "tốc độ",
+    "pos": "danh từ"
+  },
+  "塑料袋": {
+    "vi": "túi nhựa, túi nilon",
+    "hv": "tố liệu đại",
+    "pos": "danh từ"
+  },
+  "酸": {
+    "vi": "chua",
+    "hv": "toan",
+    "pos": "tính từ"
+  },
+  "算": {
+    "vi": "tính, tính toán; coi như",
+    "hv": "toán",
+    "pos": "động từ"
+  },
+  "随便": {
+    "vi": "tùy tiện, thế nào cũng được",
+    "hv": "tùy tiện",
+    "pos": "tính từ / phó từ"
+  },
+  "随着": {
+    "vi": "cùng với, theo đà",
+    "hv": "tùy trứ",
+    "pos": "giới từ"
+  },
+  "孙子": {
+    "vi": "cháu trai (con của con trai)",
+    "hv": "tôn tử",
+    "pos": "danh từ"
+  },
+  "所有": {
+    "vi": "tất cả, toàn bộ",
+    "hv": "sở hữu",
+    "pos": "tính từ"
+  },
+  "台": {
+    "vi": "cái, chiếc (lượng từ cho máy móc)",
+    "hv": "đài",
+    "pos": "lượng từ"
+  },
+  "抬": {
+    "vi": "nâng, nhấc, khiêng",
+    "hv": "đài",
+    "pos": "động từ"
+  },
+  "态度": {
+    "vi": "thái độ",
+    "hv": "thái độ",
+    "pos": "danh từ"
+  },
+  "谈": {
+    "vi": "nói chuyện, đàm luận",
+    "hv": "đàm",
+    "pos": "động từ"
+  },
+  "汤": {
+    "vi": "canh, súp",
+    "hv": "thang",
+    "pos": "danh từ"
+  },
+  "躺": {
+    "vi": "nằm",
+    "hv": "",
+    "pos": "động từ"
+  },
+  "趟": {
+    "vi": "chuyến, lượt (lượng từ cho chuyến đi)",
+    "hv": "",
+    "pos": "lượng từ"
+  },
+  "讨论": {
+    "vi": "thảo luận",
+    "hv": "thảo luận",
+    "pos": "động từ"
+  },
+  "讨厌": {
+    "vi": "ghét, đáng ghét",
+    "hv": "thảo yếm",
+    "pos": "động từ / tính từ"
+  },
+  "特点": {
+    "vi": "đặc điểm",
+    "hv": "đặc điểm",
+    "pos": "danh từ"
+  },
+  "提供": {
+    "vi": "cung cấp",
+    "hv": "đề cung",
+    "pos": "động từ"
+  },
+  "提前": {
+    "vi": "làm sớm hơn, dời lên trước",
+    "hv": "đề tiền",
+    "pos": "động từ"
+  },
+  "提醒": {
+    "vi": "nhắc, nhắc nhở",
+    "hv": "đề tỉnh",
+    "pos": "động từ"
+  },
+  "填空": {
+    "vi": "điền vào chỗ trống",
+    "hv": "điền không",
+    "pos": "động từ"
+  },
+  "条件": {
+    "vi": "điều kiện",
+    "hv": "điều kiện",
+    "pos": "danh từ"
+  },
+  "停止": {
+    "vi": "dừng, ngừng",
+    "hv": "đình chỉ",
+    "pos": "động từ"
+  },
+  "挺": {
+    "vi": "khá, rất",
+    "hv": "đĩnh",
+    "pos": "phó từ"
+  },
+  "通过": {
+    "vi": "thông qua, qua",
+    "hv": "thông qua",
+    "pos": "giới từ / động từ"
+  },
+  "通知": {
+    "vi": "thông báo",
+    "hv": "thông tri",
+    "pos": "động từ / danh từ"
+  },
+  "同情": {
+    "vi": "đồng cảm, thông cảm",
+    "hv": "đồng tình",
+    "pos": "động từ"
+  },
+  "推": {
+    "vi": "đẩy",
+    "hv": "thôi",
+    "pos": "động từ"
+  },
+  "推迟": {
+    "vi": "hoãn, dời lại",
+    "hv": "thôi trì",
+    "pos": "động từ"
+  },
+  "脱": {
+    "vi": "cởi (quần áo)",
+    "hv": "thoát",
+    "pos": "động từ"
+  },
+  "袜子": {
+    "vi": "đôi tất, vớ",
+    "hv": "miệt tử",
+    "pos": "danh từ"
+  },
+  "完全": {
+    "vi": "hoàn toàn",
+    "hv": "hoàn toàn",
+    "pos": "phó từ / tính từ"
+  },
+  "网球": {
+    "vi": "quần vợt, tennis",
+    "hv": "võng cầu",
+    "pos": "danh từ"
+  },
+  "网站": {
+    "vi": "trang web",
+    "hv": "võng trạm",
+    "pos": "danh từ"
+  },
+  "往": {
+    "vi": "đi về phía, hướng tới",
+    "hv": "vãng",
+    "pos": "giới từ"
+  },
+  "往往": {
+    "vi": "thường, thường hay",
+    "hv": "vãng vãng",
+    "pos": "phó từ"
+  },
+  "危险": {
+    "vi": "nguy hiểm",
+    "hv": "nguy hiểm",
+    "pos": "tính từ / danh từ"
+  },
+  "味道": {
+    "vi": "mùi vị, vị",
+    "hv": "vị đạo",
+    "pos": "danh từ"
+  },
+  "温度": {
+    "vi": "nhiệt độ",
+    "hv": "ôn độ",
+    "pos": "danh từ"
+  },
+  "文章": {
+    "vi": "bài viết, bài văn",
+    "hv": "văn chương",
+    "pos": "danh từ"
+  },
+  "握手": {
+    "vi": "bắt tay",
+    "hv": "ác thủ",
+    "pos": "động từ"
+  },
+  "污染": {
+    "vi": "ô nhiễm",
+    "hv": "ô nhiễm",
+    "pos": "động từ / danh từ"
+  },
+  "无": {
+    "vi": "không có",
+    "hv": "vô",
+    "pos": "động từ"
+  },
+  "无聊": {
+    "vi": "nhàm, vô vị, buồn tẻ",
+    "hv": "vô liêu",
+    "pos": "tính từ"
+  },
+  "无论": {
+    "vi": "bất luận, cho dù",
+    "hv": "vô luận",
+    "pos": "liên từ"
+  },
+  "误会": {
+    "vi": "hiểu lầm",
+    "hv": "ngộ hội",
+    "pos": "động từ / danh từ"
+  },
+  "吸引": {
+    "vi": "thu hút, hấp dẫn",
+    "hv": "hấp dẫn",
+    "pos": "động từ"
+  },
+  "洗衣机": {
+    "vi": "máy giặt",
+    "hv": "tẩy y cơ",
+    "pos": "danh từ"
+  },
+  "西红柿": {
+    "vi": "quả cà chua",
+    "hv": "tây hồng thị",
+    "pos": "danh từ"
+  },
+  "咸": {
+    "vi": "mặn",
+    "hv": "hàm",
+    "pos": "tính từ"
+  },
+  "现代": {
+    "vi": "hiện đại",
+    "hv": "hiện đại",
+    "pos": "tính từ / danh từ"
+  },
+  "限制": {
+    "vi": "hạn chế, giới hạn",
+    "hv": "hạn chế",
+    "pos": "động từ / danh từ"
+  },
+  "羡慕": {
+    "vi": "ngưỡng mộ, thèm thuồng",
+    "hv": "tiện mộ",
+    "pos": "động từ"
+  },
+  "相反": {
+    "vi": "trái lại, tương phản",
+    "hv": "tương phản",
+    "pos": "tính từ / liên từ"
+  },
+  "香": {
+    "vi": "thơm",
+    "hv": "hương",
+    "pos": "tính từ"
+  },
+  "详细": {
+    "vi": "chi tiết, tường tận",
+    "hv": "tường tế",
+    "pos": "tính từ"
+  },
+  "响": {
+    "vi": "vang, kêu (tiếng)",
+    "hv": "hưởng",
+    "pos": "động từ / tính từ"
+  },
+  "消息": {
+    "vi": "tin, tin tức",
+    "hv": "tiêu tức",
+    "pos": "danh từ"
+  },
+  "小说": {
+    "vi": "tiểu thuyết",
+    "hv": "tiểu thuyết",
+    "pos": "danh từ"
+  },
+  "效果": {
+    "vi": "hiệu quả",
+    "hv": "hiệu quả",
+    "pos": "danh từ"
+  },
+  "笑话": {
+    "vi": "chuyện cười; cười nhạo",
+    "hv": "tiếu thoại",
+    "pos": "danh từ / động từ"
+  },
+  "心情": {
+    "vi": "tâm trạng",
+    "hv": "tâm tình",
+    "pos": "danh từ"
+  },
+  "辛苦": {
+    "vi": "vất vả, khổ nhọc",
+    "hv": "tân khổ",
+    "pos": "tính từ"
+  },
+  "信任": {
+    "vi": "tin tưởng, tín nhiệm",
+    "hv": "tín nhiệm",
+    "pos": "động từ"
+  },
+  "信心": {
+    "vi": "lòng tin, sự tự tin",
+    "hv": "tín tâm",
+    "pos": "danh từ"
+  },
+  "信用卡": {
+    "vi": "thẻ tín dụng",
+    "hv": "tín dụng tạp",
+    "pos": "danh từ"
+  },
+  "行": {
+    "vi": "được, ổn; đi",
+    "hv": "hành",
+    "pos": "động từ / tính từ"
+  },
+  "醒": {
+    "vi": "tỉnh, thức giấc",
+    "hv": "tỉnh",
+    "pos": "động từ"
+  },
+  "兴奋": {
+    "vi": "hưng phấn, phấn khích",
+    "hv": "hưng phấn",
+    "pos": "tính từ"
+  },
+  "幸福": {
+    "vi": "hạnh phúc",
+    "hv": "hạnh phúc",
+    "pos": "tính từ / danh từ"
+  },
+  "性别": {
+    "vi": "giới tính",
+    "hv": "tính biệt",
+    "pos": "danh từ"
+  },
+  "性格": {
+    "vi": "tính cách",
+    "hv": "tính cách",
+    "pos": "danh từ"
+  },
+  "修": {
+    "vi": "sửa, sửa chữa",
+    "hv": "tu",
+    "pos": "động từ"
+  },
+  "许多": {
+    "vi": "rất nhiều",
+    "hv": "hứa đa",
+    "pos": "tính từ"
+  },
+  "血": {
+    "vi": "máu",
+    "hv": "huyết",
+    "pos": "danh từ"
+  },
+  "压力": {
+    "vi": "áp lực",
+    "hv": "áp lực",
+    "pos": "danh từ"
+  },
+  "牙膏": {
+    "vi": "kem đánh răng",
+    "hv": "nha cao",
+    "pos": "danh từ"
+  },
+  "亚洲": {
+    "vi": "châu Á",
+    "hv": "Á châu",
+    "pos": "danh từ riêng"
+  },
+  "呀": {
+    "vi": "trợ từ cuối câu (biến âm của 啊)",
+    "hv": "",
+    "pos": "trợ từ"
+  },
+  "严格": {
+    "vi": "nghiêm khắc, nghiêm ngặt",
+    "hv": "nghiêm cách",
+    "pos": "tính từ"
+  },
+  "严重": {
+    "vi": "nghiêm trọng",
+    "hv": "nghiêm trọng",
+    "pos": "tính từ"
+  },
+  "研究生": {
+    "vi": "học viên cao học, nghiên cứu sinh",
+    "hv": "nghiên cứu sinh",
+    "pos": "danh từ"
+  },
+  "盐": {
+    "vi": "muối",
+    "hv": "diêm",
+    "pos": "danh từ"
+  },
+  "演出": {
+    "vi": "biểu diễn; buổi diễn",
+    "hv": "diễn xuất",
+    "pos": "động từ / danh từ"
+  },
+  "演员": {
+    "vi": "diễn viên",
+    "hv": "diễn viên",
+    "pos": "danh từ"
+  },
+  "阳光": {
+    "vi": "ánh nắng, nắng",
+    "hv": "dương quang",
+    "pos": "danh từ"
+  },
+  "养成": {
+    "vi": "tạo thành, rèn thành (thói quen)",
+    "hv": "dưỡng thành",
+    "pos": "động từ"
+  },
+  "样子": {
+    "vi": "dáng vẻ, kiểu",
+    "hv": "dạng tử",
+    "pos": "danh từ"
+  },
+  "邀请": {
+    "vi": "mời, thỉnh mời",
+    "hv": "yêu thỉnh",
+    "pos": "động từ"
+  },
+  "钥匙": {
+    "vi": "chìa khóa",
+    "hv": "dược thi",
+    "pos": "danh từ"
+  },
+  "也许": {
+    "vi": "có lẽ, có thể",
+    "hv": "dã hứa",
+    "pos": "phó từ"
+  },
+  "叶子": {
+    "vi": "cái lá",
+    "hv": "diệp tử",
+    "pos": "danh từ"
+  },
+  "页": {
+    "vi": "trang (sách)",
+    "hv": "diệp",
+    "pos": "lượng từ"
+  },
+  "一切": {
+    "vi": "tất cả, mọi thứ",
+    "hv": "nhất thiết",
+    "pos": "đại từ"
+  },
+  "以": {
+    "vi": "lấy, bằng; để mà",
+    "hv": "dĩ",
+    "pos": "giới từ"
+  },
+  "亿": {
+    "vi": "trăm triệu (ức)",
+    "hv": "ức",
+    "pos": "số từ"
+  },
+  "艺术": {
+    "vi": "nghệ thuật",
+    "hv": "nghệ thuật",
+    "pos": "danh từ"
+  },
+  "意见": {
+    "vi": "ý kiến",
+    "hv": "ý kiến",
+    "pos": "danh từ"
+  },
+  "因此": {
+    "vi": "vì thế, do đó",
+    "hv": "nhân thử",
+    "pos": "liên từ"
+  },
+  "引起": {
+    "vi": "gây ra, dẫn tới",
+    "hv": "dẫn khởi",
+    "pos": "động từ"
+  },
+  "饮料": {
+    "vi": "đồ uống, nước ngọt",
+    "hv": "ẩm liệu",
+    "pos": "danh từ"
+  },
+  "印象": {
+    "vi": "ấn tượng",
+    "hv": "ấn tượng",
+    "pos": "danh từ"
+  },
+  "赢": {
+    "vi": "thắng",
+    "hv": "doanh",
+    "pos": "động từ"
+  },
+  "硬": {
+    "vi": "cứng",
+    "hv": "ngạnh",
+    "pos": "tính từ"
+  },
+  "永远": {
+    "vi": "vĩnh viễn, mãi mãi",
+    "hv": "vĩnh viễn",
+    "pos": "phó từ"
+  },
+  "勇敢": {
+    "vi": "dũng cảm",
+    "hv": "dũng cảm",
+    "pos": "tính từ"
+  },
+  "优点": {
+    "vi": "ưu điểm",
+    "hv": "ưu điểm",
+    "pos": "danh từ"
+  },
+  "优秀": {
+    "vi": "ưu tú, xuất sắc",
+    "hv": "ưu tú",
+    "pos": "tính từ"
+  },
+  "幽默": {
+    "vi": "hài hước, hóm hỉnh",
+    "hv": "",
+    "pos": "tính từ"
+  },
+  "尤其": {
+    "vi": "nhất là, đặc biệt là",
+    "hv": "do kỳ",
+    "pos": "phó từ"
+  },
+  "由": {
+    "vi": "do, bởi",
+    "hv": "do",
+    "pos": "giới từ"
+  },
+  "由于": {
+    "vi": "do, bởi vì",
+    "hv": "do ư",
+    "pos": "giới từ"
+  },
+  "有趣": {
+    "vi": "thú vị, hay",
+    "hv": "hữu thú",
+    "pos": "tính từ"
+  },
+  "友好": {
+    "vi": "thân thiện, hữu hảo",
+    "hv": "hữu hảo",
+    "pos": "tính từ"
+  },
+  "友谊": {
+    "vi": "tình hữu nghị, tình bạn",
+    "hv": "hữu nghị",
+    "pos": "danh từ"
+  },
+  "于是": {
+    "vi": "thế là, vì vậy",
+    "hv": "ư thị",
+    "pos": "liên từ"
+  },
+  "愉快": {
+    "vi": "vui vẻ, dễ chịu",
+    "hv": "du khoái",
+    "pos": "tính từ"
+  },
+  "与": {
+    "vi": "và, với (văn viết)",
+    "hv": "dữ",
+    "pos": "liên từ / giới từ"
+  },
+  "羽毛球": {
+    "vi": "cầu lông",
+    "hv": "vũ mao cầu",
+    "pos": "danh từ"
+  },
+  "语法": {
+    "vi": "ngữ pháp",
+    "hv": "ngữ pháp",
+    "pos": "danh từ"
+  },
+  "语言": {
+    "vi": "ngôn ngữ",
+    "hv": "ngữ ngôn",
+    "pos": "danh từ"
+  },
+  "预习": {
+    "vi": "học trước, chuẩn bị bài",
+    "hv": "dự tập",
+    "pos": "động từ"
+  },
+  "原来": {
+    "vi": "vốn là, hóa ra",
+    "hv": "nguyên lai",
+    "pos": "phó từ / tính từ"
+  },
+  "原谅": {
+    "vi": "tha lỗi, tha thứ",
+    "hv": "nguyên lượng",
+    "pos": "động từ"
+  },
+  "原因": {
+    "vi": "nguyên nhân",
+    "hv": "nguyên nhân",
+    "pos": "danh từ"
+  },
+  "圆": {
+    "vi": "tròn; hình tròn",
+    "hv": "viên",
+    "pos": "tính từ / danh từ"
+  },
+  "约会": {
+    "vi": "cuộc hẹn, hẹn hò",
+    "hv": "ước hội",
+    "pos": "danh từ / động từ"
+  },
+  "阅读": {
+    "vi": "đọc (văn bản)",
+    "hv": "duyệt độc",
+    "pos": "động từ"
+  },
+  "允许": {
+    "vi": "cho phép",
+    "hv": "duẫn hứa",
+    "pos": "động từ"
+  },
+  "杂志": {
+    "vi": "tạp chí",
+    "hv": "tạp chí",
+    "pos": "danh từ"
+  },
+  "咱们": {
+    "vi": "chúng ta (gồm cả người nghe)",
+    "hv": "",
+    "pos": "đại từ"
+  },
+  "暂时": {
+    "vi": "tạm thời",
+    "hv": "tạm thời",
+    "pos": "tính từ / phó từ"
+  },
+  "脏": {
+    "vi": "bẩn",
+    "hv": "tạng",
+    "pos": "tính từ"
+  },
+  "责任": {
+    "vi": "trách nhiệm",
+    "hv": "trách nhiệm",
+    "pos": "danh từ"
+  },
+  "增加": {
+    "vi": "tăng, tăng thêm",
+    "hv": "tăng gia",
+    "pos": "động từ"
+  },
+  "增长": {
+    "vi": "tăng trưởng",
+    "hv": "tăng trưởng",
+    "pos": "động từ"
+  },
+  "窄": {
+    "vi": "hẹp",
+    "hv": "trách",
+    "pos": "tính từ"
+  },
+  "长城": {
+    "vi": "Trường Thành (Vạn Lý Trường Thành)",
+    "hv": "Trường Thành",
+    "pos": "danh từ riêng"
+  },
+  "长江": {
+    "vi": "Trường Giang (sông Dương Tử)",
+    "hv": "Trường Giang",
+    "pos": "danh từ riêng"
+  },
+  "招聘": {
+    "vi": "tuyển dụng, tuyển người",
+    "hv": "chiêu sính",
+    "pos": "động từ"
+  },
+  "著名": {
+    "vi": "nổi tiếng, trứ danh",
+    "hv": "trứ danh",
+    "pos": "tính từ"
+  },
+  "真正": {
+    "vi": "thật sự, chân chính",
+    "hv": "chân chính",
+    "pos": "tính từ / phó từ"
+  },
+  "整理": {
+    "vi": "sắp xếp, chỉnh lý",
+    "hv": "chỉnh lý",
+    "pos": "động từ"
+  },
+  "整齐": {
+    "vi": "ngay ngắn, gọn gàng",
+    "hv": "chỉnh tề",
+    "pos": "tính từ"
+  },
+  "正常": {
+    "vi": "bình thường",
+    "hv": "chính thường",
+    "pos": "tính từ"
+  },
+  "正好": {
+    "vi": "vừa hay, vừa đúng lúc",
+    "hv": "chính hảo",
+    "pos": "phó từ / tính từ"
+  },
+  "正确": {
+    "vi": "chính xác, đúng đắn",
+    "hv": "chính xác",
+    "pos": "tính từ"
+  },
+  "正式": {
+    "vi": "chính thức",
+    "hv": "chính thức",
+    "pos": "tính từ"
+  },
+  "证明": {
+    "vi": "chứng minh; giấy chứng nhận",
+    "hv": "chứng minh",
+    "pos": "động từ / danh từ"
+  },
+  "之": {
+    "vi": "của (trợ từ sở hữu văn viết, = 的)",
+    "hv": "chi",
+    "pos": "trợ từ"
+  },
+  "支持": {
+    "vi": "ủng hộ, hỗ trợ",
+    "hv": "chi trì",
+    "pos": "động từ"
+  },
+  "知识": {
+    "vi": "tri thức, kiến thức",
+    "hv": "tri thức",
+    "pos": "danh từ"
+  },
+  "直接": {
+    "vi": "trực tiếp",
+    "hv": "trực tiếp",
+    "pos": "tính từ / phó từ"
+  },
+  "值得": {
+    "vi": "đáng, xứng đáng",
+    "hv": "trị đắc",
+    "pos": "động từ"
+  },
+  "职业": {
+    "vi": "nghề nghiệp",
+    "hv": "chức nghiệp",
+    "pos": "danh từ"
+  },
+  "植物": {
+    "vi": "thực vật, cây cối",
+    "hv": "thực vật",
+    "pos": "danh từ"
+  },
+  "只好": {
+    "vi": "đành phải, chỉ còn cách",
+    "hv": "chỉ hảo",
+    "pos": "phó từ"
+  },
+  "只要": {
+    "vi": "chỉ cần",
+    "hv": "chỉ yếu",
+    "pos": "liên từ"
+  },
+  "指": {
+    "vi": "ngón tay; chỉ vào",
+    "hv": "chỉ",
+    "pos": "danh từ / động từ"
+  },
+  "至少": {
+    "vi": "ít nhất",
+    "hv": "chí thiểu",
+    "pos": "phó từ"
+  },
+  "制造": {
+    "vi": "chế tạo, sản xuất",
+    "hv": "chế tạo",
+    "pos": "động từ"
+  },
+  "质量": {
+    "vi": "chất lượng",
+    "hv": "chất lượng",
+    "pos": "danh từ"
+  },
+  "中文": {
+    "vi": "tiếng Trung, Trung văn",
+    "hv": "Trung văn",
+    "pos": "danh từ"
+  },
+  "重点": {
+    "vi": "trọng điểm, điểm chính",
+    "hv": "trọng điểm",
+    "pos": "danh từ"
+  },
+  "重视": {
+    "vi": "coi trọng, chú trọng",
+    "hv": "trọng thị",
+    "pos": "động từ"
+  },
+  "重新": {
+    "vi": "lại, làm lại từ đầu",
+    "hv": "trùng tân",
+    "pos": "phó từ"
+  },
+  "周围": {
+    "vi": "xung quanh, chu vi",
+    "hv": "chu vi",
+    "pos": "danh từ"
+  },
+  "猪": {
+    "vi": "con lợn",
+    "hv": "trư",
+    "pos": "danh từ"
+  },
+  "逐渐": {
+    "vi": "dần dần, từng bước",
+    "hv": "trục tiệm",
+    "pos": "phó từ"
+  },
+  "主动": {
+    "vi": "chủ động",
+    "hv": "chủ động",
+    "pos": "tính từ"
+  },
+  "主意": {
+    "vi": "ý kiến, chủ ý",
+    "hv": "chủ ý",
+    "pos": "danh từ"
+  },
+  "祝贺": {
+    "vi": "chúc mừng",
+    "hv": "chúc hạ",
+    "pos": "động từ"
+  },
+  "专门": {
+    "vi": "chuyên, chuyên môn",
+    "hv": "chuyên môn",
+    "pos": "tính từ / phó từ"
+  },
+  "专业": {
+    "vi": "chuyên ngành; chuyên nghiệp",
+    "hv": "chuyên nghiệp",
+    "pos": "danh từ / tính từ",
+    "note": "Nghĩa hay dùng nhất là CHUYÊN NGÀNH (học ngành gì), không phải 'chuyên nghiệp'."
+  },
+  "赚": {
+    "vi": "kiếm (tiền), lời",
+    "hv": "",
+    "pos": "động từ"
+  },
+  "撞": {
+    "vi": "đụng, va vào",
+    "hv": "chàng",
+    "pos": "động từ"
+  },
+  "准确": {
+    "vi": "chuẩn xác, chính xác",
+    "hv": "chuẩn xác",
+    "pos": "tính từ"
+  },
+  "准时": {
+    "vi": "đúng giờ",
+    "hv": "chuẩn thời",
+    "pos": "tính từ / phó từ"
+  },
+  "仔细": {
+    "vi": "cẩn thận, tỉ mỉ",
+    "hv": "tử tế",
+    "pos": "tính từ",
+    "note": "BẪY HÁN-VIỆT: âm là 'tử tế' nhưng nghĩa là CẨN THẬN, TỈ MỈ — không phải tốt bụng."
+  },
+  "自然": {
+    "vi": "tự nhiên; thiên nhiên",
+    "hv": "tự nhiên",
+    "pos": "tính từ / danh từ"
+  },
+  "总结": {
+    "vi": "tổng kết",
+    "hv": "tổng kết",
+    "pos": "động từ / danh từ"
+  },
+  "租": {
+    "vi": "thuê, cho thuê",
+    "hv": "tô",
+    "pos": "động từ"
+  },
+  "组成": {
+    "vi": "tạo thành, cấu thành",
+    "hv": "tổ thành",
+    "pos": "động từ"
+  },
+  "组织": {
+    "vi": "tổ chức",
+    "hv": "tổ chức",
+    "pos": "động từ / danh từ"
+  },
+  "嘴": {
+    "vi": "cái miệng",
+    "hv": "chủy",
+    "pos": "danh từ"
+  },
+  "最好": {
+    "vi": "tốt nhất; tốt nhất là nên",
+    "hv": "tối hảo",
+    "pos": "tính từ / phó từ"
+  },
+  "最后": {
+    "vi": "cuối cùng",
+    "hv": "tối hậu",
+    "pos": "tính từ / danh từ"
+  },
+  "尊重": {
+    "vi": "tôn trọng",
+    "hv": "tôn trọng",
+    "pos": "động từ"
+  },
+  "作者": {
+    "vi": "tác giả",
+    "hv": "tác giả",
+    "pos": "danh từ"
+  },
+  "座": {
+    "vi": "tòa, ngọn (lượng từ cho núi, nhà)",
+    "hv": "tọa",
+    "pos": "lượng từ"
+  },
+  "座位": {
+    "vi": "chỗ ngồi",
+    "hv": "tọa vị",
+    "pos": "danh từ"
+  },
+  "做生意": {
+    "vi": "làm ăn, kinh doanh",
+    "hv": "",
+    "pos": "động từ"
+  }
 }

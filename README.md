@@ -16,8 +16,8 @@ Mục tiêu cụ thể: chữa tật phụ thuộc pinyin mà không nhớ mặt
 
 - [x] Phase 0 — pipeline dữ liệu: 1193 từ HSK 1–4, pinyin đã kiểm 3 nguồn, nhóm đồng âm
 - [x] Phase 0a — Google Sheet (tab `words` + `_reports`), validator sync, vòng báo lỗi
-- [x] Phase 0b — nghĩa tiếng Việt + âm Hán-Việt cho HSK 1 (150/1193 từ)
-- [ ] Phase 0c — nghĩa tiếng Việt HSK 2–4 + câu ví dụ
+- [x] Phase 0b — nghĩa tiếng Việt + âm Hán-Việt: **1193/1193 từ** (Hán-Việt 1146)
+- [ ] Phase 0c — câu ví dụ (1193 từ, có validator i+1)
 - [ ] Phase 1 — Electron app: scheduler, SQLite, FSRS, cổng gõ IME, luật pass-20
 - [ ] Phase 2 — stage đọc + cloze, màn hình đối chiếu đồng âm, phân loại lỗi
 - [ ] Phase 3 — dashboard, streak, xử lý từ hay sai
@@ -53,14 +53,37 @@ Mạnh hơn thế: **với nhiều cặp đồng âm tiếng Trung, âm Hán-Vi�
 | 回 / 会 — `huì` | hồi / hội | ✅ |
 | 他 / 她 — `tā` | tha / tha | ❌ — nhưng khác **bộ thủ** (人 / 女) |
 
-Trong HSK 1, 3 trên 4 nhóm đồng âm (đã đủ dữ liệu) được âm Hán-Việt phân biệt. Nhóm duy
-nhất thất bại thì phân biệt được bằng bộ thủ. Hai cơ chế bù cho nhau, nên **luật hiển thị
-gợi ý khi bạn trả lời sai**: ưu tiên âm Hán-Việt nếu nó khác nhau trong nhóm đồng âm, rơi
-về bộ thủ nếu âm Hán-Việt trùng.
+Đo trên **toàn bộ 106 nhóm đồng âm** của HSK 1–4 (91 nhóm đủ dữ liệu Hán-Việt):
 
-Cột `hanviet` **chỉ điền khi âm Hán-Việt thật sự giúp nhớ**. Ở trợ từ và từ khẩu ngữ (的, 了,
-吗, 很, 吃, 喝, 那, 这…) nó để trống — bản thân việc trống đã là tín hiệu "đừng trông vào
-Hán-Việt ở từ này". HSK 1 có 130/150 từ được điền.
+| Mức phân biệt | Số nhóm | Tỷ lệ |
+|---|---|---|
+| Hán-Việt phân biệt **hoàn toàn** | 78 | 86% |
+| phân biệt **một phần** | 11 | 12% |
+| Hán-Việt **trùng hết** | 2 | 2% |
+
+**98% các nhóm đồng âm được Hán-Việt phân biệt ít nhất một phần.** Và đúng 2 nhóm thất bại
+— `他/她/它` (đều "tha") và `下/夏` (đều "hạ") — thì **bộ thủ phân biệt được cả hai**
+(人/女/宀 và 一/夂).
+
+Nên luật hiển thị gợi ý khi bạn trả lời sai là: **ưu tiên âm Hán-Việt nếu nó khác nhau
+trong nhóm đồng âm, rơi về bộ thủ nếu Hán-Việt trùng.** Hai cơ chế này phủ kín 100% các
+nhóm đồng âm trong kho từ.
+
+Cột `hanviet` **chỉ điền khi âm Hán-Việt thật sự giúp nhớ**. Ở trợ từ, từ khẩu ngữ và từ
+phiên âm (的, 了, 吗, 很, 吃, 喝, 这, 咖啡, 沙发, 巧克力…) nó để trống — bản thân việc trống
+đã là tín hiệu "đừng trông vào Hán-Việt ở từ này". Toàn kho: 1146/1193 từ được điền.
+
+### Bẫy Hán-Việt
+
+Hán-Việt cũng gài bẫy, và những ca đó được ghi thẳng vào cột `note`:
+
+| Từ | Âm Hán-Việt | Nghĩa thật trong tiếng Trung |
+|---|---|---|
+| 博士 | bác sĩ | **tiến sĩ** (bác sĩ chữa bệnh là 医生/大夫) |
+| 访问 | phỏng vấn | **thăm viếng** (phỏng vấn lấy tin là 采访) |
+| 入口 | nhập khẩu | **lối vào** (nhập khẩu hàng là 进口) |
+| 仔细 | tử tế | **cẩn thận, tỉ mỉ** |
+| 专业 | chuyên nghiệp | **chuyên ngành** |
 
 ## Báo lỗi dữ liệu
 
