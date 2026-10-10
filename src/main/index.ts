@@ -733,6 +733,16 @@ async function runSmoke() {
     w0.hide();
     ok('ô nhỏ vẫn còn sau khi đóng bài học', mini?.isVisible() === true);
 
+    // --- bấm mở app khi nó đang chạy ---
+    const wA = createWindow();
+    await until(() => wA.isVisible());
+    wA.close();                                   // đóng → chỉ ẩn đi
+    await until(() => !wA.isVisible());
+    ok('đóng rồi thì cửa sổ ẩn', wA.isVisible() === false);
+    app.emit('activate');                         // = bấm icon Dock/Spotlight
+    ok('bấm mở lại khi app đang chạy thì cửa sổ hiện ra',
+       await until(() => wA.isVisible()), `isVisible=${wA.isVisible()}`);
+
     // --- đóng cửa sổ + chỉ báo luôn hiện ---
     const w2 = createWindow();
     ok('cửa sổ ĐÓNG ĐƯỢC (nút close không bị khoá)', w2.isClosable());
@@ -773,3 +783,11 @@ app.on('before-quit', (e) => {
 });
 
 app.on('window-all-closed', () => { /* ở lại trên tray */ });
+
+/**
+ * macOS: bấm icon trên Dock / Spotlight / Launchpad khi app ĐANG CHẠY không tạo
+ * tiến trình mới — nó chỉ bắn sự kiện 'activate'. Thiếu handler này thì app
+ * trông như chết: tiến trình vẫn sống, biểu tượng trên menu bar vẫn đó, nhưng
+ * bấm mở bao nhiêu lần cũng không có cửa sổ nào hiện ra.
+ */
+app.on('activate', () => createWindow());

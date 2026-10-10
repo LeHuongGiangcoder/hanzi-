@@ -57,6 +57,12 @@ devtools cũng không đọc được đáp án. Có test tự động cho cả 
 
 ### Cách app bật lên
 
+Mở bằng Spotlight / Dock / Launchpad như mọi app, hoặc bấm biểu tượng `汉` trên menu bar.
+
+> macOS **không tạo tiến trình mới** khi bạn bấm icon của một app đang chạy — nó chỉ bắn sự
+> kiện `activate`. Thiếu `app.on('activate')` thì app trông như chết: tiến trình vẫn sống,
+> biểu tượng vẫn đó, nhưng bấm mở bao nhiêu lần cũng không có cửa sổ nào hiện ra.
+
 Tự chạy lúc đăng nhập và nằm im trên menu bar (`汉`). Tới giờ đặt trước (mặc định 20:30)
 mà hôm nay chưa pass đủ 20 từ thì mở cửa sổ. Laptop ngủ qua giờ hẹn thì `powerMonitor`
 bắt lại lúc mở nắp — không bỏ sót ngày nào.
