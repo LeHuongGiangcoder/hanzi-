@@ -9,6 +9,7 @@ const api = {
   surrender: (typed: string) => ipcRenderer.invoke('session:surrender', { typed }),
   stats: () => ipcRenderer.invoke('stats:get'),
   progress: () => ipcRenderer.invoke('stats:progress'),
+  wordsByDate: (date: string) => ipcRenderer.invoke('words:by-date', date),
   composing: (on: boolean) => ipcRenderer.invoke('window:composing', on),
   openDrill: () => ipcRenderer.invoke('window:open-drill'),
   onProgress: (cb: (p: unknown) => void) =>

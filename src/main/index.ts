@@ -8,7 +8,7 @@ import { openDb, upsertWords, ensureCards, isoDate, homophonesOf, quarantineWord
 // @ts-ignore
 import { buildCloze, buildChoices } from '../core/stages.mjs';
 // @ts-ignore
-import { resumeSession, applyReview, markPassed, replaceInQueue, saveStageIdx, mixForTarget, DEFAULT_TARGET } from '../core/scheduler.mjs';
+import { resumeSession, applyReview, markPassed, replaceInQueue, saveStageIdx, mixForTarget, DEFAULT_TARGET, wordsForDate } from '../core/scheduler.mjs';
 // @ts-ignore
 import { gradeAnswer } from '../core/grading.mjs';
 // @ts-ignore
@@ -138,14 +138,33 @@ function createWindow() {
         // đây là bug đã tái hiện được). Phải KHÔNG nộp bài.
         let el = input();
         if (!el) {
-          // Phiên đã xong → màn hình "xong" hiện thẳng bảng tiến độ.
-          const panel = document.querySelector('.stats');
-          return {
+          // Phiên đã xong → màn hình "xong" hiện bảng tiến độ + nút xem danh sách.
+          const out2 = {
             mode: 'phiên đã hoàn thành',
-            statsOnDoneScreen: !!panel,
+            statsOnDoneScreen: !!document.querySelector('.stats'),
             levelRows: document.querySelectorAll('.lvrow').length,
-            text: panel?.innerText.replace(/\\n+/g, ' · ').slice(0, 300) ?? null,
           };
+          const dayBtn = [...document.querySelectorAll('button')]
+            .find((b) => /Danh sách|ngày mai/.test(b.textContent || ''));
+          out2.hasDayButton = !!dayBtn;
+          dayBtn?.click();
+          await sleep(800);
+          const rows = () => [...document.querySelectorAll('.wordlist li')];
+          out2.today_header = document.querySelector('.dayhead b')?.textContent ?? null;
+          out2.today_rows = rows().length;
+          out2.today_passed = rows().filter((li) => li.className === 'passed').length;
+          out2.today_masked = rows().filter((li) => li.querySelector('.hz.masked')).length;
+          out2.today_sample = rows().slice(0, 2).map((li) => li.innerText.replace(/\\s+/g, ' ').trim());
+
+          [...document.querySelectorAll('.dayhead button')].pop()?.click();
+          await sleep(1000);
+          out2.tomorrow_header = document.querySelector('.dayhead b')?.textContent ?? null;
+          out2.tomorrow_isPreview = !!document.querySelector('.badge');
+          out2.tomorrow_rows = rows().length;
+          out2.tomorrow_masked = rows().filter((li) => li.querySelector('.hz.masked')).length;
+          out2.tomorrow_sample = rows().slice(0, 2).map((li) => li.innerText.replace(/\\s+/g, ' ').trim());
+          out2.cannotGoFurther = [...document.querySelectorAll('.dayhead button')].pop()?.disabled;
+          return out2;
         }
         compose(el, '在');
         await sleep(60);
@@ -177,6 +196,30 @@ function createWindow() {
           await sleep(250);
           res.D_cmdEnterSubmitted = !!document.querySelector('.card');
         }
+        // --- danh sách từ theo ngày ---
+        const dayBtn = [...document.querySelectorAll('button')]
+          .find((b) => /Danh sách|xem trước ngày mai/.test(b.textContent || ''));
+        res.F_hasDayButton = !!dayBtn;
+        dayBtn?.click();
+        await sleep(700);
+        const rows = () => [...document.querySelectorAll('.wordlist li')];
+        res.F_today_rows = rows().length;
+        res.F_today_masked = rows().filter((li) => li.querySelector('.hz.masked')).length;
+        res.F_today_header = document.querySelector('.dayhead b')?.textContent ?? null;
+
+        // bấm → để xem trước ngày mai
+        const nextBtn = [...document.querySelectorAll('.dayhead button')].pop();
+        nextBtn?.click();
+        await sleep(900);
+        res.G_header = document.querySelector('.dayhead b')?.textContent ?? null;
+        res.G_isPreview = !!document.querySelector('.badge');
+        res.G_rows = rows().length;
+        res.G_masked = rows().filter((li) => li.querySelector('.hz.masked')).length;
+        res.G_nextDisabled = [...document.querySelectorAll('.dayhead button')].pop()?.disabled;
+        res.G_sample = rows().slice(0, 3).map((li) => li.innerText.replace(/\\t|\\n/g, ' ').trim());
+        document.querySelector('.daylist button.primary')?.click();
+        await sleep(300);
+
         // --- màn hình tiến độ ---
         const statsBtn = [...document.querySelectorAll('button')]
           .find((b) => b.textContent?.trim() === 'Tiến độ');
@@ -552,6 +595,11 @@ function registerIpc() {
       `SELECT COUNT(*) n FROM sessions WHERE finished_at IS NOT NULL AND date >= date('now','localtime','-30 day')`
     ).get().n,
   }));
+
+  ipcMain.handle('words:by-date', (_e, date: string) => {
+    const target = Number(getSetting(db, 'daily_target', String(DEFAULT_TARGET))) || DEFAULT_TARGET;
+    return wordsForDate(db, date, { mix: mixForTarget(target) });
+  });
 
   ipcMain.handle('stats:progress', () => {
     const s = progressStats(db);

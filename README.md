@@ -292,6 +292,23 @@ Trong code còn vài khái niệm khác, dùng cho việc khác, đừng nhầm 
 | `daily_queue.passed_at` | qua hết các cổng trong một phiên | bộ đếm 20/20 — là *làm xong hôm nay*, không phải *đã thuộc* |
 | `min(stability) ≥ 21 ngày` | **đã thuộc** theo nghĩa ở trên | màn hình tiến độ |
 
+### Danh sách từ theo ngày
+
+Nút **Danh sách** trên thanh trên (và trên màn hình "xong"). Mũi tên ← → đi qua từng ngày,
+xa nhất là **ngày mai**.
+
+- **ngày đã học** → đọc đúng hàng đợi đã lưu, kèm trạng thái từng từ (✓ xong · ◐ đang dở · ○ chưa tới)
+- **ngày mai** → **dự kiến, tính tại chỗ, KHÔNG ghi vào DB**
+
+Vì sao không lưu sẵn danh sách ngày mai: dựng rồi lưu là chốt cứng, trong khi những câu trả
+lời còn lại của hôm nay vẫn đang làm đổi lịch ôn — danh sách lưu sẵn sẽ sai ngay khi bạn học
+tiếp. Bản dự kiến cũng loại sẵn những từ hôm nay còn dang dở, vì chúng sẽ được học nốt hôm
+nay chứ không để sang mai.
+
+**Từ của hôm nay mà chưa học xong thì bị che hán tự**, có nút *Hiện hán tự* nếu bạn cố ý
+muốn xem. Nhìn thấy đáp án trước khi làm bài thì cổng "tạo ra chữ" không còn kiểm được gì.
+Từ đã xong và từ của ngày mai thì hiện bình thường — xem trước là cách học hợp lệ.
+
 ### Sao lưu DB: đừng chỉ copy file .db
 
 DB chạy ở chế độ WAL, nên giao dịch mới nhất nằm trong `hanzi-drill.db-wal` chứ chưa vào

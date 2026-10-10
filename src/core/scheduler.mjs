@@ -98,7 +98,7 @@ export function applyReview(db, cardRow, { grade, latencyMs, answerRaw, errorTyp
  * Trộn: từ đến hạn > từ hay sai > từ mới. Sau đó CỐ Ý kéo thêm các từ cùng âm
  * của những từ đã chọn vào — đó là bẫy đồng âm: nếu chỉ nhớ âm thì sẽ trượt.
  */
-export function buildQueue(db, { date = isoDate(), mix = DEFAULT_MIX } = {}) {
+export function buildQueue(db, { date = isoDate(), mix = DEFAULT_MIX, exclude = null } = {}) {
   const pick = (sql, n, ...args) => (n > 0 ? db.prepare(sql).all(...args, n) : []);
   const READY = `w.active=1 AND w.quarantined=0 AND w.meaning_vi<>''`;
   const ANCHOR = 'c.direction=w.anchor';
@@ -135,6 +135,7 @@ export function buildQueue(db, { date = isoDate(), mix = DEFAULT_MIX } = {}) {
 
   const add = (row, reason) => {
     if (out.length >= mix.target || taken.has(row.id)) return false;
+    if (exclude?.has(row.id)) return false;
     if (!canPair(row, byKey.get(row.homophone_key), confusableGroups, mix)) return false;
     const siblings = byKey.get(row.homophone_key);
     if (row.homophone_key && siblings?.length === 1) confusableGroups++;
@@ -229,6 +230,58 @@ export function resumeSession(db, opts = {}) {
 export function saveStageIdx(db, sessionId, wordId, stageIdx) {
   return db.prepare('UPDATE daily_queue SET stage_idx=? WHERE session_id=? AND word_id=?')
     .run(stageIdx, sessionId, wordId).changes;
+}
+
+/**
+ * Danh sách từ của một ngày.
+ *
+ * Ngày đã có phiên → đọc đúng hàng đợi đã lưu, kèm trạng thái từng từ.
+ * Ngày chưa có phiên → DỰ KIẾN, tính tại chỗ và KHÔNG ghi vào DB. Dựng sẵn rồi
+ * lưu lại sẽ chốt cứng danh sách, trong khi những câu trả lời còn lại của hôm
+ * nay vẫn đang làm đổi lịch ôn — danh sách lưu sẵn sẽ sai ngay khi bạn học tiếp.
+ */
+export function wordsForDate(db, date, { mix = DEFAULT_MIX } = {}) {
+  const session = db.prepare('SELECT * FROM sessions WHERE date=?').get(date);
+
+  if (session) {
+    const rows = db.prepare(`
+      SELECT w.hanzi, w.pinyin, w.hanviet, w.meaning_vi, w.hsk_level, w.stages,
+             q.reason, q.passed_at, q.stage_idx
+      FROM daily_queue q JOIN words w ON w.id = q.word_id
+      WHERE q.session_id = ? ORDER BY q.position
+    `).all(session.id);
+    return {
+      date, kind: 'actual',
+      finished: !!session.finished_at,
+      passed: session.passed_count,
+      target: session.target_count,
+      words: rows.map((r) => ({
+        ...r,
+        stages: JSON.parse(r.stages).length,
+        status: r.passed_at ? 'passed' : r.stage_idx > 0 ? 'doing' : 'todo',
+      })),
+    };
+  }
+
+  // Những từ hôm nay còn dang dở sẽ được học nốt trong hôm nay, nên không thể
+  // là từ của ngày mai. Loại chúng ra để bản dự kiến bớt sai.
+  const today = isoDate();
+  const pending = new Set(
+    db.prepare(`
+      SELECT q.word_id id FROM daily_queue q JOIN sessions s ON s.id = q.session_id
+      WHERE s.date = ? AND q.passed_at IS NULL
+    `).all(today).map((r) => r.id)
+  );
+
+  const picked = buildQueue(db, { date, mix, exclude: date > today ? pending : null });
+  return {
+    date, kind: 'preview', finished: false, passed: 0, target: picked.length,
+    words: picked.map((w) => ({
+      hanzi: w.hanzi, pinyin: w.pinyin, hanviet: w.hanviet, meaning_vi: w.meaning_vi,
+      hsk_level: w.hsk_level, reason: w.reason, status: 'todo',
+      stages: JSON.parse(w.stages).length,
+    })),
+  };
 }
 
 /** Đánh dấu một từ đã pass trong phiên. */

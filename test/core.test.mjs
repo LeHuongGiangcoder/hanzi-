@@ -745,3 +745,65 @@ test('đường bù cho đủ chỉ tiêu không được lôi từ cấp cao v�
   assert.equal(high.length, 0,
     'lôi từ cấp cao vào khi HSK1 chưa xong: ' + high.map((w) => `${w.hanzi}(HSK${w.hsk_level})`).join(' '));
 });
+
+// ---------- danh sách từ theo ngày ----------
+import { wordsForDate } from '../src/core/scheduler.mjs';
+
+const isoD = (n = 0) => {
+  const t = new Date(); t.setDate(t.getDate() + n);
+  return new Date(t.getTime() - t.getTimezoneOffset() * 60000).toISOString().slice(0, 10);
+};
+
+test('ngày đã có phiên: đọc đúng hàng đợi đã lưu, kèm trạng thái từng từ', () => {
+  const db = freshDb();
+  const r = resumeSession(db);
+  const w = r.items[0];
+  for (const _ of w.stages) r.runner.answer(w.id, true);
+  markPassed(db, r.session.id, w.id);
+  saveStageIdx(db, r.session.id, r.items[1].id, 1);
+
+  const day = wordsForDate(db, isoD(0));
+  assert.equal(day.kind, 'actual');
+  assert.equal(day.words.length, 20);
+  assert.equal(day.words.find((x) => x.hanzi === w.hanzi).status, 'passed');
+  assert.equal(day.words.find((x) => x.hanzi === r.items[1].hanzi).status, 'doing');
+  assert.equal(day.words.filter((x) => x.status === 'todo').length, 18);
+});
+
+test('ngày mai: là bản DỰ KIẾN và KHÔNG được ghi vào DB', () => {
+  const db = freshDb();
+  resumeSession(db);
+  const before = db.prepare('SELECT COUNT(*) n FROM sessions').get().n;
+  const prev = wordsForDate(db, isoD(1));
+  assert.equal(prev.kind, 'preview');
+  assert.ok(prev.words.length > 0);
+  assert.equal(db.prepare('SELECT COUNT(*) n FROM sessions').get().n, before,
+    'xem trước không được tạo phiên');
+  assert.equal(db.prepare('SELECT COUNT(*) n FROM daily_queue').get().n, 20);
+});
+
+test('dự kiến ngày mai KHÔNG chứa từ hôm nay còn dang dở', () => {
+  const db = freshDb();
+  const r = resumeSession(db);
+  const pending = r.items.map((w) => w.hanzi);       // chưa pass từ nào
+  const prev = wordsForDate(db, isoD(1));
+  const overlap = prev.words.filter((w) => pending.includes(w.hanzi));
+  assert.deepEqual(overlap.map((w) => w.hanzi), [],
+    'từ sẽ học nốt hôm nay không thể là từ của ngày mai');
+});
+
+test('từ đã pass hôm nay thì được phép quay lại trong dự kiến ngày mai', () => {
+  const db = freshDb();
+  const r = resumeSession(db);
+  for (const w of r.items) { for (const _ of w.stages) r.runner.answer(w.id, true); markPassed(db, r.session.id, w.id); }
+  const prev = wordsForDate(db, isoD(1));
+  assert.ok(prev.words.length > 0);
+});
+
+test('ngày quá khứ chưa từng học: danh sách rỗng, không dựng phiên mới', () => {
+  const db = freshDb();
+  const before = db.prepare('SELECT COUNT(*) n FROM sessions').get().n;
+  const past = wordsForDate(db, '2020-01-01');
+  assert.equal(past.kind, 'preview');
+  assert.equal(db.prepare('SELECT COUNT(*) n FROM sessions').get().n, before);
+});

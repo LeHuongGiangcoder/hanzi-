@@ -4,6 +4,7 @@ import ReportDialog from './components/ReportDialog';
 import ReadingStage from './components/ReadingStage';
 import ClozeStage from './components/ClozeStage';
 import Progress from './components/Progress';
+import DayList from './components/DayList';
 
 const STAGE_LABEL: Record<string, string> = {
   production: 'Tạo ra chữ', reading: 'Đọc hiểu', cloze: 'Dùng trong câu',
@@ -19,6 +20,7 @@ export default function App() {
   const [reporting, setReporting] = useState<string | null>(null);
   const [imeWarn, setImeWarn] = useState(false);
   const [showStats, setShowStats] = useState(false);
+  const [showDays, setShowDays] = useState(false);
 
   const load = useCallback(async () => {
     setResult(null); setImeWarn(false);
@@ -50,11 +52,23 @@ export default function App() {
   const p = q.progress ?? { passed: 0, total: 20 };
   const pct = p.total ? (p.passed / p.total) * 100 : 0;
 
+  const dayModal = showDays && (
+    <div className="modal" onClick={() => setShowDays(false)}>
+      <div onClick={(e) => e.stopPropagation()} style={{ width: 680 }}>
+        <DayList onClose={() => setShowDays(false)} />
+      </div>
+    </div>
+  );
+
   if (q.done) {
     return (
       <div className="stage done">
         <h1 style={{ marginBottom: 24 }}>Xong {p.total} từ hôm nay ✓</h1>
         <Progress />
+        <button style={{ marginTop: 20 }} onClick={() => setShowDays(true)}>
+          Xem danh sách hôm nay · xem trước ngày mai
+        </button>
+        {dayModal}
       </div>
     );
   }
@@ -74,6 +88,7 @@ export default function App() {
           </>
         )}
         <div className="bar"><i style={{ width: `${pct}%` }} /></div>
+        <button className="ghost" onClick={() => setShowDays(true)}>Danh sách</button>
         <button className="ghost" onClick={() => setShowStats(true)}>Tiến độ</button>
         <button className="ghost" onClick={() => setReporting(result && !result.correct ? 'grading' : 'hanzi')}>
           ⚠ Báo lỗi <span style={{ opacity: .6 }}>⌘E</span>
@@ -122,6 +137,8 @@ export default function App() {
           <Result result={result} onNext={load} onReport={() => setReporting('grading')} />
         )}
       </div>
+
+      {dayModal}
 
       {showStats && (
         <div className="modal" onClick={() => setShowStats(false)}>
