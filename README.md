@@ -292,6 +292,18 @@ Trong code còn vài khái niệm khác, dùng cho việc khác, đừng nhầm 
 | `daily_queue.passed_at` | qua hết các cổng trong một phiên | bộ đếm 20/20 — là *làm xong hôm nay*, không phải *đã thuộc* |
 | `min(stability) ≥ 21 ngày` | **đã thuộc** theo nghĩa ở trên | màn hình tiến độ |
 
+### Sao lưu DB: đừng chỉ copy file .db
+
+DB chạy ở chế độ WAL, nên giao dịch mới nhất nằm trong `hanzi-drill.db-wal` chứ chưa vào
+file chính. Copy mỗi `.db` là mất phần mới — đã đo thực tế: bản copy thiếu WAL báo 14 từ
+đang học trong khi bản thật có 44.
+
+```bash
+sqlite3 hanzi-drill.db "VACUUM INTO 'snapshot.db'"
+```
+
+Lệnh này tạo ảnh chụp nhất quán trong MỘT file, gộp cả WAL, và chạy được khi app đang mở.
+
 ### Màn hình tiến độ
 
 Bấm **Tiến độ** trên thanh trên, hoặc nó tự hiện khi học xong trong ngày:

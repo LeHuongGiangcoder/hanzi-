@@ -40,7 +40,10 @@ export default function Progress({ onClose }: { onClose?: () => void }) {
                 <i className="mature" style={{ width: `${pct(d.mature, d.total)}%` }} />
                 <i className="learning" style={{ width: `${pct(d.learning, d.total)}%` }} />
               </div>
-              <span className="num">{d.mature}/{d.total}</span>
+              <span className="num">
+                {d.mature}/{d.total}
+                {d.learning > 0 && <em> +{d.learning}</em>}
+              </span>
             </div>
           );
         })}

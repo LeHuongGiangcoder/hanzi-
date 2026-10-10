@@ -735,3 +735,13 @@ test('trả lời đúng vài lần trong CÙNG MỘT BUỔI chưa đủ để b
     assert.ok(shi.length <= 1, `ghép ${shi.join('/')} khi cả hai còn chưa qua nổi một đêm`);
   }
 });
+
+test('đường bù cho đủ chỉ tiêu không được lôi từ cấp cao vào trước', () => {
+  const db = freshDb();
+  // ép mọi đường chính cạn sạch để chỉ còn đường bù hoạt động
+  const q = buildQueue(db, { mix: { target: 40, due: 0, fresh: 0, leech: 0, maxConfusableGroups: 2 } });
+  assert.equal(q.length, 40);
+  const high = q.filter((w) => w.hsk_level >= 3);
+  assert.equal(high.length, 0,
+    'lôi từ cấp cao vào khi HSK1 chưa xong: ' + high.map((w) => `${w.hanzi}(HSK${w.hsk_level})`).join(' '));
+});

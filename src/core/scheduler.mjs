@@ -165,10 +165,16 @@ export function buildQueue(db, { date = isoDate(), mix = DEFAULT_MIX } = {}) {
   }
 
   // Còn thiếu thì bù thêm, vẫn tôn trọng luật trên.
+  //
+  // Thứ tự phải theo CẤP trước, không phải theo ngày đến hạn. Với kho từ mới
+  // thì mọi card đều đến hạn cùng ngày, nên sắp theo c.due là sắp theo thứ tự
+  // ngẫu nhiên của rowid — đường này có thể lôi từ HSK 4 vào trong khi HSK 1
+  // còn chưa học xong.
   if (out.length < mix.target) {
     for (const r of pick(
       `SELECT ${COLS} FROM cards c JOIN words w ON w.id=c.word_id AND ${ANCHOR}
-       WHERE ${READY} ORDER BY c.due ASC LIMIT ?`,
+       WHERE ${READY}
+       ORDER BY c.due ASC, w.hsk_level ASC, w.frequency IS NULL, w.frequency ASC LIMIT ?`,
       mix.target * 6
     )) {
       add(r, 'replacement');

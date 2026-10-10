@@ -98,6 +98,7 @@ select, textarea, input.txt { width: 100%; padding: 10px 12px; background: var(-
 .track i.mature { background: var(--ok); }
 .track i.learning { background: var(--accent); opacity: .65; }
 .legend { display: flex; gap: 18px; margin-top: 10px; color: var(--dim); font-size: 13px; }
+.legend .hint { margin-left: auto; opacity: .7; }
 .legend b.dot { display: inline-block; width: 8px; height: 8px; border-radius: 99px;
   margin-right: 7px; }
 .dot.mature { background: var(--ok); } .dot.learning { background: var(--accent); opacity:.65; }
@@ -106,7 +107,8 @@ select, textarea, input.txt { width: 100%; padding: 10px 12px; background: var(-
 .levels { display: flex; flex-direction: column; gap: 9px; }
 .lvrow { display: flex; align-items: center; gap: 14px; font-size: 13px; }
 .lvrow .lv { width: 52px; color: var(--dim); }
-.lvrow .num { width: 86px; text-align: right; font-variant-numeric: tabular-nums; color: var(--dim); }
+.lvrow .num { width: 112px; text-align: right; font-variant-numeric: tabular-nums; color: var(--dim); }
+.lvrow .num em { color: var(--accent); font-style: normal; }
 
 .kpis { display: flex; gap: 12px; }
 .kpis > div { flex: 1; background: var(--panel); border: 1px solid var(--line);
